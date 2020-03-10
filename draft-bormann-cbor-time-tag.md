@@ -2,8 +2,8 @@
 title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
-docname: draft-bormann-cbor-time-tag-03
-date: 2020-03-09
+docname: draft-bormann-cbor-time-tag-latest
+# date: 2020-03-10
 
 stand_alone: true
 
@@ -398,7 +398,7 @@ version of this document, the tag values for duration and period have been
 requested at the same time as the value for extended time in order to
 achieve allocation of all three values as a contiguous set.
 
-<!-- 
+<!--
 
 (TBD: Add registry for time scales.
 Add registry for map keys and allocation policies for additional keys.)
@@ -421,7 +421,7 @@ resolution and wall clock offset).
 
 --- back
 
-<!-- 
+<!--
 Contributors
 ============
 {: numbered="no"}
