@@ -2,7 +2,8 @@
 
 This is the working area for the individual Internet-Draft, "Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period".
 
-* [Editor's Copy](https://cbor-wg.github.io/time-tag/#go.draft-bormann-cbor-time-tag.html)
+* [Editor's
+  Copy](https://cbor-wg.github.io/time-tag/#go.draft-bormann-cbor-time-tag.html)   [![Build Status](https://travis-ci.org/cbor-wg/time-tag.svg?branch=master)](https://travis-ci.org/cbor-wg/time-tag)
 * [Individual Draft](https://tools.ietf.org/html/draft-bormann-cbor-time-tag)
 * [Compare Editor's Copy to Individual Draft](https://cbor-wg.github.io/time-tag/#go.draft-bormann-cbor-time-tag.diff)
 
