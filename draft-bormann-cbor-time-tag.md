@@ -3,7 +3,7 @@ title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
 docname: draft-bormann-cbor-time-tag-latest
-# date: 2020-03-10
+# date: 2021-02-21
 
 stand_alone: true
 
@@ -44,7 +44,7 @@ author:
 
 
 normative:
-  RFC7049:
+  RFC8949:
   TIME_T:
     target: http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16
     author:
@@ -88,21 +88,21 @@ normative:
   RFC8610: cddl
 
 informative:
-  TIME: I-D.touch-time
+  RFC8575:
 
 --- abstract
 
-The Concise Binary Object Representation (CBOR, RFC 7049) is a data
+The Concise Binary Object Representation (CBOR, RFC 8949) is a data
 format whose design goals include the possibility of extremely small
 code size, fairly small message size, and extensibility without the
 need for version negotiation.
 
 In CBOR, one point of extensibility is the definition of CBOR tags.
-RFC 7049 defines two tags for time: CBOR tag 0 (RFC3339 time) and tag
-1 (Posix time {{TIME_T}}, int or float).  Since then, additional requirements have
+RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+1 (Posix time as int or float).  Since then, additional requirements have
 become known.  The present document defines a CBOR tag for time that
-allows a more elaborate representation of time, and anticipates the
-definition of related CBOR tags for duration and time period.  It is
+allows a more elaborate representation of time, as well as related
+CBOR tags for duration and time period.  It is
 intended as the reference document for the IANA registration of the
 CBOR tags defined.
 
@@ -114,7 +114,8 @@ Version -01 consolidated this draft to non-speculative
 content, the normative parts of which are believed will stay unchanged
 during further development of the draft.  This version is provided to
 aid the registration of the CBOR tag immediately needed.
-The present version -02 makes use of the IANA allocations registered.
+Versions -02 and -03 made use of the IANA allocations registered and
+made other editorial updates.
 Further versions will re-introduce some of the material from -00, but
 in a more concrete form.
 
@@ -123,10 +124,10 @@ in a more concrete form.
 Introduction        {#intro}
 ============
 
-The Concise Binary Object Representation (CBOR, {{RFC7049}}) provides
+The Concise Binary Object Representation (CBOR, {{RFC8949}}) provides
 for the interchange of structured data without a requirement for a
 pre-agreed schema.
-RFC 7049 defines a basic set of data types, as well as a tagging
+RFC 8949 defines a basic set of data types, as well as a tagging
 mechanism that enables extending the set of data types supported via
 an IANA registry.
 
@@ -147,6 +148,7 @@ familiar from the programming language C (including C++14's 0bnnn
 binary literals), except that the operator "\*\*" stands for
 exponentiation.
 
+{::comment}
 Background
 ----------
 
@@ -154,6 +156,7 @@ Additional information about the complexities of time representation
 can be found in {{TIME}}.  This specification uses a number of terms
 that should be familiar to connoisseurs of precise time; references
 for these may need to be added.
+{:/}
 
 Objectives
 ==========
@@ -245,6 +248,8 @@ Key 1
 
 Key 1 indicates a value that is exactly like the data item that would
 be tagged by CBOR tag 1 (Posix time {{TIME_T}} as int or float).
+The time value indicated by the value under this key can be further
+modified by other keys.
 
 Keys 4 and 5
 ------------
@@ -273,19 +278,29 @@ integer value.
 | -18 | attoseconds  | (future)        |
 {: #decfract title="Key for decimally scaled Fractions"}
 
-{::comment}
-Key -1
+Key -1 {#key-m1}
 ------
 
 Key -1 is used to indicate a time scale.  The value 0 indicates UTC,
-the value 1 indicates TAI.  If key -1 is not present, time scale value
-0 is implied.
+with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
+PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}.
+
+If key -1 is not present, time scale value 0 is implied.
 Additional values can be registered in the (TBD define name for time
 scale registry); values MUST be integers or text strings.
 
-(Note that there should be no time scale "GPS" -- instead, the time
-should be converted to TAI using a single subtraction.)
+(Note that there should be no time scales "GPS" or "NTP" — instead,
+the time should be converted to TAI using a single subtraction.)
 
+~~~ math
+t_{ntp} = t_{utc} + 2208988800
+~~~
+~~~ math
+t_{gps} = t_{tai} - 315964819
+~~~
+{: #offset title="Converting Common Offset Time Scales"}
+
+{::comment}
 Key -2
 ------
 
@@ -310,8 +325,9 @@ timer can detect."
 The value is expressed in SI seconds {{SI-SECOND}} and
 can be any positive number, such as an integer, a floating point
 value (major type 7 or Tag 5), or a decimal value (Tag 4).
+{:/}
 
-Key -5
+Key -5: Accuracy
 ------
 
 Key -5 can be used to indicate the accuracy of the time {{IEEE1588-2008}}:
@@ -323,6 +339,8 @@ value (major type 7 or Tag 5), or a decimal value (Tag 4).
 
 (This could be extended into more information about the way the clock
 source is synchronized, e.g. manually, GPS, NTP, PTP, roughtime, ...)
+
+{::comment}
 
 Key -7
 ------
@@ -371,12 +389,10 @@ type names defined in {{tag-cddl}} are recommended:
 
 ~~~ CDDL
 etime = #6.1001({* (int/tstr) => any})
+duration = #6.1002({* (int/tstr) => any})
+period = #6.1003({* (int/tstr) => any})
 ~~~
 {: #tag-cddl title="Recommended type names for CDDL"}
-
-<!--
-duration = #6.1002({* (int/tstr) => any})
-period = #6.1003({* (int/tstr) => any}) ; ?
 
 -->
 
@@ -408,7 +424,7 @@ Add registry for map keys and allocation policies for additional keys.)
 Security Considerations
 ============
 
-The security considerations of RFC 7049 apply; the tags introduced
+The security considerations of RFC 8949 apply; the tags introduced
 here are not expected to raise security considerations beyond those.
 
 Time, of course, has significant security considerations; these
