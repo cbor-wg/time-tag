@@ -22,9 +22,27 @@ definition of related CBOR tags for duration and time period.  It is
 intended as the reference document for the IANA registration of the
 CBOR tags defined. 
     " name="description">
-<meta content="xml2rfc 2.40.1" name="generator">
+<meta content="xml2rfc 3.5.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-bormann-cbor-time-tag-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.5.0
+    Python 3.8.7
+    appdirs 1.4.4
+    ConfigArgParse 1.2.3
+    google-i18n-address 2.4.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.2
+    kitchen 1.2.6
+    lxml 4.6.2
+    pycountry 20.7.3
+    pyflakes 2.2.0
+    PyYAML 5.4.1
+    requests 2.25.1
+    setuptools 51.3.3
+    six 1.15.0
+-->
 <link href="draft-bormann-cbor-time-tag.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">@import url('https://martinthomson.github.io/i-d-template/fonts.css');
@@ -838,11 +856,11 @@ table.left {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR tag for extended time</td>
-<td class="right">March 2020</td>
+<td class="right">February 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann, et al.</td>
-<td class="center">Expires 11 September 2020</td>
+<td class="center">Expires 25 August 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -855,12 +873,12 @@ table.left {
 <dd class="internet-draft">draft-bormann-cbor-time-tag-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-03-10" class="published">10 March 2020</time>
+<time datetime="2021-02-21" class="published">21 February 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2020-09-11">11 September 2020</time></dd>
+<dd class="expires"><time datetime="2021-08-25">25 August 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -927,7 +945,7 @@ in a more concrete form.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 September 2020.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 August 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -936,7 +954,7 @@ in a more concrete form.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2020 IETF Trust and the persons identified as the
+            Copyright (c) 2021 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -955,62 +973,62 @@ in a more concrete form.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+<nav class="toc"><ul class="ulEmpty toc compact">
+<li class="ulEmpty toc compact" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
+<ul class="ulEmpty toc compact">
+<li class="ulEmpty toc compact" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.1.2.2">
-                <p id="section-toc.1-1.1.2.2.1"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-background" class="xref">Background</a><a href="#section-toc.1-1.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="ulEmpty toc compact" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-background" class="xref">Background</a><a href="#section-toc.1-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-</ul>
+            </ul>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.2">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-objectives" class="xref">Objectives</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.3">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-time-format" class="xref">Time Format</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.3.2.1">
+<ul class="ulEmpty toc compact">
+<li class="ulEmpty toc compact" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-key-1" class="xref">Key 1</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.3.2.2">
+              <li class="ulEmpty toc compact" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-keys-4-and-5" class="xref">Keys 4 and 5</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.3.2.3">
+              <li class="ulEmpty toc compact" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-keys-3-6-9-12-15-18" class="xref">Keys -3, -6, -9, -12, -15, -18</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
-</ul>
+            </ul>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.4">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-cddl-typenames" class="xref">CDDL typenames</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.5">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.6">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.7">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty">
-<li class="toc ulEmpty" id="section-toc.1-1.7.2.1">
+<ul class="ulEmpty toc compact">
+<li class="ulEmpty toc compact" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.7.2.1.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.7.2.2">
+              <li class="ulEmpty toc compact" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.7.2.2.1" class="pilcrow">¶</a></p>
 </li>
-</ul>
+            </ul>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.8">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-acknowledgements" class="xref">Acknowledgements</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.9">
+          <li class="ulEmpty toc compact" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-appendix.b" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
-</ul>
+        </ul>
 </nav>
 </section>
 </div>
@@ -1064,24 +1082,24 @@ for these may need to be added.<a href="#section-1.2-1" class="pilcrow">¶</a></
 <p id="section-2-1">For the time tag,
 the present specification addresses the following objectives that go
 beyond the original tags 0 and 1:<a href="#section-2-1" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-2.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
+<ul class="normal">
+<li class="normal" id="section-2-2.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
 1 only provides for integer and up to binary64 floating point
 representation of times, limiting resolution to approximately
 microseconds at the time of writing (and progressively becoming
 worse over time).<a href="#section-2-2.1" class="pilcrow">¶</a>
 </li>
-</ul>
+      </ul>
 <p id="section-2-3">Not currently addressed, but possibly covered by the definition of
 additional map keys for the map inside the tag:<a href="#section-2-3" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-2-4.1">Indication of time scale.  Tags 0 and 1 are for UTC; however, some
+<ul class="normal">
+<li class="normal" id="section-2-4.1">Indication of time scale.  Tags 0 and 1 are for UTC; however, some
 interchanges are better performed on TAI.  Other time scales may be
 registered once they become relevant (e.g., one of the proposed
 successors to UTC that might no longer use leap seconds, or a
 scale based on smeared leap seconds).<a href="#section-2-4.1" class="pilcrow">¶</a>
 </li>
-<li id="section-2-4.2">Direct representation of natural platform time formats.  Some
+        <li class="normal" id="section-2-4.2">Direct representation of natural platform time formats.  Some
 platforms use epoch-based time formats that require some computation
 to convert them into the representations allowed by tag 1; these
 computations can also lose precision and cause ambiguities.
@@ -1089,12 +1107,12 @@ computations can also lose precision and cause ambiguities.
 "fixed" to include, e.g., Decimal or BigFloat representations.  It
 does define how to use these with the extended time format.)<a href="#section-2-4.2" class="pilcrow">¶</a>
 </li>
-<li id="section-2-4.3">Additional indication of intents about the interpretation of the
+        <li class="normal" id="section-2-4.3">Additional indication of intents about the interpretation of the
 time given, in particular for future times.
 Intents might include information about time zones, daylight savings
 times, etc.<a href="#section-2-4.3" class="pilcrow">¶</a>
 </li>
-</ul>
+      </ul>
 <p id="section-2-5">Additional tags might later be defined for duration and period.
 The objectives for such duration and period tags are likely similar.<a href="#section-2-5" class="pilcrow">¶</a></p>
 </section>
@@ -1115,21 +1133,21 @@ Not understanding key/value for unsigned keys is an error.<a href="#section-3-1"
 specifies the "base time", and may also contain one or more negative
 integer or text-string keys, which may encode supplementary
 information such as:<a href="#section-3-2" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-3-3.1">a higher precision time offset to be added to the base time,<a href="#section-3-3.1" class="pilcrow">¶</a>
+<ul class="normal">
+<li class="normal" id="section-3-3.1">a higher precision time offset to be added to the base time,<a href="#section-3-3.1" class="pilcrow">¶</a>
 </li>
-</ul>
+      </ul>
 <p id="section-3-4">Future keys may add:<a href="#section-3-4" class="pilcrow">¶</a></p>
-<ul>
-<li id="section-3-5.1">a reference time scale and epoch different from the default UTC and 1970-01-01<a href="#section-3-5.1" class="pilcrow">¶</a>
+<ul class="normal">
+<li class="normal" id="section-3-5.1">a reference time scale and epoch different from the default UTC and 1970-01-01<a href="#section-3-5.1" class="pilcrow">¶</a>
 </li>
-<li id="section-3-5.2">information about clock source and precision, accuracy, and resolution<a href="#section-3-5.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-5.2">information about clock source and precision, accuracy, and resolution<a href="#section-3-5.2" class="pilcrow">¶</a>
 </li>
-<li id="section-3-5.3">intent information such as timezone and daylight savings time,
+        <li class="normal" id="section-3-5.3">intent information such as timezone and daylight savings time,
 and/or possibly positioning coordinates, to express information that
 would indicate a local time.<a href="#section-3-5.3" class="pilcrow">¶</a>
 </li>
-</ul>
+      </ul>
 <p id="section-3-6">While this document does not define supplementary text keys, a number
 of unsigned and negative-integer keys are defined below.<a href="#section-3-6" class="pilcrow">¶</a></p>
 <div id="key-1">
@@ -1292,7 +1310,7 @@ include the exploitation of ambiguities where time is security
 relevant (e.g., for freshness or in a validity span) or the disclosure
 of characteristics of the emitting system (e.g., time zone, or clock
 resolution and wall clock offset).<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3"><a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-3"></p>
 </section>
 </div>
 <section id="section-7">
@@ -1305,29 +1323,37 @@ resolution and wall clock offset).<a href="#section-6-2" class="pilcrow">¶</a><
         </h3>
 <dl class="references">
 <dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
-<dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <time></time>, <span>&lt;<a href="http://www.iana.org/assignments/cbor-tags">http://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="http://www.iana.org/assignments/cbor-tags">http://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="IEEE1588-2008">[IEEE1588-2008]</dt>
-<dd>
-<span class="refAuthor">IEEE</span>, <span class="refTitle">"1588-2008 - IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <time datetime="2008-07">July 2008</time>, <span>&lt;<a href="http://standards.ieee.org/findstds/standard/1588-2008.html">http://standards.ieee.org/findstds/standard/1588-2008.html</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"1588-2008 - IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <time datetime="2008-07" class="refDate">July 2008</time>, <span>&lt;<a href="http://standards.ieee.org/findstds/standard/1588-2008.html">http://standards.ieee.org/findstds/standard/1588-2008.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RESOLUTION">[RESOLUTION]</dt>
-<dd>
-<span class="refAuthor">The Open Group Base Specifications</span>, <span class="refTitle">"Vol. 1: Base Definitions, Issue 7"</span>, <span class="seriesInfo">2016 Edition</span>, <span class="seriesInfo">IEEE Std 1003.1-2008</span>, <span class="seriesInfo">Section 3.328 '(Time) Resolution'</span>, <time datetime="2016">2016</time>, <span>&lt;<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328">http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">The Open Group Base Specifications</span>, <span class="refTitle">"Vol. 1: Base Definitions, Issue 7"</span>, <span class="seriesInfo">Section 3.328 '(Time) Resolution'</span>, <span class="seriesInfo">IEEE Std 1003.1-2008</span>, <span class="seriesInfo">2016 Edition</span>, <time datetime="2016" class="refDate">2016</time>, <span>&lt;<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328">http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-<dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC7049">[RFC7049]</dt>
-<dd>
-<span class="refAuthor">Bormann, C.</span><span class="refAuthor"> and P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">RFC 7049</span>, <span class="seriesInfo">DOI 10.17487/RFC7049</span>, <time datetime="2013-10">October 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7049">https://www.rfc-editor.org/info/rfc7049</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">Bormann, C.</span><span class="refAuthor"> and P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">RFC 7049</span>, <span class="seriesInfo">DOI 10.17487/RFC7049</span>, <time datetime="2013-10" class="refDate">October 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7049">https://www.rfc-editor.org/info/rfc7049</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8610">[RFC8610]</dt>
-<dd>
-<span class="refAuthor">Birkholz, H.</span><span class="refAuthor">, Vigano, C.</span><span class="refAuthor">, and C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8610">https://www.rfc-editor.org/info/rfc8610</a>&gt;</span>. </dd>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span><span class="refAuthor">, Vigano, C.</span><span class="refAuthor">, and C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8610">https://www.rfc-editor.org/info/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="SI-SECOND">[SI-SECOND]</dt>
-<dd>
-<span class="refAuthor">International Organization for Standardization (ISO)</span>, <span class="refTitle">"Quantities and units -- Part 3: Space and time"</span>, <span class="seriesInfo">ISO 80000-3</span>, <time datetime="2006-03-01">1 March 2006</time>. </dd>
+        <dd>
+<span class="refAuthor">International Organization for Standardization (ISO)</span>, <span class="refTitle">"Quantities and units — Part 3: Space and time"</span>, <span class="seriesInfo">ISO 80000-3</span>, <time datetime="2006-03-01" class="refDate">1 March 2006</time>. </dd>
+<dd class="break"></dd>
 <dt id="TIME_T">[TIME_T]</dt>
-<dd>
-<span class="refAuthor">The Open Group Base Specifications</span>, <span class="refTitle">"Vol. 1: Base Definitions, Issue 7"</span>, <span class="seriesInfo">2016 Edition</span>, <span class="seriesInfo">IEEE Std 1003.1-2008</span>, <span class="seriesInfo">Section 4.15 'Seconds Since the Epoch'</span>, <time datetime="2016">2016</time>, <span>&lt;<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16">http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16</a>&gt;</span>. </dd>
+      <dd>
+<span class="refAuthor">The Open Group Base Specifications</span>, <span class="refTitle">"Vol. 1: Base Definitions, Issue 7"</span>, <span class="seriesInfo">Section 4.15 'Seconds Since the Epoch'</span>, <span class="seriesInfo">IEEE Std 1003.1-2008</span>, <span class="seriesInfo">2016 Edition</span>, <time datetime="2016" class="refDate">2016</time>, <span>&lt;<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16">http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 </dl>
 </section>
 <section id="section-7.2">
@@ -1336,8 +1362,9 @@ resolution and wall clock offset).<a href="#section-6-2" class="pilcrow">¶</a><
         </h3>
 <dl class="references">
 <dt id="TIME">[TIME]</dt>
-<dd>
-<span class="refAuthor">Touch, J.</span>, <span class="refTitle">"Resolving Multiple Time Scales in the Internet"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-touch-time-06</span>, <time datetime="2019-11-19">19 November 2019</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-touch-time-06.txt">http://www.ietf.org/internet-drafts/draft-touch-time-06.txt</a>&gt;</span>. </dd>
+      <dd>
+<span class="refAuthor">Touch, J.</span>, <span class="refTitle">"Resolving Multiple Time Scales in the Internet"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-touch-time-06</span>, <time datetime="2019-11-19" class="refDate">19 November 2019</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-touch-time-06.txt">https://www.ietf.org/archive/id/draft-touch-time-06.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 </dl>
 </section>
 </section>

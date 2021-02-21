@@ -5,10 +5,10 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Informational                                 B. Gamari
-Expires: 11 September 2020                                    Well-Typed
+Expires: 25 August 2021                                       Well-Typed
                                                              H. Birkholz
                                                           Fraunhofer SIT
-                                                           10 March 2020
+                                                        21 February 2021
 
 
 Concise Binary Object Representation (CBOR) Tags for Time, Duration, and
@@ -48,16 +48,18 @@ Status of This Memo
    This Internet-Draft is submitted in full conformance with the
    provisions of BCP 78 and BCP 79.
 
+
+
+
+
+
+Bormann, et al.          Expires 25 August 2021                 [Page 1]
+
+Internet-Draft         CBOR tag for extended time          February 2021
+
+
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
-
-
-
-Bormann, et al.         Expires 11 September 2020               [Page 1]
-
-Internet-Draft         CBOR tag for extended time             March 2020
-
-
    working documents as Internet-Drafts.  The list of current Internet-
    Drafts is at https://datatracker.ietf.org/drafts/current/.
 
@@ -66,11 +68,11 @@ Internet-Draft         CBOR tag for extended time             March 2020
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 September 2020.
+   This Internet-Draft will expire on 25 August 2021.
 
 Copyright Notice
 
-   Copyright (c) 2020 IETF Trust and the persons identified as the
+   Copyright (c) 2021 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -107,11 +109,9 @@ Table of Contents
 
 
 
-
-
-Bormann, et al.         Expires 11 September 2020               [Page 2]
+Bormann, et al.          Expires 25 August 2021                 [Page 2]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
 1.  Introduction
@@ -165,9 +165,9 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 3]
+Bormann, et al.          Expires 25 August 2021                 [Page 3]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
    *  Direct representation of natural platform time formats.  Some
@@ -221,9 +221,9 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 4]
+Bormann, et al.          Expires 25 August 2021                 [Page 4]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
 3.1.  Key 1
@@ -248,7 +248,7 @@ Internet-Draft         CBOR tag for extended time             March 2020
    are added to a base time in seconds [SI-SECOND] indicated by a Key 1,
    which then MUST also be present and MUST have an integer value.
 
-                 +-----+--------------+-----------------+
+                 +=====+==============+=================+
                  | Key | meaning      | example usage   |
                  +=====+==============+=================+
                  | -3  | milliseconds | Java time       |
@@ -277,9 +277,9 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 5]
+Bormann, et al.          Expires 25 August 2021                 [Page 5]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
                  Figure 1: Recommended type names for CDDL
@@ -290,7 +290,7 @@ Internet-Draft         CBOR tag for extended time             March 2020
    Table 2 from the FCFS space, with the present document as the
    specification reference.
 
-              +------+-----------+-------------------------+
+              +======+===========+=========================+
               |  Tag | Data Item | Semantics               |
               +======+===========+=========================+
               | 1001 | map       | [RFCthis] extended time |
@@ -333,9 +333,9 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 6]
+Bormann, et al.          Expires 25 August 2021                 [Page 6]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
               Control Systems", July 2008,
@@ -344,8 +344,8 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
    [RESOLUTION]
               The Open Group Base Specifications, "Vol. 1: Base
-              Definitions, Issue 7", 2016 Edition, IEEE Std 1003.1-2008,
-              Section 3.328 '(Time) Resolution', 2016,
+              Definitions, Issue 7", Section 3.328 '(Time) Resolution',
+              IEEE Std 1003.1-2008, 2016 Edition, 2016,
               <http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/
               V1_chap03.html#tag_03_328>.
 
@@ -366,12 +366,12 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
    [SI-SECOND]
               International Organization for Standardization (ISO),
-              "Quantities and units -- Part 3: Space and time",
+              "Quantities and units — Part 3: Space and time",
               ISO 80000-3, 1 March 2006.
 
    [TIME_T]   The Open Group Base Specifications, "Vol. 1: Base
-              Definitions, Issue 7", 2016 Edition, IEEE Std 1003.1-2008,
-              Section 4.15 'Seconds Since the Epoch', 2016,
+              Definitions, Issue 7", Section 4.15 'Seconds Since the
+              Epoch', IEEE Std 1003.1-2008, 2016 Edition, 2016,
               <http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/
               V1_chap04.html#tag_04_16>.
 
@@ -379,8 +379,8 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
    [TIME]     Touch, J., "Resolving Multiple Time Scales in the
               Internet", Work in Progress, Internet-Draft, draft-touch-
-              time-06, 19 November 2019, <http://www.ietf.org/internet-
-              drafts/draft-touch-time-06.txt>.
+              time-06, 19 November 2019,
+              <https://www.ietf.org/archive/id/draft-touch-time-06.txt>.
 
 Acknowledgements
 
@@ -389,9 +389,9 @@ Authors' Addresses
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 7]
+Bormann, et al.          Expires 25 August 2021                 [Page 7]
 
-Internet-Draft         CBOR tag for extended time             March 2020
+Internet-Draft         CBOR tag for extended time          February 2021
 
 
    Carsten Bormann
@@ -445,4 +445,4 @@ Internet-Draft         CBOR tag for extended time             March 2020
 
 
 
-Bormann, et al.         Expires 11 September 2020               [Page 8]
+Bormann, et al.          Expires 25 August 2021                 [Page 8]
