@@ -321,7 +321,7 @@ The first three are analogous to `clock-quality-grouping` in
 {{RFC8575}}, which is in turn based on the definitions in
 {{IEEE1588-2008}}; two more are specific to this document.
 
-~~~cddl
+~~~ cddl
 ClockQuality-group = (
   ? ClockClass => uint .size 1 ; PTP/RFC8575
   ? ClockAccuracy => uint .size 1 ; PTP/RFC8575
@@ -470,6 +470,9 @@ Semantically, they do not measure the time elapsed from a given epoch,
 but from the start to the end of (an otherwise unspecified) interval
 of time.
 
+In combination with an epoch identified in the context, a duration can
+also be used to express an absolute time.
+
 <aside markdown="1">
 (TBD: Clearly, ISO8601 durations are rather different; we do not want to use these.)
 </aside>
@@ -484,7 +487,7 @@ plus a duration.
 They are given as an array of unwrapped time and duration elements,
 tagged with Tag 1003:
 
-~~~ CDDL
+~~~ cddl
 Period = #6.1003([
   start: ~Time / null
   end: ~Time / null
@@ -496,7 +499,7 @@ If the third array element is not given, the duration element is null.
 Exactly two out of the three elements must be non-null, this can be
 clumsily expressed in CDDL as:
 
-~~~ CDDL
+~~~ cddl
 Period = #6.1003([
   (start: ~Time,
    ((end: ~Time,
@@ -519,7 +522,7 @@ CDDL typenames
 For the use with the CBOR Data Definition Language, CDDL {{-cddl}}, the
 type names defined in {{tag-cddl}} are recommended:
 
-~~~cddl
+~~~ cddl
 etime = #6.1001({* (int/tstr) => any})
 duration = #6.1002({* (int/tstr) => any})
 period = #6.1003([~etime/null, ~etime/null, ~duration/null])
@@ -558,8 +561,6 @@ include the exploitation of ambiguities where time is security
 relevant (e.g., for freshness or in a validity span) or the disclosure
 of characteristics of the emitting system (e.g., time zone, or clock
 resolution and wall clock offset).
-
-----
 
 --- back
 
