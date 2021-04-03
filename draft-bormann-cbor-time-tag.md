@@ -340,14 +340,14 @@ Guarantee = -8
 
 Key -2 (ClockClass) can be used to indicate the clock class as per
 Table 5 of {{IEEE1588-2008}}.
-It is defined as a one-byte integer as that is the ranged defined there.
+It is defined as a one-byte unsigned integer as that is the range defined there.
 
 ### ClockAccuracy (Key -4)
 
 
 Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as per
 Table 6 of {{IEEE1588-2008}}.
-It is defined as a one-byte integer as that is the ranged defined there.
+It is defined as a one-byte unsigned integer as that is the range defined there.
 The range between 32 and 47 is a slightly distorted logarithmic scale from
 25 ns to 1 s (see {{formula-accuracy-enum}}); the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.
