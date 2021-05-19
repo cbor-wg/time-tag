@@ -2,8 +2,8 @@
 title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
-docname: draft-bormann-cbor-time-tag-latest
-date: 2021-02-22
+docname: draft-ietf-cbor-time-tag-latest
+date: 2021-05-19
 
 stand_alone: true
 
@@ -119,16 +119,17 @@ CBOR tags defined.
 
 --- note_Note_to_Readers
 
-Version -00 of the present draft opened up the possibilities provided
-by extended representations of time in CBOR.
+Version -00 of the individual submission that led to the present draft
+opened up the possibilities provided by extended representations of
+time in CBOR.
 Version -01 consolidated this draft to non-speculative
-content, the normative parts of which are believed will stay unchanged
-during further development of the draft.  This version is provided to
+content, the normative parts of which were believed will stay unchanged
+during further development of the draft.  This version was provided to
 aid the registration of the CBOR tag immediately needed.
-Versions -02 and -03 made use of the IANA allocations registered and
-made other editorial updates.
-Further versions will re-introduce some of the material from -00, but
-in a more concrete form.
+Further versions of the individual submission made use of the IANA
+allocations registered and made other editorial updates.
+Now a WG document, future versions could re-introduce some of the
+material from the initial submission, but in a more concrete form.
 
 --- middle
 
@@ -147,10 +148,7 @@ an IANA registry.
 Terminology         {#terms}
 ------------
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in
-RFC 2119 {{!RFC2119}}.
+{::boilerplate bcp14-tagged}
 
 The term "byte" is used in its now customary sense as a synonym for
 "octet".
@@ -577,7 +575,7 @@ seconds in CBOR time.
 
 Acknowledgements
 ================
-{: numbered="no"}
+{: numbered="false"}
 
 <!--  LocalWords:  CBOR extensibility IANA uint sint IEEE endian TAI
  -->
