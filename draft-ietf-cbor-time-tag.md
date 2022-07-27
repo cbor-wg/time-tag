@@ -108,14 +108,16 @@ format whose design goals include the possibility of extremely small
 code size, fairly small message size, and extensibility without the
 need for version negotiation.
 
-In CBOR, one point of extensibility is the definition of CBOR tags.
-RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
-1 (Posix time as int or float).  Since then, additional requirements have
-become known.  The present document defines a CBOR tag for time that
-allows a more elaborate representation of time, as well as related
-CBOR tags for duration and time period.  It is
-intended as the reference document for the IANA registration of the
-CBOR tags defined.
+[^abs2-]
+
+[^abs2-]: In CBOR, one point of extensibility is the definition of CBOR tags.
+    RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+    1 (Posix time as int or float).  Since then, additional requirements have
+    become known.  The present document defines a CBOR tag for time that
+    allows a more elaborate representation of time, as well as related
+    CBOR tags for duration and time period.  It is
+    intended as the reference document for the IANA registration of the
+    CBOR tags defined.
 
 --- note_Note_to_Readers
 
@@ -143,7 +145,7 @@ RFC 8949 defines a basic set of data types, as well as a tagging
 mechanism that enables extending the set of data types supported via
 an IANA registry.
 
-(TBD: Expand on text from abstract here.)
+[^abs2-]
 
 Terminology         {#terms}
 ------------
