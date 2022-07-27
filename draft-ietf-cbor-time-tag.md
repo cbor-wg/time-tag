@@ -49,7 +49,7 @@ author:
 
 
 normative:
-  RFC8949:
+  RFC8949: cbor
   TIME_T:
     target: http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16
     author:
@@ -101,10 +101,12 @@ normative:
     date: September 2008
   IANA.cbor-tags: tags
   RFC8610: cddl
+  IXDTF: I-D.ietf-sedate-datetime-extended
 
 informative:
   RFC8575:
   RFC3161:
+  RFC3339:
 
 --- abstract
 
@@ -124,19 +126,14 @@ need for version negotiation.
     intended as the reference document for the IANA registration of the
     CBOR tags defined.
 
---- note_Note_to_Readers
+[^status]
 
-Version -00 of the individual submission that led to the present draft
-opened up the possibilities provided by extended representations of
-time in CBOR.
-Version -01 consolidated this draft to non-speculative
-content, the normative parts of which were believed will stay unchanged
-during further development of the draft.  This version was provided to
-aid the registration of the CBOR tag immediately needed.
-Further versions of the individual submission made use of the IANA
-allocations registered and made other editorial updates.
-Now a WG document, future versions could re-introduce some of the
-material from the initial submission, but in a more concrete form.
+[^status]:
+    The present version (-01) adds a trial balloon (Sections {{<tzh}}
+    and {{<suff}}) for providing a way
+    to include, in time tags, the hints defined in
+    draft-ietf-sedate-datetime-extended.
+    This trial balloon is intended for discussion at and around IETF 114.
 
 --- middle
 
@@ -163,6 +160,10 @@ Where bit arithmetic is explained, this document uses the notation
 familiar from the programming language C (including C++14's 0bnnn
 binary literals), except that the operator "\*\*" stands for
 exponentiation.
+
+CBOR diagnostic notation is defined in {{Section 8 of -cbor}} and
+{{Section G of -cddl}}.
+
 
 {::comment}
 Background
@@ -224,7 +225,7 @@ and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.   Implementations MUST ignore
 key/value types they do not understand for negative integer and text
 string values of the key.
-Not understanding key/value for unsigned keys is an error.
+Not understanding key/value for unsigned integer keys is an error.
 <!-- (Discussion: Do we need "critical" keys?) -->
 
 The map must contain exactly one unsigned integer key, which
@@ -434,32 +435,96 @@ value (major type 7 or Tag 5), or a decimal value (Tag 4).
 (This could be extended into more information about the way the clock
 source is synchronized, e.g. manually, GPS, NTP, PTP, roughtime, ...)
 
-Key -7
-------
-
-Key -7 can be used to indicate the time zone that would best fit for
-displaying the time given to humans.
-(TBD: Format for the time zone information; possibly including DST
-information.  No default; generally, the time can by default be
-presented as UTC/"Zulu time".)
-
-Key -8
-------
-
-Key -8 can be used to indicate the location in which the time given
-should be interpreted (e.g., for deriving time zone information).
-(TBD: Format for the coordinate information; may need to contain the
-Datum information.)
-
-Key -10
-------
-
-Key -10 can be used to indicate the calendar that would best fit for
-displaying the time given to humans.
-(TBD: Format for the calendar information.  This should probably
-default to Gregorian.)
-
 {:/}
+
+Keys -10, 10: Time Zone Hint {#tzh}
+------
+
+Keys -10 and 10 can be used to provide a hint about the time zone that
+would best fit for displaying the time given to humans, using a text
+string in the format defined for `time-zone-name` or `time-numoffset`
+in {{IXDTF}}.
+Key -10 is equivalent to providing this information as an elective
+hint, while key 10 provides this information as critical (i.e., it
+MUST be used when interpreting the entry with this key).
+
+Keys -10 and 10 MUST NOT both be present.
+
+~~~ cddl
+time-zone-info = tstr .abnf
+                 ("time-zone-name / time-numoffset" .det IXDTFtz)
+IXDTFtz = '
+   time-hour       = 2DIGIT  ; 00-23
+   time-minute     = 2DIGIT  ; 00-59
+   time-numoffset  = ("+" / "-") time-hour ":" time-minute
+
+
+
+   time-zone-initial = ALPHA / "." / "_"
+   time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
+   time-zone-part    = time-zone-initial *13(time-zone-char)
+                       ; but not "." or ".."
+   time-zone-name    = time-zone-part *("/" time-zone-part)
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF] and [RFC3339]; update as needed
+~~~
+
+Keys -11, 11: IXDTF Suffix Information {#suff}
+------
+
+Similar to keys -10 and 10, keys -11 (elective) and 11 (critical) can
+be used to provide additional information in the style of IXDTF
+suffixes, such as the calendar that would best fit for displaying the
+time given to humans.
+The key's value is a map that has IXDTF `suffix-key` names as keys and
+corresponding suffix values as values, specifically:
+
+~~~ cddl
+suffix-info-map = { * suffix-key => suffix-values }
+suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
+suffix-values = one-or-more<suffix-value>
+one-or-more<T> = T / [ 2* T ]
+suffix-value = tstr .abnf ("suffix-value" .det IXDTF)
+
+IXDTF = '
+   key-initial       = ALPHA / "_"
+   key-char          = key-initial / DIGIT / "-"
+   suffix-key        = key-initial *key-char
+
+   suffix-value      = 1*alphanum
+   alphanum          = ALPHA / DIGIT
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF]; update as needed!
+~~~
+
+When keys -11 and 11 both are present, the two maps MUST NOT have
+entries with the same map keys.
+
+Figure 4 of {{IXDTF}} gives an example for an extended date-time with both time zone
+and suffix information:
+
+~~~~
+1996-12-19T16:39:57-08:00[America/Los_Angeles][u-ca=hebrew]
+~~~~
+
+A time tag that is approximating this example, in CBOR diagnostic
+notation, would be:
+
+~~~ cbor-diag
+/ 1996-12-19T16:39:57-08:00[America//Los_Angeles][u-ca=hebrew] /
+1001({ 1: 851042397,
+     -10: "America/Los_Angeles",
+     -11: { "u-ca": "hebrew" }
+})
+~~~
+
+Note that both -10 and -11 are using negative keys and therefore
+provide elective information, as in the IXDTF form.
+Note also that in this example the time numeric offset (`-08:00`) is
+lost in translating from the {{RFC3339}} information in the IXDTF into a
+Posix time that can be included under Key 1 in a time tag.
 
 Duration Format {#duration}
 ===============
@@ -587,5 +652,5 @@ Acknowledgements
 
 <!--  LocalWords:  CBOR extensibility IANA uint sint IEEE endian TAI
  -->
-<!--  LocalWords:  signedness endianness NTP
+<!--  LocalWords:  signedness endianness NTP IXDTF
  -->
