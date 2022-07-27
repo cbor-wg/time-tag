@@ -1,15 +1,15 @@
 ---
+v: 3
+
 title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
 docname: draft-ietf-cbor-time-tag-latest
-date: 2021-05-19
+date: 2022-07-27
 
-stand_alone: true
-
-ipr: trust200902
 keyword: Internet-Draft
 cat: info
+stream: IETF
 
 pi: [toc, sortrefs, symrefs, compact, comments]
 
