@@ -11,6 +11,11 @@ keyword: Internet-Draft
 cat: info
 stream: IETF
 
+venue:
+  group: CBOR
+  mail: cbor@ietf.org
+  github: cbor-wg/time-tag
+
 pi: [toc, sortrefs, symrefs, compact, comments]
 
 author:
