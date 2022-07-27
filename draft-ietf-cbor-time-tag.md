@@ -533,7 +533,8 @@ IANA Considerations
 ============
 
 In the registry {{-tags}},
-IANA has allocated the tags in {{tab-tag-values}} from the
+IANA has allocated the tags in {{tab-tag-values}} from what was at the
+time the
 FCFS space, with the present document as the specification reference.
 
 |  Tag | Data Item | Semantics               |
