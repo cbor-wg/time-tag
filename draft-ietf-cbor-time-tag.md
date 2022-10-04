@@ -210,8 +210,7 @@ interpretation of the time given, in particular for future times.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.
 
-Not currently addressed, but possibly covered by the definition of
-additional map keys for the map inside the tag:
+Semantics not covered by this document can be added via additional map keys for the map inside the tag that can be defined in other specifications. An example of an additional semantic definition follows.
 
 * Direct representation of natural platform time formats.  Some
   platforms use epoch-based time formats that require some computation
