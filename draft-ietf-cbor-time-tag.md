@@ -210,7 +210,10 @@ interpretation of the time given, in particular for future times.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.
 
-Semantics not covered by this document can be added via additional map keys for the map inside the tag that can be defined in other specifications. An example of an additional semantic definition follows.
+Semantics not covered by this document can be added by registering
+additional map keys for the map inside the tag, the specification for
+which is referenced by the registry entry ({{map-key-registry}}, {{time-format}}).
+For example, map keys could be registered for:
 
 * Direct representation of natural platform time formats.  Some
   platforms use epoch-based time formats that require some computation
@@ -233,7 +236,6 @@ determined by each specific key.   Implementations MUST ignore
 key/value types they do not understand for negative integer and text
 string values of the key.
 Not understanding key/value for unsigned integer keys is an error.
-<!-- (Discussion: Do we need "critical" keys?) -->
 
 The map must contain exactly one unsigned integer key, which
 specifies the "base time", and may also contain one or more negative
@@ -248,6 +250,8 @@ information such as:
   accuracy, and uncertainty
 <!-- precision, and resolution -->
 
+Additional keys can be defined by registering them in the Map Key
+Registry ({{map-key-registry}}).
 Future keys may add:
 
 * intent information such as timezone and daylight savings time,
