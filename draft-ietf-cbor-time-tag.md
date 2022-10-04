@@ -50,6 +50,7 @@ author:
 
 normative:
   RFC8949: cbor
+  BCP26: RFC8126
   TIME_T:
     target: http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16
     author:
@@ -107,6 +108,18 @@ informative:
   RFC8575:
   RFC3161:
   RFC3339:
+  ISO8601:
+    display: ISO8601:1988
+    target: https://www.iso.org/standard/15903.html
+    title: >
+      Data elements and interchange formats — Information interchange —
+      Representation of dates and times
+    author:
+    - org: International Organization for Standardization
+      abbrev: ISO
+    seriesinfo:
+      ISO: '8601:1988'
+    date: 1988-06
 
 --- abstract
 
@@ -129,11 +142,8 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-01) adds a trial balloon (Sections {{<tzh}}
-    and {{<suff}}) for providing a way
-    to include, in time tags, the hints defined in
-    draft-ietf-sedate-datetime-extended.
-    This trial balloon is intended for discussion at and around IETF 114.
+    The present version (-02) fills in proposals for all TBDs that
+    were outstanding.
 
 --- middle
 
@@ -188,31 +198,31 @@ beyond the original tags 0 and 1:
   microseconds at the time of writing (and progressively becoming
   worse over time).
 
-* Indication of time scale.  Tags 0 and 1 are for UTC; however, some
-  interchanges are better performed on TAI.  Other time scales may be
+* Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+  interchanges are better performed on TAI.  Other timescales may be
   registered once they become relevant (e.g., one of the proposed
   successors to UTC that might no longer use leap seconds, or a
   scale based on smeared leap seconds).
 
-Not currently addressed, but possibly covered by the definition of
-additional map keys for the map inside the tag:
+By incorporating a way to transport {{IXDTF}} suffix information ({{tzh}},
+{{suff}}), additional indications can be provided of intents about the
+interpretation of the time given, in particular for future times.
+Intents might include information about time zones, daylight savings
+times, preferred calendar representations, etc.
+
+Semantics not covered by this document can be added by registering
+additional map keys for the map inside the tag, the specification for
+which is referenced by the registry entry ({{map-key-registry}}, {{time-format}}).
+For example, map keys could be registered for:
 
 * Direct representation of natural platform time formats.  Some
   platforms use epoch-based time formats that require some computation
   to convert them into the representations allowed by tag 1; these
   computations can also lose precision and cause ambiguities.
-  (TBD: The present specification does not take a position on whether tag 1 can be
-  "fixed" to include, e.g., Decimal or BigFloat representations.  It
-  does define how to use these with the extended time format.)
-
-* Additional indication of intents about the interpretation of the
-  time given, in particular for future times.
-  Intents might include information about time zones, daylight savings
-  times, etc.
-  <!--
-  (TBD: This is not yet a well-developed part of the spec; there needs
-  to be some effort to avoid the kitchen sink.)
-  -->
+  (The present specification does not take a position on whether tag 1
+  can be "fixed" to include, e.g., Decimal or BigFloat representations.
+  It does define how to use these representations with the extended
+  time format.)
 
 Additional tags are defined for durations and periods.
 
@@ -226,7 +236,6 @@ determined by each specific key.   Implementations MUST ignore
 key/value types they do not understand for negative integer and text
 string values of the key.
 Not understanding key/value for unsigned integer keys is an error.
-<!-- (Discussion: Do we need "critical" keys?) -->
 
 The map must contain exactly one unsigned integer key, which
 specifies the "base time", and may also contain one or more negative
@@ -235,12 +244,14 @@ information such as:
 
 * a higher precision time offset to be added to the base time,
 
-* a reference time scale and epoch different from the default UTC and 1970-01-01
+* a reference timescale and epoch different from the default UTC and 1970-01-01
 
 * information about clock quality parameters, such as source,
   accuracy, and uncertainty
 <!-- precision, and resolution -->
 
+Additional keys can be defined by registering them in the Map Key
+Registry ({{map-key-registry}}).
 Future keys may add:
 
 * intent information such as timezone and daylight savings time,
@@ -296,25 +307,26 @@ integer value.
 | -18 | attoseconds  | (future)        |
 {: #decfract title="Key for decimally scaled Fractions"}
 
-Key -1: Time Scale {#key-timescale}
+Key -1: Timescale {#key-timescale}
 ------
 
-Key -1 is used to indicate a time scale.  The value 0 indicates UTC,
+Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
 PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}.
 
-If key -1 is not present, time scale value 0 is implied.
-Additional values can be registered in the (TBD define name for time
-scale registry); values MUST be integers or text strings.
+If key -1 is not present, timescale value 0 is implied.
 
-(Note that there should be no time scales "GPS" or "NTP" — instead,
+Additional values can be registered in the Timescale Registry
+({{timescale-registry}}); values MUST be integers or text strings.
+
+(Note that there should be no timescales "GPS" or "NTP" — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)
 
 ~~~ math
 t_{utc} = t_{ntp} - 2208988800 \\
 t_{tai} = t_{gps} + 315964819
 ~~~
-{: #offset title="Converting Common Offset Time Scales"}
+{: #offset title="Converting Common Offset Timescales"}
 
 
 Clock Quality
@@ -532,7 +544,7 @@ Duration Format {#duration}
 
 A duration is the length of an interval of time.
 Durations in this format are given in SI seconds, possibly adjusted
-for conventional corrections of the time scale given (e.g., leap
+for conventional corrections of the timescale given (e.g., leap
 seconds).
 
 Except for using Tag 1002 instead of 1001,
@@ -544,8 +556,21 @@ of time.
 In combination with an epoch identified in the context, a duration can
 also be used to express an absolute time.
 
+Without such context, durations are subject to some uncertainties
+underlying the timescale used.
+E.g., for durations intended as a determinant of future time periods,
+there is some uncertainty of what irregularities (such as leap
+seconds, timescale corrections) will be exhibited by the timescale in
+that period.
+For durations as measurements of past periods, abstracting the period
+to a duration loses some detail about timescale irregularities.
+For many applications, these uncertainties are acceptable and thus
+the use of durations is appropriate.
+
 <aside markdown="1">
-(TBD: Clearly, ISO8601 durations are rather different; we do not want to use these.)
+Note that {{ISO8601}} durations are rather different from the ones defined
+in the present specification; there is no intention to support ISO 8601
+durations here.
 </aside>
 
 Period Format {#period}
@@ -583,9 +608,9 @@ Period = #6.1003([
 ])
 ~~~
 
-<aside markdown="1">
+<!--
 (Issue: should start/end be given the two-element treatment, or start/duration?)
-</aside>
+ -->
 
 CDDL typenames
 ==========
@@ -603,6 +628,9 @@ period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 IANA Considerations
 ============
 
+CBOR tags
+---------
+
 In the registry {{-tags}},
 IANA has allocated the tags in {{tab-tag-values}} from what was at the
 time the
@@ -617,10 +645,62 @@ FCFS space, with the present document as the specification reference.
 IANA is requested to change the "Data Item" column for Tag 1003 from
 "map" to "array".
 
-<aside markdown="1">
-(TBD: Add registry for time scales.
-Add registry for map keys and allocation policies for additional keys.)
-</aside>
+
+Timescale Registry
+------------------
+
+This specification defines a new subregistry titled "Timescale
+Registry" in the "CBOR Time Tag Parameters" registry
+[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
+4.7 of BCP26}}).
+
+Each entry needs to provide a timescale name (a sequence of uppercase
+ASCII characters and digits, where a digit may not occur at the start:
+`[A-Z][A-Z0-9]*`), a value (unsigned integer), and brief description
+of the semantics, and a specification reference (RFC).
+The initial contents are shown in {{tab-timescales}}.
+
+| Timescale | Value | Semantics            | Reference |
+| UTC       |     0 | UTC with POSIX Epoch | [RFCthis] |
+| TAI       |     1 | TAI with PTP Epoch   | [RFCthis] |
+{: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
+
+Map Key Registry
+----------------
+
+This specification defines a new subregistry titled "Map Key Registry"
+in the "CBOR Time Tag Parameters" registry
+[IANA.cbor-time-tag-parameters], with "Specification Required" as the
+Registration Procedure ({{Section 4.6 of BCP26}}).
+
+The designated expert is requested to assign the key values with the
+shortest encodings (1+0 and 1+1 encoding) to registrations that are
+likely to enjoy wide use and can benefit from short encodings.
+
+Each entry needs to provide a map key value (integer), a brief description
+of the semantics, and a specification reference (RFC).
+The initial contents are shown in {{tab-timescales}}.
+
+| Value | Semantics                           | Reference          |
+|   -18 | attoseconds                         | [RFCthis]          |
+|   -15 | femtoseconds                        | [RFCthis]          |
+|   -12 | picoseconds                         | [RFCthis]          |
+|   -11 | IXDTF Suffix Information (elective) | [RFCthis], {{IXDTF}} |
+|   -10 | IXDTF Time Zone Hint (elective)     | [RFCthis], {{IXDTF}} |
+|    -9 | nanoseconds                         | [RFCthis]          |
+|    -8 | Guarantee                           | [RFCthis]          |
+|    -7 | Uncertainty                         | [RFCthis]          |
+|    -6 | microseconds                        | [RFCthis]          |
+|    -5 | Offset-Scaled Log Variance          | [RFCthis]          |
+|    -4 | Clock Accuracy                      | [RFCthis]          |
+|    -3 | milliseconds                        | [RFCthis]          |
+|    -2 | Clock Class                         | [RFCthis]          |
+|     1 | Time value (as in CBOR Tag 1)       | [RFCthis]          |
+|     4 | Time value as in CBOR Tag 4         | [RFCthis]          |
+|     5 | Time value as in CBOR Tag 5         | [RFCthis]          |
+|    10 | IXDTF Time Zone Hint (critical)     | [RFCthis], {{IXDTF}} |
+|    11 | IXDTF Suffix Information (critical) | [RFCthis], {{IXDTF}} |
 
 Security Considerations
 ============
