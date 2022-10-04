@@ -488,12 +488,13 @@ one-or-more<T> = T / [ 2* T ]
 suffix-value = tstr .abnf ("suffix-value" .det IXDTF)
 
 IXDTF = '
-   key-initial       = ALPHA / "_"
+   key-initial       = lcalpha / "_"
    key-char          = key-initial / DIGIT / "-"
    suffix-key        = key-initial *key-char
 
    suffix-value      = 1*alphanum
    alphanum          = ALPHA / DIGIT
+   lcalpha           =  %x61-7A
    ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
    DIGIT             =  %x30-39 ; 0-9
 ' ; extracted from [IXDTF]; update as needed!
