@@ -323,7 +323,9 @@ Key -1: Timescale {#key-timescale}
 Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
 PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}; the value 2
-indicates UT1, as per the reference terminology defined in ANNEX 1 Time Scales of {{ITU-R_TF.460-6}}.
+indicates UT1 (Earth Rotation Angle), as defined by the International
+Earth Rotation and Reference Systems Service (IERS) and illustrated by
+the reference terminology in ANNEX 1 of {{ITU-R_TF.460-6}}.
 
 If key -1 is not present, timescale value 0 is implied.
 
@@ -675,6 +677,7 @@ The initial contents are shown in {{tab-timescales}}.
 | Timescale | Value | Semantics            | Reference |
 | UTC       |     0 | UTC with POSIX Epoch | [RFCthis] |
 | TAI       |     1 | TAI with PTP Epoch   | [RFCthis] |
+| UT1       |     2 | UT1 with POSIX Epoch | [RFCthis] |
 {: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
 
 Map Key Registry
