@@ -5,7 +5,7 @@ title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
 docname: draft-ietf-cbor-time-tag-latest
-date: 2022-10-04
+date: 2023
 
 keyword: Internet-Draft
 cat: info
@@ -235,12 +235,23 @@ and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.   Implementations MUST ignore
 key/value types they do not understand for negative integer and text
 string values of the key.
-Not understanding key/value for unsigned integer keys is an error.
+Not understanding key/value for unsigned integer keys is an error
+(these are either "base time" or "critical", see below).
 
-The map must contain exactly one unsigned integer key, which
-specifies the "base time", and may also contain one or more negative
-integer or text-string keys, which may encode supplementary
-information such as:
+The map must contain exactly one unsigned integer key that specifies
+the "base time", and may also contain one or more negative integer or
+text-string keys, which may encode supplementary information.
+
+Supplementary information may also be provided by additional unsigned
+integer keys that are explicitly defined to provide supplementary
+information ("critical"; as these are required to be understood, there
+can be no confusion with base time keys).
+
+Negative integer and text string keys always supply supplementary
+information ("elective", and this will not be explicitly stated
+below).
+
+Supplementary information may include:
 
 * a higher precision time offset to be added to the base time,
 
@@ -452,7 +463,9 @@ source is synchronized, e.g. manually, GPS, NTP, PTP, roughtime, ...)
 Keys -10, 10: Time Zone Hint {#tzh}
 ------
 
-Keys -10 and 10 can be used to provide a hint about the time zone that
+Keys -10 and 10 supply supplementary information, where key 10 is critical.
+
+They can be used to provide a hint about the time zone that
 would best fit for displaying the time given to humans, using a text
 string in the format defined for `time-zone-name` or `time-numoffset`
 in {{IXDTF}}.
@@ -484,6 +497,8 @@ IXDTFtz = '
 
 Keys -11, 11: IXDTF Suffix Information {#suff}
 ------
+
+Keys -11 and 11 supply supplementary information, where key 11 is critical.
 
 Similar to keys -10 and 10, keys -11 (elective) and 11 (critical) can
 be used to provide additional information in the style of IXDTF
