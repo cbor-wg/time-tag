@@ -142,8 +142,9 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-02) fills in proposals for all TBDs that
-    were outstanding.
+    The present version (-04) clearly separates the concepts of
+    critical (must-understand) and base-time; this should now be ready
+    for WGLC.
 
 --- middle
 
