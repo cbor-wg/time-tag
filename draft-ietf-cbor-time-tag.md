@@ -5,7 +5,7 @@ title: >
   Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period
 abbrev: CBOR tag for extended time
 docname: draft-ietf-cbor-time-tag-latest
-date: 2022-10-04
+date: 2023
 
 keyword: Internet-Draft
 cat: info
