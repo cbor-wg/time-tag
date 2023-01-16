@@ -246,7 +246,7 @@ text-string keys, which may encode supplementary information.
 Supplementary information may also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
 information ("critical"; as these are required to be understood, there
-can be no confusion with base time keys).
+can be no confusion with Base Time keys).
 
 Negative integer and text string keys always supply supplementary
 information ("elective", and this will not be explicitly stated
@@ -254,7 +254,7 @@ below).
 
 Supplementary information may include:
 
-* a higher precision time offset to be added to the base time,
+* a higher precision time offset to be added to the Base Time,
 
 * a reference timescale and epoch different from the default UTC and 1970-01-01
 
@@ -287,7 +287,7 @@ would be tagged by CBOR tag 0 (RFC 3339 date/time string) or tag 1
 Key 1
 -----
 
-Key 1 indicates a value that is exactly like the data item that would
+Key 1 indicates a Base Time value that is exactly like the data item that would
 be tagged by CBOR tag 1 (Posix time {{TIME_T}} as int or float).
 The time value indicated by the value under this key can be further
 modified by other keys.
@@ -295,7 +295,7 @@ modified by other keys.
 Keys 4 and 5
 ------------
 
-Keys 4 and 5 are like key 1, except that the data item is an array as
+Keys 4 and 5 indicate a Base Time value and are like key 1, except that the data item is an array as
 defined for CBOR tag 4 or 5, respectively.  This can be used to include
 a Decimal or Bigfloat epoch-based float {{TIME_T}} in an extended time.
 
@@ -306,7 +306,7 @@ The keys -3, -6, -9, -12, -15 and -18 indicate additional decimal fractions by
 giving an unsigned integer (major type 0) and scaling this with the
 scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively (see {{decfract}}).  More than one
 of these keys MUST NOT be present in one extended time data item.
-These additional fractions are added to a base time in seconds {{SI-SECOND}}
+These additional fractions are added to a Base Time in seconds {{SI-SECOND}}
 indicated by a Key 1, which then MUST also be present and MUST have an
 integer value.
 
@@ -712,9 +712,9 @@ The initial contents are shown in {{tab-timescales}}.
 |    -4 | Clock Accuracy                      | [RFCthis]          |
 |    -3 | milliseconds                        | [RFCthis]          |
 |    -2 | Clock Class                         | [RFCthis]          |
-|     1 | Time value (as in CBOR Tag 1)       | [RFCthis]          |
-|     4 | Time value as in CBOR Tag 4         | [RFCthis]          |
-|     5 | Time value as in CBOR Tag 5         | [RFCthis]          |
+|     1 | Base Time value (as in CBOR Tag 1)  | [RFCthis]          |
+|     4 | Base Time value as in CBOR Tag 4    | [RFCthis]          |
+|     5 | Base Time value as in CBOR Tag 5    | [RFCthis]          |
 |    10 | IXDTF Time Zone Hint (critical)     | [RFCthis], {{IXDTF}} |
 |    11 | IXDTF Suffix Information (critical) | [RFCthis], {{IXDTF}} |
 
