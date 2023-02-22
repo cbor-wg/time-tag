@@ -235,7 +235,7 @@ item (CBOR major type 5).  The map may contain integer (major types 0
 and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
-Implementations MUST ignore key/value pairs they do not understand.
+implementations MUST ignore key/value pairs they do not understand.
 Conversely, for unsigned integer keys, implementations MUST signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).
