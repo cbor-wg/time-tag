@@ -340,6 +340,20 @@ t_{tai} = t_{gps} + 315964819
 ~~~
 {: #offset title="Converting Common Offset Timescales"}
 
+{:aside}
+>
+Editor's note:
+This initial set of timescales was deliberately chosen to be frugal, as
+the specification of the tag provides an extension point where
+additional timescales can be registered at any time.
+Registrations are clearly needed for earth-referenced timescales (such
+as UT1 and TT), as well as possibly for specific realizations of
+abstract time scales (such as TAI(USNO) which is more accurate as a
+constant offset basis for GPS times).
+While the registration process itself is trivial, these registrations
+need to be made based on a solid specification of their actual
+definition.
+Draft text for a specification of the UT1 time scale can be found at <https://github.com/cbor-wg/time-tag/pull/9>.
 
 Clock Quality
 ------
