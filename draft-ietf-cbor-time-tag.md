@@ -613,7 +613,7 @@ Exactly two out of the three elements must be non-null, this can be
 clumsily expressed in CDDL as:
 
 ~~~ cddl
-Period = #6.1003([
+clumsyPeriod = #6.1003([
   (start: ~Time,
    ((end: ~Time,
      ? duration: null) //
@@ -732,6 +732,18 @@ of characteristics of the emitting system (e.g., time zone, or clock
 resolution and wall clock offset).
 
 --- back
+
+Collected CDDL
+==============
+
+This appendix collects the CDDL rules spread over the document into
+one convenient place.
+
+~~~ cddl
+{::include draft-ietf-cbor-time-tag-extracted.cddl}
+~~~
+{: #fig-collected-cddl title="Collected CDDL rules from this
+specification" sourcecode-name="time-tag-collected-cddl.cddl"}
 
 <!--
 Contributors
