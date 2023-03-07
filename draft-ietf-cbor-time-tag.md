@@ -230,13 +230,14 @@ Additional tags are defined for durations and periods.
 Time Format
 ===========
 
-An extended time is indicated by CBOR tag 1001, which tags a map data
+An extended time is indicated by CBOR tag 1001, the content of which is a map data
 item (CBOR major type 5).  The map may contain integer (major types 0
 and 1) or text string (major type 3) keys, with the value type
-determined by each specific key.   Implementations MUST ignore
-key/value types they do not understand for negative integer and text
-string values of the key.
-Not understanding key/value for unsigned integer keys is an error
+determined by each specific key.
+For negative integer keys and text string values of the key,
+implementations MUST ignore key/value pairs they do not understand.
+Conversely, for unsigned integer keys, implementations MUST signal as
+an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).
 
 The map must contain exactly one unsigned integer key that specifies
