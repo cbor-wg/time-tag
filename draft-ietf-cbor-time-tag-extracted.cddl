@@ -1,0 +1,75 @@
+
+ClockQuality-group = (
+  ? ClockClass => uint .size 1 ; PTP/RFC8575
+  ? ClockAccuracy => uint .size 1 ; PTP/RFC8575
+  ? OffsetScaledLogVariance => uint .size 2 ; PTP/RFC8575
+  ? Uncertainty => ~time/~duration
+  ? Guarantee => ~time/~duration
+)
+ClockClass = -2
+ClockAccuracy = -4
+OffsetScaledLogVariance = -5
+Uncertainty = -7
+Guarantee = -8
+
+
+time-zone-info = tstr .abnf
+                 ("time-zone-name / time-numoffset" .det IXDTFtz)
+IXDTFtz = '
+   time-hour       = 2DIGIT  ; 00-23
+   time-minute     = 2DIGIT  ; 00-59
+   time-numoffset  = ("+" / "-") time-hour ":" time-minute
+
+
+
+   time-zone-initial = ALPHA / "." / "_"
+   time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
+   time-zone-part    = time-zone-initial *13(time-zone-char)
+                       ; but not "." or ".."
+   time-zone-name    = time-zone-part *("/" time-zone-part)
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF] and [RFC3339]; update as needed
+
+
+suffix-info-map = { * suffix-key => suffix-values }
+suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
+suffix-values = one-or-more<suffix-value>
+one-or-more<T> = T / [ 2* T ]
+suffix-value = tstr .abnf ("suffix-value" .det IXDTF)
+
+IXDTF = '
+   key-initial       = lcalpha / "_"
+   key-char          = key-initial / DIGIT / "-"
+   suffix-key        = key-initial *key-char
+
+   suffix-value      = 1*alphanum
+   alphanum          = ALPHA / DIGIT
+   lcalpha           =  %x61-7A
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF]; update as needed!
+
+
+Period = #6.1003([
+  start: ~Time / null
+  end: ~Time / null
+  ? duration: ~Duration / null
+])
+
+
+clumsyPeriod = #6.1003([
+  (start: ~Time,
+   ((end: ~Time,
+     ? duration: null) //
+    (end: null,
+     duration: ~Duration))) //
+  (start: null,
+   end: ~Time,
+   duration: ~Duration)
+])
+
+
+etime = #6.1001({* (int/tstr) => any})
+duration = #6.1002({* (int/tstr) => any})
+period = #6.1003([~etime/null, ~etime/null, ~duration/null])
