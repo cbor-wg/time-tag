@@ -1,17 +1,54 @@
 
-ClockQuality-group = (
-  ? ClockClass => uint .size 1 ; PTP/RFC8575
-  ? ClockAccuracy => uint .size 1 ; PTP/RFC8575
-  ? OffsetScaledLogVariance => uint .size 2 ; PTP/RFC8575
-  ? Uncertainty => ~time/~duration
-  ? Guarantee => ~time/~duration
-)
-ClockClass = -2
-ClockAccuracy = -4
-OffsetScaledLogVariance = -5
-Uncertainty = -7
-Guarantee = -8
+Etime = #6.1001(etime-detailed)
 
+etime-framework = {
+  uint => any ; at least one base time
+  * (nint/text) => any ; elective supplementary information
+  * uint => any ; critical supplementary information
+}
+
+etime-detailed = ({
+  $$ETIME-BASETIME
+  ClockQuality-group
+  * $$ETIME-ELECTIVE
+  * $$ETIME-CRITICAL
+  * ((nint/text) .feature "etime-elective-extension") => any
+  * (uint .feature "etime-critical-extension") => any
+}) .within etime-framework
+
+
+$$ETIME-BASETIME //= (1: ~time)
+
+
+$$ETIME-BASETIME //= (4: ~decfrac)
+$$ETIME-BASETIME //= (5: ~bigfloat)
+
+
+$$ETIME-ELECTIVE //= (-3: uint)
+$$ETIME-ELECTIVE //= (-6: uint)
+$$ETIME-ELECTIVE //= (-9: uint)
+$$ETIME-ELECTIVE //= (-12: uint)
+$$ETIME-ELECTIVE //= (-15: uint)
+$$ETIME-ELECTIVE //= (-18: uint)
+
+
+$$ETIME-ELECTIVE //= (-1 => $ETIME-TIMESCALE)
+
+$ETIME-TIMESCALE /= &(etime-utc: 0)
+$ETIME-TIMESCALE /= &(etime-tai: 1)
+
+
+ClockQuality-group = (
+  ? &(ClockClass: -2) => uint .size 1 ; PTP/RFC8575
+  ? &(ClockAccuracy: -4) => uint .size 1 ; PTP/RFC8575
+  ? &(OffsetScaledLogVariance: -5) => uint .size 2 ; PTP/RFC8575
+  ? &(Uncertainty: -7) => ~time/~duration
+  ? &(Guarantee: -8) => ~time/~duration
+)
+
+
+$$ETIME-ELECTIVE //= (-10: time-zone-info)
+$$ETIME-CRITICAL //= (10: time-zone-info)
 
 time-zone-info = tstr .abnf
                  ("time-zone-name / time-numoffset" .det IXDTFtz)
@@ -32,6 +69,9 @@ IXDTFtz = '
 ' ; extracted from [IXDTF] and [RFC3339]; update as needed
 
 
+$$ETIME-ELECTIVE //= (-11: suffix-info-map)
+$$ETIME-CRITICAL //= (11: suffix-info-map)
+
 suffix-info-map = { * suffix-key => suffix-values }
 suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
 suffix-values = one-or-more<suffix-value>
@@ -51,6 +91,9 @@ IXDTF = '
 ' ; extracted from [IXDTF]; update as needed!
 
 
+Duration = #6.1001(etime-detailed)
+
+
 Period = #6.1003([
   start: ~Time / null
   end: ~Time / null
@@ -58,7 +101,7 @@ Period = #6.1003([
 ])
 
 
-clumsyPeriod = #6.1003([
+clumsy-Period = #6.1003([
   (start: ~Time,
    ((end: ~Time,
      ? duration: null) //
