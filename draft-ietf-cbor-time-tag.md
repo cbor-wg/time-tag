@@ -174,7 +174,10 @@ exponentiation.
 
 CBOR diagnostic notation is defined in {{Section 8 of -cbor}} and
 {{Section G of -cddl}}.
-
+A machine-processable model of the data structures defined in this
+specification is provided throughout the text using the Concise Data
+Definition Language, CDDL {{-cddl}}; {{collected-cddl}} provides the
+collected model information.
 
 {::comment}
 Background
@@ -274,6 +277,25 @@ Future keys may add:
 While this document does not define supplementary text keys, a number
 of unsigned and negative-integer keys are defined below.
 
+~~~ cddl
+Etime = #6.1001(etime-detailed)
+
+etime-framework = {
+  uint => any ; at least one base time
+  * (nint/text) => any ; elective supplementary information
+  * uint => any ; critical supplementary information
+}
+
+etime-detailed = ({
+  $$ETIME-BASETIME
+  ClockQuality-group
+  * $$ETIME-ELECTIVE
+  * $$ETIME-CRITICAL
+  * ((nint/text) .feature "etime-elective-extension") => any
+  * (uint .feature "etime-critical-extension") => any
+}) .within etime-framework
+~~~
+
 {::comment}
 
 Keys 0 and 1
@@ -293,12 +315,23 @@ be tagged by CBOR tag 1 (Posix time {{TIME_T}} as int or float).
 The time value indicated by the value under this key can be further
 modified by other keys.
 
+~~~ cddl
+$$ETIME-BASETIME //= (1: ~time)
+~~~
+
 Keys 4 and 5
 ------------
 
 Keys 4 and 5 indicate a Base Time value and are like key 1, except that the data item is an array as
 defined for CBOR tag 4 or 5, respectively.  This can be used to include
 a Decimal or Bigfloat epoch-based float {{TIME_T}} in an extended time.
+
+
+~~~ cddl
+$$ETIME-BASETIME //= (4: ~decfrac)
+$$ETIME-BASETIME //= (5: ~bigfloat)
+~~~
+
 
 Keys -3, -6, -9, -12, -15, -18
 ------------------------------
@@ -320,12 +353,28 @@ integer value.
 | -18 | attoseconds  | (future)        |
 {: #decfract title="Key for decimally scaled Fractions"}
 
+~~~ cddl
+$$ETIME-ELECTIVE //= (-3: uint)
+$$ETIME-ELECTIVE //= (-6: uint)
+$$ETIME-ELECTIVE //= (-9: uint)
+$$ETIME-ELECTIVE //= (-12: uint)
+$$ETIME-ELECTIVE //= (-15: uint)
+$$ETIME-ELECTIVE //= (-18: uint)
+~~~
+
 Key -1: Timescale {#key-timescale}
 ------
 
 Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
 PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}.
+
+~~~ cddl
+$$ETIME-ELECTIVE //= (-1 => $ETIME-TIMESCALE)
+
+$ETIME-TIMESCALE /= &(etime-utc: 0)
+$ETIME-TIMESCALE /= &(etime-tai: 1)
+~~~
 
 If key -1 is not present, timescale value 0 is implied.
 
@@ -368,17 +417,12 @@ The first three are analogous to `clock-quality-grouping` in
 
 ~~~ cddl
 ClockQuality-group = (
-  ? ClockClass => uint .size 1 ; PTP/RFC8575
-  ? ClockAccuracy => uint .size 1 ; PTP/RFC8575
-  ? OffsetScaledLogVariance => uint .size 2 ; PTP/RFC8575
-  ? Uncertainty => ~time/~duration
-  ? Guarantee => ~time/~duration
+  ? &(ClockClass: -2) => uint .size 1 ; PTP/RFC8575
+  ? &(ClockAccuracy: -4) => uint .size 1 ; PTP/RFC8575
+  ? &(OffsetScaledLogVariance: -5) => uint .size 2 ; PTP/RFC8575
+  ? &(Uncertainty: -7) => ~time/~duration
+  ? &(Guarantee: -8) => ~time/~duration
 )
-ClockClass = -2
-ClockAccuracy = -4
-OffsetScaledLogVariance = -5
-Uncertainty = -7
-Guarantee = -8
 ~~~
 
 ### ClockClass (Key -2)
@@ -492,6 +536,9 @@ MUST be used when interpreting the entry with this key).
 Keys -10 and 10 MUST NOT both be present.
 
 ~~~ cddl
+$$ETIME-ELECTIVE //= (-10: time-zone-info)
+$$ETIME-CRITICAL //= (10: time-zone-info)
+
 time-zone-info = tstr .abnf
                  ("time-zone-name / time-numoffset" .det IXDTFtz)
 IXDTFtz = '
@@ -524,6 +571,9 @@ The key's value is a map that has IXDTF `suffix-key` names as keys and
 corresponding suffix values as values, specifically:
 
 ~~~ cddl
+$$ETIME-ELECTIVE //= (-11: suffix-info-map)
+$$ETIME-CRITICAL //= (11: suffix-info-map)
+
 suffix-info-map = { * suffix-key => suffix-values }
 suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
 suffix-values = one-or-more<suffix-value>
@@ -580,6 +630,12 @@ seconds).
 
 Except for using Tag 1002 instead of 1001,
 durations are structurally identical to time values.
+
+
+~~~ cddl
+Duration = #6.1001(etime-detailed)
+~~~
+
 Semantically, they do not measure the time elapsed from a given epoch,
 but from the start to the end of (an otherwise unspecified) interval
 of time.
@@ -646,7 +702,7 @@ clumsyPeriod = #6.1003([
 CDDL typenames
 ==========
 
-For the use with the CBOR Data Definition Language, CDDL {{-cddl}}, the
+When detailed validation is not needed, the
 type names defined in {{tag-cddl}} are recommended:
 
 ~~~ cddl
