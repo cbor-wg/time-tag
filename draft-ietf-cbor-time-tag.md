@@ -142,9 +142,8 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-04) clearly separates the concepts of
-    critical (must-understand) and base-time; this should now be ready
-    for WGLC.
+    The present version (-05) adds CDDL definitions; this should now
+    address all WGLC comments.
 
 --- middle
 
@@ -274,8 +273,11 @@ Future keys may add:
   and/or possibly positioning coordinates, to express information that
   would indicate a local time.
 
-While this document does not define supplementary text keys, a number
-of unsigned and negative-integer keys are defined below.
+This document does not define supplementary text keys.
+A number of both unsigned and negative-integer keys are defined in
+the following subsections.
+
+A formal definition of Tag 1001 in CDDL is:
 
 ~~~ cddl
 Etime = #6.1001(etime-detailed)
