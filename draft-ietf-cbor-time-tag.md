@@ -685,7 +685,7 @@ Exactly two out of the three elements must be non-null, this can be
 clumsily expressed in CDDL as:
 
 ~~~ cddl
-clumsyPeriod = #6.1003([
+clumsy-Period = #6.1003([
   (start: ~Time,
    ((end: ~Time,
      ? duration: null) //

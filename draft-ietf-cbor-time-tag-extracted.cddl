@@ -101,7 +101,7 @@ Period = #6.1003([
 ])
 
 
-clumsyPeriod = #6.1003([
+clumsy-Period = #6.1003([
   (start: ~Time,
    ((end: ~Time,
      ? duration: null) //
