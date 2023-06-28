@@ -120,6 +120,7 @@ informative:
     seriesinfo:
       ISO: '8601:1988'
     date: 1988-06
+    ann: Also available from <⁠<https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf>>.
 
 --- abstract
 
