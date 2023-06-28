@@ -178,15 +178,6 @@ specification is provided throughout the text using the Concise Data
 Definition Language, CDDL {{-cddl}}; {{collected-cddl}} provides the
 collected model information.
 
-{::comment}
-Background
-----------
-
-Additional information about the complexities of time representation
-can be found in {{TIME}}.  This specification uses a number of terms
-that should be familiar to connoisseurs of precise time; references
-for these may need to be added.
-{:/}
 
 Objectives
 ==========
@@ -298,16 +289,6 @@ etime-detailed = ({
 }) .within etime-framework
 ~~~
 
-{::comment}
-
-Keys 0 and 1
-------------
-
-Keys 0 and 1 indicate values that are exactly like the data items that
-would be tagged by CBOR tag 0 (RFC 3339 date/time string) or tag 1
-(Posix time {{TIME_T}} as int or float), respectively.
-
-{:/}
 
 Key 1
 -----
@@ -320,6 +301,7 @@ modified by other keys.
 ~~~ cddl
 $$ETIME-BASETIME //= (1: ~time)
 ~~~
+
 
 Keys 4 and 5
 ------------
@@ -480,47 +462,6 @@ and therefore this format provides a way to represent them as well;
 the time value given is nominally guaranteed to not deviate from the
 actual time by more than the value of the guarantee, in seconds.
 
-{::comment}
-
-Key -2
-------
-
-Key -2 can be used to indicate the quality of the point in time:
-The value 0 indicates a time obtained from a clock (past or "current" time).
-The value -1 indicates a future time that has been scheduled by a human.
-The value 1 indicates a time derived from a time obtained from a clock
-(such as the timestamp of a record in a log file).
-(TBD: Is this well-defined enough?
-What other cases should be considered here?)
-
-If key -2 is not present, no information is available about the
-quality of the time.
-
-Key -4: Resolution
-------
-
-Key -4 can be used to indicate the resolution of the time provided
-{{RESOLUTION}}:
-"The minimum time interval that a clock can measure or whose passage a
-timer can detect."
-The value is expressed in SI seconds {{SI-SECOND}} and
-can be any positive number, such as an integer, a floating point
-value (major type 7 or Tag 5), or a decimal value (Tag 4).
-
-Key -5: Accuracy
-------
-
-Key -5 can be used to indicate the accuracy of the time {{IEEE1588-2008}}:
-"The mean of the time or frequency error between the clock under test
-and a perfect reference clock, over an ensemble of measurements."
-The value is expressed in SI seconds {{SI-SECOND}} and
-can be any positive number, such as an integer, a floating point
-value (major type 7 or Tag 5), or a decimal value (Tag 4).
-
-(This could be extended into more information about the way the clock
-source is synchronized, e.g. manually, GPS, NTP, PTP, roughtime, ...)
-
-{:/}
 
 Keys -10, 10: Time Zone Hint {#tzh}
 ------
