@@ -703,9 +703,9 @@ time the
 FCFS space, with the present document as the specification reference.
 
 |  Tag | Data Item | Semantics               |
-| 1001 | map       | [RFCthis] extended time |
-| 1002 | map       | [RFCthis] duration      |
-| 1003 | array     | [RFCthis] period        |
+| 1001 | map       | \[RFCthis] extended time |
+| 1002 | map       | \[RFCthis] duration      |
+| 1003 | array     | \[RFCthis] period        |
 {: #tab-tag-values cols='r l l' title="Values for Tags"}
 
 IANA is requested to change the "Data Item" column for Tag 1003 from
@@ -717,7 +717,7 @@ Timescale Registry
 
 This specification defines a new subregistry titled "Timescale
 Registry" in the "CBOR Time Tag Parameters" registry
-[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+\[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
 4.7 of BCP26}}).
 
@@ -728,8 +728,8 @@ of the semantics, and a specification reference (RFC).
 The initial contents are shown in {{tab-timescales}}.
 
 | Timescale | Value | Semantics            | Reference |
-| UTC       |     0 | UTC with POSIX Epoch | [RFCthis] |
-| TAI       |     1 | TAI with PTP Epoch   | [RFCthis] |
+| UTC       |     0 | UTC with POSIX Epoch | \[RFCthis] |
+| TAI       |     1 | TAI with PTP Epoch   | \[RFCthis] |
 {: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
 
 Map Key Registry
@@ -737,7 +737,7 @@ Map Key Registry
 
 This specification defines a new subregistry titled "Map Key Registry"
 in the "CBOR Time Tag Parameters" registry
-[IANA.cbor-time-tag-parameters], with "Specification Required" as the
+\[IANA.cbor-time-tag-parameters], with "Specification Required" as the
 Registration Procedure ({{Section 4.6 of BCP26}}).
 
 The designated expert is requested to assign the key values with the
@@ -749,24 +749,24 @@ of the semantics, and a specification reference (RFC).
 The initial contents are shown in {{tab-timescales}}.
 
 | Value | Semantics                           | Reference          |
-|   -18 | attoseconds                         | [RFCthis]          |
-|   -15 | femtoseconds                        | [RFCthis]          |
-|   -12 | picoseconds                         | [RFCthis]          |
-|   -11 | IXDTF Suffix Information (elective) | [RFCthis], {{IXDTF}} |
-|   -10 | IXDTF Time Zone Hint (elective)     | [RFCthis], {{IXDTF}} |
-|    -9 | nanoseconds                         | [RFCthis]          |
-|    -8 | Guarantee                           | [RFCthis]          |
-|    -7 | Uncertainty                         | [RFCthis]          |
-|    -6 | microseconds                        | [RFCthis]          |
-|    -5 | Offset-Scaled Log Variance          | [RFCthis]          |
-|    -4 | Clock Accuracy                      | [RFCthis]          |
-|    -3 | milliseconds                        | [RFCthis]          |
-|    -2 | Clock Class                         | [RFCthis]          |
-|     1 | Base Time value (as in CBOR Tag 1)  | [RFCthis]          |
-|     4 | Base Time value as in CBOR Tag 4    | [RFCthis]          |
-|     5 | Base Time value as in CBOR Tag 5    | [RFCthis]          |
-|    10 | IXDTF Time Zone Hint (critical)     | [RFCthis], {{IXDTF}} |
-|    11 | IXDTF Suffix Information (critical) | [RFCthis], {{IXDTF}} |
+|   -18 | attoseconds                         | \[RFCthis]          |
+|   -15 | femtoseconds                        | \[RFCthis]          |
+|   -12 | picoseconds                         | \[RFCthis]          |
+|   -11 | IXDTF Suffix Information (elective) | \[RFCthis], {{IXDTF}} |
+|   -10 | IXDTF Time Zone Hint (elective)     | \[RFCthis], {{IXDTF}} |
+|    -9 | nanoseconds                         | \[RFCthis]          |
+|    -8 | Guarantee                           | \[RFCthis]          |
+|    -7 | Uncertainty                         | \[RFCthis]          |
+|    -6 | microseconds                        | \[RFCthis]          |
+|    -5 | Offset-Scaled Log Variance          | \[RFCthis]          |
+|    -4 | Clock Accuracy                      | \[RFCthis]          |
+|    -3 | milliseconds                        | \[RFCthis]          |
+|    -2 | Clock Class                         | \[RFCthis]          |
+|     1 | Base Time value (as in CBOR Tag 1)  | \[RFCthis]          |
+|     4 | Base Time value as in CBOR Tag 4    | \[RFCthis]          |
+|     5 | Base Time value as in CBOR Tag 5    | \[RFCthis]          |
+|    10 | IXDTF Time Zone Hint (critical)     | \[RFCthis], {{IXDTF}} |
+|    11 | IXDTF Suffix Information (critical) | \[RFCthis], {{IXDTF}} |
 
 Security Considerations
 ============
