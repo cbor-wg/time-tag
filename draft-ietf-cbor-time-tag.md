@@ -156,8 +156,8 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-05) adds CDDL definitions; this should now
-    address all WGLC comments.
+    The present version (-07) picks up a few loose ends, completing
+    the processing of the WGLC input.
 
 --- middle
 
