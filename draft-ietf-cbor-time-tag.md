@@ -11,6 +11,8 @@ keyword: Internet-Draft
 cat: std
 stream: IETF
 
+svg-id-cleanup: yes
+
 venue:
   group: CBOR
   mail: cbor@ietf.org
@@ -57,11 +59,11 @@ normative:
       org: The Open Group Base Specifications
     title: >
       Vol. 1: Base Definitions, Issue 7
-    date: 2016
+    date: 2018
     seriesinfo:
-      "Section 4.15": "'Seconds Since the Epoch'"
-      "IEEE Std": "1003.1-2008"
-      "2016": "Edition"
+      "Section 4.16": "'Seconds Since the Epoch'"
+      "IEEE Std": "1003.1-2017"
+      "2018": "Edition"
 #  RESOLUTION:
 #    target: http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328
 #    author:
@@ -121,6 +123,17 @@ informative:
       ISO: '8601:1988'
     date: 1988-06
     ann: Also available from <⁠<https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf>>.
+  C:
+    target: https://www.iso.org/standard/74528.html
+    title: Information technology - Programming languages - C
+    author:
+    - org: International Organization for Standardization
+    date: 2018-06
+    seriesinfo:
+      ISO/IEC: 9899:2018
+    refcontent:
+    - Fourth Edition
+    ann: Contents available via <⁠<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf>>
 
 --- abstract
 
@@ -346,6 +359,15 @@ $$ETIME-ELECTIVE //= (-12: uint)
 $$ETIME-ELECTIVE //= (-15: uint)
 $$ETIME-ELECTIVE //= (-18: uint)
 ~~~
+
+Note that these keys have been provided to facilitate representing
+pairs of the form second/decimal fraction of a second, as found for
+instance in C `timespec` (compare Section 7.27.1 of {{C}}).
+When ingesting a timestamp with one of these keys into a type provided
+by the target platform, care has to be taken to meet its invariants.
+E.g., for C `timespec`, the fractional part `tv_nsec` needs to be
+between 0 inclusive and 10<sup>9</sup> exclusive, which can be
+achieved by also adjusting the base time appropriately.
 
 Key -1: Timescale {#key-timescale}
 ------
