@@ -11,6 +11,8 @@ keyword: Internet-Draft
 cat: std
 stream: IETF
 
+svg-id-cleanup: yes
+
 venue:
   group: CBOR
   mail: cbor@ietf.org
