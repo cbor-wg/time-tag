@@ -23,7 +23,7 @@ jobs:
     # Note: No caching for this build!
 
     - name: "Update Archive"
-      uses: martinthomson/i-d-template@v1m
+      uses: martinthomson/i-d-template@v1
       env:
         ARCHIVE_FULL: ${{ inputs.archive_full }}
       with:
@@ -31,12 +31,12 @@ jobs:
         token: ${{ github.token }}
 
     - name: "Update GitHub Pages"
-      uses: martinthomson/i-d-template@v1m
+      uses: martinthomson/i-d-template@v1
       with:
         make: gh-archive
         token: ${{ github.token }}
 
     - name: "Save Archive"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: archive.json
