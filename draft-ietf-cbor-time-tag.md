@@ -122,6 +122,17 @@ informative:
     seriesinfo:
       ISO: '8601:1988'
     date: 1988-06
+  C:
+    target: https://www.iso.org/standard/74528.html
+    title: Information technology - Programming languages - C
+    author:
+    - org: International Organization for Standardization
+    date: 2018-06
+    seriesinfo:
+      ISO/IEC: 9899:2018
+    refcontent:
+    - Fourth Edition
+    ann: Contents available via <⁠<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf>>
 
 --- abstract
 
@@ -347,6 +358,15 @@ $$ETIME-ELECTIVE //= (-12: uint)
 $$ETIME-ELECTIVE //= (-15: uint)
 $$ETIME-ELECTIVE //= (-18: uint)
 ~~~
+
+Note that these keys have been provided to facilitate representing
+pairs of the form second/decimal fraction of a second, as found for
+instance in C `timespec` (compare Section 7.27.1 of {{C}}).
+When ingesting a timestamp with one of these keys into a type provided
+by the target platform, care has to be taken to meet its invariants.
+E.g., for C `timespec`, the fractional part `tv_nsec` needs to be
+between 0 inclusive and 10<sup>9</sup> exclusive, which can be
+achieved by also adjusting the base time appropriately.
 
 Key -1: Timescale {#key-timescale}
 ------
