@@ -8,7 +8,7 @@ docname: draft-ietf-cbor-time-tag-latest
 date: 2023
 
 keyword: Internet-Draft
-cat: info
+cat: std
 stream: IETF
 
 venue:
