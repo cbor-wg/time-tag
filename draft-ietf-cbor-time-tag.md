@@ -386,7 +386,7 @@ Additional values can be registered in the Timescale Registry
 (Note that there should be no timescales "GPS" or "NTP" — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)
 
-~~~ math
+~~~ math-asciitex
 t_{utc} = t_{ntp} - 2208988800 \\
 t_{tai} = t_{gps} + 315964819
 ~~~
