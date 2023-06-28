@@ -57,11 +57,11 @@ normative:
       org: The Open Group Base Specifications
     title: >
       Vol. 1: Base Definitions, Issue 7
-    date: 2016
+    date: 2018
     seriesinfo:
-      "Section 4.15": "'Seconds Since the Epoch'"
-      "IEEE Std": "1003.1-2008"
-      "2016": "Edition"
+      "Section 4.16": "'Seconds Since the Epoch'"
+      "IEEE Std": "1003.1-2017"
+      "2018": "Edition"
 #  RESOLUTION:
 #    target: http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_328
 #    author:
