@@ -449,6 +449,13 @@ characterizes the dispersion of the values that could reasonably be
 attributed to the measurand".  More specifically, the value for this
 key represents the extended uncertainty for k = 2, in seconds.
 
+Note that the additional information that can be meaningfully provided
+with the duration that represents an uncertainty is limited, e.g., it
+is not customary to provide an uncertainty for a duration representing
+an uncertainty.
+Implementations are free to reduce an uncertainty (which is already
+elective) to the information they can process.
+
 ### Guarantee (Key -8)
 
 Key -8 (Guarantee) can be used to represent a stated guarantee for the
@@ -462,6 +469,12 @@ and therefore this format provides a way to represent them as well;
 the time value given is nominally guaranteed to not deviate from the
 actual time by more than the value of the guarantee, in seconds.
 
+Note that the additional information that can be meaningfully provided
+with the duration that represents a guarantee is limited, e.g., it is
+not meaningful to provide a guarantee of accuracy for the duration
+representing a guarantee of accuracy.
+Implementations are free to reduce a guarantee (which is already
+elective) to the information they can process.
 
 Keys -10, 10: Time Zone Hint {#tzh}
 ------
