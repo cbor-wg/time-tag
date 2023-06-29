@@ -448,8 +448,11 @@ The range between 32 and 47 is a slightly distorted logarithmic scale from
 25 ns to 1 s (see {{formula-accuracy-enum}}); the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.
 
+<!-- Note that the double space after the \approx is actually needed -->
+<!-- by utftex -->
+
 ~~~ math
-enum_{acc} \approx 48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsilon \rfloor
+enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsilon \rfloor
 ~~~
 {: #formula-accuracy-enum title="Approximate conversion from accuracy to accuracy enumeration value"}
 
