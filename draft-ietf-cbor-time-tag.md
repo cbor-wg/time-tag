@@ -156,8 +156,7 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-08) fixes some cosmetic bugs, in the
-    references and in the plaintext representation of one formula.
+    The present version (-09) addresses IANA early review comments.
     It reflects the state of the document after the short final WGLC
     completed.
 
