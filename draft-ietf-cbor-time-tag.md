@@ -716,19 +716,19 @@ IANA is requested to change the "Data Item" column for Tag 1003 from
 Timescale Registry
 ------------------
 
-This specification defines a new subregistry titled "Timescale
-Registry" in the "CBOR Time Tag Parameters" registry
+This specification defines a new registry titled "Timescales" in the
+"CBOR Time Tag Parameters" registry group
 \[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
 4.7 of BCP26}}).
 
 Each entry needs to provide a timescale name (a sequence of uppercase
 ASCII characters and digits, where a digit may not occur at the start:
-`[A-Z][A-Z0-9]*`), a value (unsigned integer), and brief description
+`[A-Z][A-Z0-9]*`), a value (CBOR unsigned integer, uint), and brief description
 of the semantics, and a specification reference (RFC).
 The initial contents are shown in {{tab-timescales}}.
 
-| Timescale | Value | Semantics            | Reference |
+| Timescale | Value | Semantics            | Reference  |
 | UTC       |     0 | UTC with POSIX Epoch | \[RFCthis] |
 | TAI       |     1 | TAI with PTP Epoch   | \[RFCthis] |
 {: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
@@ -736,8 +736,8 @@ The initial contents are shown in {{tab-timescales}}.
 Map Key Registry
 ----------------
 
-This specification defines a new subregistry titled "Map Key Registry"
-in the "CBOR Time Tag Parameters" registry
+This specification defines a new registry titled "Map Keys"
+in the "CBOR Time Tag Parameters" registry group
 \[IANA.cbor-time-tag-parameters], with "Specification Required" as the
 Registration Procedure ({{Section 4.6 of BCP26}}).
 
@@ -745,11 +745,11 @@ The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.
 
-Each entry needs to provide a map key value (integer), a brief description
+Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference (RFC).
 The initial contents are shown in {{tab-timescales}}.
 
-| Value | Semantics                           | Reference          |
+| Value | Semantics                           | Reference           |
 |   -18 | attoseconds                         | \[RFCthis]          |
 |   -15 | femtoseconds                        | \[RFCthis]          |
 |   -12 | picoseconds                         | \[RFCthis]          |
