@@ -86,7 +86,7 @@ normative:
   IEEE1588-2008:
     target: http://standards.ieee.org/findstds/standard/1588-2008.html
     title: >
-      1588-2008 - IEEE Standard for a Precision Clock
+      1588-2008 — IEEE Standard for a Precision Clock
       Synchronization Protocol for Networked Measurement and Control
       Systems
     author:
@@ -125,7 +125,7 @@ informative:
     ann: Also available from <⁠<https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf>>.
   C:
     target: https://www.iso.org/standard/74528.html
-    title: Information technology - Programming languages - C
+    title: Information technology — Programming languages — C
     author:
     - org: International Organization for Standardization
     date: 2018-06
@@ -156,8 +156,10 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-07) picks up a few loose ends, completing
-    the processing of the WGLC input.
+    The present version (-08) fixes some cosmetic bugs, in the
+    references and in the plaintext representation of one formula.
+    It reflects the state of the document after the short final WGLC
+    completed.
 
 --- middle
 
@@ -268,7 +270,6 @@ Supplementary information may include:
 
 * information about clock quality parameters, such as source,
   accuracy, and uncertainty
-<!-- precision, and resolution -->
 
 Additional keys can be defined by registering them in the Map Key
 Registry ({{map-key-registry}}).
@@ -677,9 +678,6 @@ clumsy-Period = #6.1003([
 ])
 ~~~
 
-<!--
-(Issue: should start/end be given the two-element treatment, or start/duration?)
- -->
 
 CDDL typenames
 ==========
@@ -801,8 +799,6 @@ specification" sourcecode-name="time-tag-collected-cddl.cddl"}
 Contributors
 ============
 {: numbered="no"}
-
-Add reference to [TIME] once available.
 
 Ben Gamari suggested being able to use decimally scaled fractional
 seconds in CBOR time.
