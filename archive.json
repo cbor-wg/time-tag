@@ -1,0 +1,789 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-07-25T00:57:10.124056+00:00",
+  "repo": "cbor-wg/time-tag",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    },
+    {
+      "name": "-02",
+      "description": "",
+      "color": "bfdadc"
+    },
+    {
+      "name": "discuss-in-WGLC",
+      "description": "",
+      "color": "bfd4f2"
+    },
+    {
+      "name": "has-pr",
+      "description": "",
+      "color": "444364"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU4NTM3ODc3ODU=",
+      "title": "Multiple ways of expressing the same time",
+      "url": "https://github.com/cbor-wg/time-tag/issues/1",
+      "state": "CLOSED",
+      "author": "ecorm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "has-pr"
+      ],
+      "body": "(Also posted at https://mailarchive.ietf.org/arch/msg/cbor/lxN8zxiFV2mNKLlbDYw8Ff1eFI0/)\r\n\r\nI'm implementing tags 1001 and 1002 in my C++ library to exchange time points and durations.\r\n\r\nI'm in the situation where I'm not sure which is the \"expected\" way to encode time as nanoseconds since the Unix epoch. I'm specifically referring to `std::chrono::system_clock::time_point`, which is a 64 bit integer. There are currently three ways I could encode such a value.\r\n\r\n1. The whole number of seconds under Key 1, with the remaining nanoseconds under Key -9.\r\n\r\n2. The total number of nanoseconds under Key -9, with a value of zero under Key 1.\r\n\r\n3. The total number of nanoseconds expressed as a Decimal Fraction under Key 4.\r\n\r\nOption 2 is the easiest and most efficient because it doesn't involve a division/subtraction calculation. However, a receiver that discards Key -9 will end up with zero seconds. At least with option 1, the receiver will know the number of whole seconds if Key -9 is ignored.\r\n\r\nOption 3 requires that the sender and receiver understand Tag 4 (Decimal Fraction), or at least the concept of decimal fractions within the context of tags 1001-1003.\r\n\r\nI'm guessing that option 1 is the \"canonical\" way, but I'm not entirely sure. Some guidance would be appreciated. **Perhaps a few words concerning this should be added to the standard's text?**\r\n\r\nOn the receiving side, my library would ideally handle all three scenarios. It's on the sending side I'm more concerned about when I need to interoperate with CBOR decoders other than mine.",
+      "createdAt": "2021-04-08T19:22:31Z",
+      "updatedAt": "2023-06-28T12:06:00Z",
+      "closedAt": "2023-06-28T12:06:00Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Your case (3) is definitely valid.\r\n\r\nFor -3/..., the current text indeed does not limit the range of the additional part.\r\nSo your (2) would be a valid way to express the timestamp.\r\nExcept that we don't allow bignums, so you got yourself a Y2608 problem.\r\nAny other distribution between key 1 and key -9 is also valid.\r\nSo the onus is on the receiver to put this together to a proper tv_sec/tv_nsec.",
+          "createdAt": "2023-06-28T09:43:12Z",
+          "updatedAt": "2023-06-28T09:43:12Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "I_kwDODq1g684_SwBm",
+      "title": "Are the clock quality fields allowed for the Duration format?",
+      "url": "https://github.com/cbor-wg/time-tag/issues/2",
+      "state": "CLOSED",
+      "author": "ecorm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "has-pr"
+      ],
+      "body": "In section [3.5. Clock Quality](https://www.ietf.org/archive/id/draft-ietf-cbor-time-tag-00.html#name-clock-quality), is says (emphasis mine):\r\n\r\n> A number of keys are defined to indicate the quality of clock that was **used to determine the point in time**.\r\n\r\nDue to the phrase \"point in time\", this leads one to believe that the quality keys are only applicable to the Time format (tag 1001).\r\n\r\nHowever in section [4. Duration Format ](https://www.ietf.org/archive/id/draft-ietf-cbor-time-tag-00.html#name-duration-format), it says (emphasis mine):\r\n\r\n> Except for using Tag 1002 instead of 1001, **durations are structurally identical to time values**.\r\n\r\nThis leads one to believe that quality keys are also permitted for tag 1002 (durations).\r\n\r\nSo there's a bit of a contradiction, and I don't know how to deal with the possibility of quality keys appearing in the Duration format.",
+      "createdAt": "2021-11-24T01:18:58Z",
+      "updatedAt": "2023-06-28T12:06:21Z",
+      "closedAt": "2023-06-28T12:06:20Z",
+      "comments": [
+        {
+          "author": "ecorm",
+          "authorAssociation": "NONE",
+          "body": "Related to this are the Uncertainty and Guarantee keys which can themselves be Duration maps. If the nested Durations embedded in the Uncertainty and Guarantee keys also have quality keys, then there can be an unbounded amount of recursion and it becomes impossible to store the overall entity in a fixed amount of storage.",
+          "createdAt": "2021-11-24T02:51:10Z",
+          "updatedAt": "2021-11-24T02:51:10Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "To your second comment: \"Don't do that then\" :-)\r\nDurations that are measured do have uncertainties (and possibly even guarantees).\r\nDurations that are given as uncertainties naturally do not have uncertainties.\r\nI wrote up a couple of notes to this effect in https://github.com/cbor-wg/time-tag/pull/16",
+          "createdAt": "2023-06-28T10:58:49Z",
+          "updatedAt": "2023-06-28T10:58:49Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDODq1g684_usXY",
+      "title": "Should clock quality be it's own tag?",
+      "url": "https://github.com/cbor-wg/time-tag/issues/3",
+      "state": "CLOSED",
+      "author": "ecorm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I get the impression that the extended time types are trying to be \"kitchen sink\" types with too much information. Most applications dealing with time don't care about the PTP clock quality stuff. I suggest that the clock quality be it's own separate tag.\r\n\r\nApplications wanting to convey a clock quality along with an extended time can simply combine them both in an array of two elements.\r\n\r\nAlso consider the use case where the same clock quality applies to a series of time points, which I think would be more likely than a series of time points each having their own clock quality. By having the clock quality be it's own separate tag, it makes it possible for applications to exchange data structures with multiple time points having the same clock quality.",
+      "createdAt": "2021-12-02T07:11:33Z",
+      "updatedAt": "2023-06-28T11:06:28Z",
+      "closedAt": "2023-06-28T11:06:28Z",
+      "comments": [
+        {
+          "author": "core-bot",
+          "authorAssociation": "NONE",
+          "body": "Hi Emile,\n\nIt is a good point that one may want to store attributes of a time (clock quality, time scale, possible future attributes) separately from the time itself.\nThis could be done by using the same data structure as the time tag, but leaving out the actual timestamp.  Such a \u201ctime-attributes\u201d tag might be a worthwhile addition to the set of three defined here.\n\nOn 2. Dec 2021, at 08:11, Emile Cormier ***@***.***> wrote:\n> \n> I get the impression that the extended time types are trying to be \"kitchen sink\" types with too much information. Most applications dealing with time don't care about the PTP clock quality stuff.\n\nCertainly these fields are only for applications that do.\nWhether that makes them \u201ckitchen sink\u201d applications is a bit in the eye of the beholder\u2026\n\n> I suggest that the clock quality be it's own separate tag.\n> \n> Applications wanting to convey a clock quality along with an extended time can simply combine them both in an array of two elements.\n\nWell, an array wouldn't convey that the attributes actually modify the time (unless this is implied by some context, such as schema information).\n\nI think a better example is the period tag 1003, which allows two of start, end, and duration; we could add another optional element for common attributes, which could be an unwrapped time-attributes tag.\n\n> Also consider the use case where the same clock quality applies to a series of time points, which I think would be more likely than a series of time points each having their own clock quality. By having the clock quality be it's own separate tag, it makes it possible for applications to exchange data structures with multiple time points having the same clock quality.\n\nIndeed.\nBut this doesn\u2019t take away the benefit of including time attributes inside a time, duration, or period.\n\nGr\u00fc\u00dfe, Carsten\n\n",
+          "createdAt": "2021-12-02T07:52:00Z",
+          "updatedAt": "2021-12-02T07:52:00Z"
+        },
+        {
+          "author": "ecorm",
+          "authorAssociation": "NONE",
+          "body": "> But this doesn\u2019t take away the benefit of including time attributes inside a time, duration, or period.\r\n\r\nIt may be a benefit in terms of data compactness and having everything \"together\" under one map, but it ends up making things messy in my CBOR decoder where I need to store the clock quality as an optional field in the intermediate time type I use between the decoder and application time types (such as `std::chrono::time_point` or `boost::date_time`). That optional clock quality field will never be used in the vast majority of applications using my library, yet I still have to make provision for it if I want to claim that my library supports CBOR tags 1001 and 1002.\r\n\r\nIf I choose to ignore the clock quality fields and not store them in my intermediate time type, then there would be no means for (the rare) applications that actually need PTP clock quality to retrieve those values.",
+          "createdAt": "2021-12-02T08:47:30Z",
+          "updatedAt": "2021-12-02T08:47:30Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Tag 1001..1003 already are extensible, so there is no way to claim full support (as you don't know what extensions will be made in the future).  You could handle unsupported information already known in the same way you would support future unsupported information, e.g., by offering the raw CBOR information to the application.",
+          "createdAt": "2023-06-28T11:06:28Z",
+          "updatedAt": "2023-06-28T11:06:28Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDODq1g684_uyzj",
+      "title": "Local time and time zones",
+      "url": "https://github.com/cbor-wg/time-tag/issues/4",
+      "state": "CLOSED",
+      "author": "ecorm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "There's currently no standardized way of exchanging local date/times (with or without time zone information) in CBOR. I suggest that a \"local\" time scale be added (in addition to the existing UTC and TAI). The number of seconds for a given local date and time of day would be calculated the same way as for POSIX time (this is how it's done in C++ with `std::chrono::local_time`).\r\n\r\nThe time zone, if specified, could be a text string corresponding to the IANA tz database name (e.g. \"Europe/Paris\"). This would be stored in one of the unused extended time keys, such as `-10`.\r\n\r\nA use case where a local time needs to be exchanged would be a building automation system where an event is local to the building. For example: \"Turn on the Yuletide tree lights at 12:00 (local time) on December 25, 2021\". Another use case might be an appointment in a planning app, where it the appointment is in local time.\r\n\r\nIt's not always true that every local date/time with timezone has a corresponding equivalent time in UTC. Local date/times can be ambiguous when they straddle a daylight saving time change. For local date/times occurring in the future, the rules for daylight saving could change. It therefore might be important for certain applications to exchange local date/times as actual local date/times without converting them to their \"equivalent\" UTC time.",
+      "createdAt": "2021-12-02T07:49:08Z",
+      "updatedAt": "2023-06-28T19:53:30Z",
+      "closedAt": "2023-06-28T11:03:59Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> There's currently no standardized way of exchanging local date/times (with or without time zone information) in CBOR. I suggest that a \"local\" time scale be added (in addition to the existing UTC and TAI). The number of seconds for a given local date and time of day would be calculated the same way as for POSIX time (this is how it's done in C++ with std::chrono::local_time).\n\nWe have been waiting for the SEDATE WG to define a structure for timezone information; that could be added to the time attributes.\nPlease see https://www.ietf.org/archive/id/draft-ietf-sedate-datetime-extended-01.html for the pre-IETF112 revision, or https://github.com/ietf-wg-sedate/draft-ietf-sedate-datetime-extended for more recent pull requests.\nWe\u2019ll have the same problem as SEDATE in that we might have actual time values as well as calendaring information that becomes fixed on the timescale only after  the event.\n\n> The time zone, if specified, could be a text string corresponding to the IANA tz database name (e.g. \"Europe/Paris\"). This would be stored in one of the unused extended time keys, such as -10.\n\nExactly; the plan would be to make sure that this and all other SEDATE extensions can live in a time tag.\n\n> A use case where a local time needs to be exchanged would be a building automation system where an event is local to the building. For example: \"Turn on the Yuletide tree lights at 12:00 (local time) on December 25, 2021\". Another use case might be an appointment in a planning app, where it the appointment is in local time.\n\nThere also is the \"floating time\u201d concept, please see the brief discussion at the end of https://ietf-wg-sedate.github.io/draft-ietf-sedate-datetime-extended/scope/draft-ietf-sedate-datetime-extended.html#name-scope\n\n> It's not always true that every local date/time with timezone has a corresponding equivalent time in UTC.\n\n(Or it could have two: A/B times during a clock fallback.)\n\n> Local date/times can be ambiguous when they straddle a daylight saving time change. For local date/times occurring in the future, the rules for daylight saving could change. It therefore might be important for certain applications to exchange local date/times as actual local date/times without converting them to their \"equivalent\" UTC time.\n\nIndeed; what SEDATE have been discussing is enabling the provision of both the UTC offset and the timezone name; plus information which of the two wins.\nRFC 3339 datetimes would have the UTC offset win, while calendaring times would have the timezone name win (with potential A/B disambiguation by the offset or maybe some other means).\nWaiting for SEDATE to make up its mind is what holds up completing the present tag definition, even though parts of it are already in use in applications.\n\nGr\u00fc\u00dfe, Carsten\n\n",
+          "createdAt": "2021-12-02T08:01:38Z",
+          "updatedAt": "2021-12-02T08:01:38Z"
+        },
+        {
+          "author": "ecorm",
+          "authorAssociation": "NONE",
+          "body": "@cabo , are you aware of the [revised string persistence syntax of the proposed ECMAScript Temporal](https://tc39.es/proposal-temporal/docs/index.html#string-persistence)? At quick glance, it seems to match the syntax proposed in SEDATE.",
+          "createdAt": "2021-12-02T09:02:58Z",
+          "updatedAt": "2021-12-02T09:02:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, the SEDATE WG was created to specifically look at Temporal and other specification proposals.",
+          "createdAt": "2021-12-02T10:47:02Z",
+          "updatedAt": "2021-12-02T10:47:02Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As we now have keys -10 and 10 (Time Zone Hint), I believe this item is covered.\r\n\r\nWe do not have an exact equivalent of RFC 3339 time offsets, but that is actually rarely desirable.\r\nThe actual timestamp in a time-tag is always timescale-referenced.\r\nGiving an absolute time-offset is rarely what is actually needed; if we ever come across such a case, we can add to the Map Key registry.",
+          "createdAt": "2023-06-28T11:03:59Z",
+          "updatedAt": "2023-06-28T11:03:59Z"
+        },
+        {
+          "author": "ecorm",
+          "authorAssociation": "NONE",
+          "body": "Thank you for your work on this matter, and on Internet standards in general. :+1: \r\n\r\nThere remains the use case of a local time in an unspecified time zone (which is represented as `std::chrono::local_time` in C++). I checked the TZ database to see if there's an entry that represents \"unspecified time zone\", but could only find \"Factory\" which is defined as UTC+0.\r\n\r\nTransmitting local time in an unspecified time zone doesn't seem to be much in demand, so I won't insist on its inclusion in the CBOR 1001 time tag. Perhaps I'll propose a new, separate tag for that purpose. It could be useful for constrained IoT devices with a real time clock, but lacking the non-volatile memory needed for a timezone database.",
+          "createdAt": "2023-06-28T19:53:30Z",
+          "updatedAt": "2023-06-28T19:53:30Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDODq1g685TUAeZ",
+      "title": "planned vs. actual",
+      "url": "https://github.com/cbor-wg/time-tag/issues/7",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "-02"
+      ],
+      "body": "A planned timestamp for an event is bound to the timescale, including future irregularities in that that may not be predicable at the time of planning.  An actual timestamps for an event is also bound to a timescale, but based on its known characteristics.  An actual timestamp event can be translated to a different timescale as soon as characteristics for both are known (which, unless at the level of realizations) is usually the case immediately.  A planned timestamp may change its translation, e.g., when a leap second is introduced.\r\n\r\nShould there be an indication whether a timestamp is planned or actual?  Is this just a binary flag or should there be more information?",
+      "createdAt": "2022-10-05T12:58:36Z",
+      "updatedAt": "2023-06-28T11:00:08Z",
+      "closedAt": "2023-06-28T11:00:08Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It seems we didn't come up with a good way to provide this information (it can be more complex than just the simple choice presented here), so we'll leave this to a future extension (via the Map Key Registry).",
+          "createdAt": "2023-06-28T11:00:08Z",
+          "updatedAt": "2023-06-28T11:00:08Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDODq1g685TUCVI",
+      "title": "base value map keys vs. additional critical map entry",
+      "url": "https://github.com/cbor-wg/time-tag/issues/8",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "-02"
+      ],
+      "body": "Section 3 says \u00bbThe map must contain exactly one unsigned integer key, which specifies the \"base time\"\u00ab.  This is true for base time keys such as 1, 4, 5.  However, 10 and 11 are critical map entries that are in addition to a base time key.\r\n\r\nSo map keys for critical entries should be unsigned numbers.\r\nSome of the critical map keys are base times, some are additional entries.\r\nThe definition of the map key must say which.\r\nThere is no problem with consuming critical entries without knowing which it is as all keys for critical entries must be known.\r\n\r\nShould \"base time\" be a column in the IANA registry, too?",
+      "createdAt": "2022-10-05T13:03:56Z",
+      "updatedAt": "2023-07-24T12:42:56Z",
+      "closedAt": "2023-01-11T16:44:58Z",
+      "comments": [
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "I support splitting criticality from being \"a base time\" and allowing multiple of the former.\r\n\r\nA column entry sounds like a practical thing to do; statements that \"there is at most one base time\", \"base times need to be citical\" and \"documents establishing critical options must say whether they're a base time\" would suffice as well.",
+          "createdAt": "2022-10-05T15:00:13Z",
+          "updatedAt": "2022-10-05T15:00:13Z"
+        },
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "Good to see this resolved after a long time of not reading an updated document.\r\n\r\nWhat I don't fully understand (maybe due to having lost context) is why -10 and -11 have a critical form. I maintain support for having non-basetime critical entries, but what could possibly be in key 10 that alters the time stamp's meaning to the extent that ignoring it produces a different value? (A timestamp of 1690199826 still refers to the point in time when I wrote this, no matter whether [America/Los_Angeles][u-ca=hebrew] applies to it or not, that seems to me to be inherently add-on information).\r\n\r\nDo we have better examples? Best on my mind would be an \"affine-transform\" offset, where a value of [k, d] means that the number y given in base-time maps to the value x on the indicated timescale through y = k x + d. (So for example, a device using an internal 1024Hz clock could report its internal 32bit time stamp along with the offset stored last time it did something NTPish).\r\n\r\nAlso, was the idea of having \"base time\" be a column in the registry dropped? (AIU right now the difference between a base-time and any other critical entry is the presence of the string \"Base Time\" in the \"Semantics\" column).",
+          "createdAt": "2023-07-24T11:58:12Z",
+          "updatedAt": "2023-07-24T11:58:12Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "-10 and -11 have a critical form because IXDTF (SEDATE) has a critical form.\r\nCan't really do a \"proof by lack of imagination\" for a registry :-)\r\n\r\nI don't have a strong opinion whether a column in the registry for base time is better than saying \"Base Time\" or \"critical\" in the semantics.  If you do, we could make this change.",
+          "createdAt": "2023-07-24T12:04:39Z",
+          "updatedAt": "2023-07-24T12:04:39Z"
+        },
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "That's a fine explanation that'd have helped me. I like to hope I'd have understood that right away if there was a hint in the text; attempts to come up with a good proposal fell short as they all would have referred to the critical flag of sedate-datetime-extended, but this document generally just takes the meat out of there (eg. IXDTFtz) and does not translate to the full form.\r\n\r\nMight it make sense to set one of the two items in the example to critical, with a corresponding ! flag in the approximate translation and the diagnostic comment?\r\n\r\nAs for the column, no strong opinion here either, just wanted to make sure it's not something that was lost.",
+          "createdAt": "2023-07-24T12:42:56Z",
+          "updatedAt": "2023-07-24T12:42:56Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDODq1g685bgiTI",
+      "title": "provide overall CDDL",
+      "url": "https://github.com/cbor-wg/time-tag/issues/14",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See: <https://mailarchive.ietf.org/arch/msg/cbor/iNMah00863oYzjO2J1Px2MW6iDA>\r\n",
+      "createdAt": "2023-01-16T17:10:39Z",
+      "updatedAt": "2023-03-13T21:32:54Z",
+      "closedAt": "2023-03-13T21:32:54Z",
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 5,
+      "id": "PR_kwDODq1g6848NO9B",
+      "title": "Add SEDATE trial balloon for IETF 114",
+      "url": "https://github.com/cbor-wg/time-tag/pull/5",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "New Sections 3.6 and 3.7 to cover SEDATE attributes",
+      "createdAt": "2022-07-27T20:36:47Z",
+      "updatedAt": "2022-10-04T13:41:23Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "b5d93d946349979d8b7bc3ba2d2ba69058d17197",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "add-sedate",
+      "headRefOid": "5f5a482cab39b800fe1b73d1de6a93c158b25da1",
+      "closedAt": "2022-10-04T13:41:22Z",
+      "mergedAt": "2022-10-04T13:41:22Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "f6cfc573d0a1f95172a93640080f6b43ae152451"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDODq1g685AJp31",
+      "title": "Fill in proposals for all TBDs that were outstanding.",
+      "url": "https://github.com/cbor-wg/time-tag/pull/6",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-04T16:49:32Z",
+      "updatedAt": "2022-10-04T21:45:23Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "5a3714b2f5c480a0781fb550d050f53caea294bd",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "fill-in-tbds",
+      "headRefOid": "e13d4d43b932393070d38a52a866484ad9544e41",
+      "closedAt": "2022-10-04T21:45:23Z",
+      "mergedAt": "2022-10-04T21:45:23Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "b482b8aa4f85e4005d2a3ccdf11ccb6fedcd7ba2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685DX0gr",
+          "commit": {
+            "abbreviatedOid": "2f9d9fa"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "No hard blockers. Nits inside.",
+          "createdAt": "2022-10-04T16:57:05Z",
+          "updatedAt": "2022-10-04T17:40:13Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "Maybe like this? Not sure that is an improvement (nit level)\r\n\r\n```suggestion\r\nSemantics not covered by this document can be added via additional map keys for the map inside the tag that can be defined in other specifications. An example of an additional semantic definition follows.\r\n```",
+              "createdAt": "2022-10-04T16:57:05Z",
+              "updatedAt": "2022-10-04T17:40:13Z"
+            },
+            {
+              "originalPosition": 156,
+              "body": "+1",
+              "createdAt": "2022-10-04T17:03:47Z",
+              "updatedAt": "2022-10-04T17:40:13Z"
+            },
+            {
+              "originalPosition": 151,
+              "body": "+1",
+              "createdAt": "2022-10-04T17:03:48Z",
+              "updatedAt": "2022-10-04T17:40:13Z"
+            },
+            {
+              "originalPosition": 208,
+              "body": "we could do one more",
+              "createdAt": "2022-10-04T17:04:56Z",
+              "updatedAt": "2022-10-04T17:40:14Z"
+            },
+            {
+              "originalPosition": 213,
+              "body": "+1",
+              "createdAt": "2022-10-04T17:39:48Z",
+              "updatedAt": "2022-10-04T17:40:14Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDODq1g685Aw-Y5",
+      "title": "Adding UT1",
+      "url": "https://github.com/cbor-wg/time-tag/pull/9",
+      "state": "CLOSED",
+      "author": "henkbirkholz",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "discuss-in-WGLC"
+      ],
+      "body": "",
+      "createdAt": "2022-10-13T19:58:15Z",
+      "updatedAt": "2023-02-22T16:06:46Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "57a178c743171a8bb3036b6836b37e15244d8aac",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "ut1",
+      "headRefOid": "73308852085ecdacb33a6537e2fc13425b5b620e",
+      "closedAt": "2023-02-22T16:06:46Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "In the interim, we were a bit skeptical this PR is ready.  \r\nNow the SEDATE WGLC has been issued, which we may want to stay in sync with.  ",
+          "createdAt": "2022-10-21T05:22:25Z",
+          "updatedAt": "2022-10-21T05:22:25Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685EZw2_",
+          "commit": {
+            "abbreviatedOid": "7330885"
+          },
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-19T13:43:40Z",
+          "updatedAt": "2022-10-19T13:45:06Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "This is a bit of a lame reference, as its main content is \"Concise definitions of the above terms and the concepts involved are available in the publications of the IERS (Paris, France).\"  What are those IERS documents?  We'd need to say this here...\r\n",
+              "createdAt": "2022-10-19T13:43:40Z",
+              "updatedAt": "2022-10-19T13:45:06Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "We don't say the Epoch here (only in the IANA table later).\r\n",
+              "createdAt": "2022-10-19T13:44:12Z",
+              "updatedAt": "2022-10-19T13:45:06Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "Is the POSIX epoch defined for UT1?  What was the UT1 value at 1970-01-01T00:00Z (UTC)?  We probably need to say.",
+              "createdAt": "2022-10-19T13:44:59Z",
+              "updatedAt": "2022-10-19T13:45:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDODq1g685HGfeQ",
+      "title": "Close #8",
+      "url": "https://github.com/cbor-wg/time-tag/pull/10",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "separate the concepts of critical (must-understand) and base-time",
+      "createdAt": "2023-01-10T20:40:20Z",
+      "updatedAt": "2023-01-11T16:44:57Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "57a178c743171a8bb3036b6836b37e15244d8aac",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "issue-8-critical",
+      "headRefOid": "59b5bf66f0e23b5f9fb45c9046ceeaeeeb75d988",
+      "closedAt": "2023-01-11T16:44:57Z",
+      "mergedAt": "2023-01-11T16:44:57Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "8deee3e8959b11374a416583b8ef6a8d54d9f79c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDODq1g685HegyF",
+      "title": "Explain in a note why the spec only registers TAI and UTC.",
+      "url": "https://github.com/cbor-wg/time-tag/pull/11",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Which also explains why #9 is not being merged.",
+      "createdAt": "2023-01-16T15:39:00Z",
+      "updatedAt": "2023-02-22T16:06:14Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "96dde8024b883d3ecfc197ed10f2e38111f721db",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "dear-astronomers",
+      "headRefOid": "6c1482cf4ec6a225f96d8590bf2fdd4042c036b2",
+      "closedAt": "2023-02-22T16:06:14Z",
+      "mergedAt": "2023-02-22T16:06:14Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "16791c09075b041cf94d05c52162fcb307890700"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685LO1if",
+          "commit": {
+            "abbreviatedOid": "6c1482c"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "yes. either WGLC pulls this in or it becomes part of an extension document",
+          "createdAt": "2023-01-19T16:48:51Z",
+          "updatedAt": "2023-01-19T16:48:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDODq1g685He1DQ",
+      "title": "Clarify some more what keys are base time.",
+      "url": "https://github.com/cbor-wg/time-tag/pull/12",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-01-16T16:44:19Z",
+      "updatedAt": "2023-01-19T17:04:25Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "96dde8024b883d3ecfc197ed10f2e38111f721db",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "clarify-base-time",
+      "headRefOid": "d3b88b2bc3b9f3c8208f2bab40718852b23f0f59",
+      "closedAt": "2023-01-19T17:04:25Z",
+      "mergedAt": "2023-01-19T17:04:25Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "cc977c5bc55dbcffd77284ed3a2911ff84508a46"
+      },
+      "comments": [
+        {
+          "author": "laurencelundblade",
+          "authorAssociation": "NONE",
+          "body": "+1",
+          "createdAt": "2023-01-17T18:11:45Z",
+          "updatedAt": "2023-01-17T18:11:45Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685LO2CD",
+          "commit": {
+            "abbreviatedOid": "d3b88b2"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Comprehensive improvement",
+          "createdAt": "2023-01-19T16:49:45Z",
+          "updatedAt": "2023-01-19T16:49:45Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDODq1g685He7fc",
+      "title": "Clarify the requirements and the handling of unknown keys.",
+      "url": "https://github.com/cbor-wg/time-tag/pull/13",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-01-16T17:08:33Z",
+      "updatedAt": "2023-03-07T23:56:35Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "96dde8024b883d3ecfc197ed10f2e38111f721db",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "clarify-requirements",
+      "headRefOid": "46951c84c794869c6f1e902cae1004c0e5697aa3",
+      "closedAt": "2023-03-07T23:56:35Z",
+      "mergedAt": "2023-03-07T23:56:35Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "86a9a1d33a9b29516ca5b55e0821cfcbd016ed9f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685POk5T",
+          "commit": {
+            "abbreviatedOid": "46951c8"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "lgtm",
+          "createdAt": "2023-03-07T18:04:07Z",
+          "updatedAt": "2023-03-07T18:04:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDODq1g685L7UDq",
+      "title": "Close #14: Provide overall CDDL modeling",
+      "url": "https://github.com/cbor-wg/time-tag/pull/15",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-03-13T19:23:00Z",
+      "updatedAt": "2023-03-13T21:32:52Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "8b376b98487079d3aeaec6c79f5844ece8de9a8f",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "more-cddl",
+      "headRefOid": "82af384d8e31350af1a8fdd033ce3a64cc2f773f",
+      "closedAt": "2023-03-13T21:32:52Z",
+      "mergedAt": "2023-03-13T21:32:51Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "4490394b0d0bf32f68a8a0f1e119cfbdbc236fc5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDODq1g685UIPY2",
+      "title": "(editorial:) Close #2",
+      "url": "https://github.com/cbor-wg/time-tag/pull/16",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-06-28T10:58:20Z",
+      "updatedAt": "2023-06-28T12:06:19Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "b9f5858e88c206b042417f896d0e9f0627cb25ec",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "fix-2",
+      "headRefOid": "29fd6f70e620c4bb5e8ce5d03c70783239c00b46",
+      "closedAt": "2023-06-28T12:06:18Z",
+      "mergedAt": "2023-06-28T12:06:18Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "9ab77b27e8d8784b406451f57b7bcb95bb8df2a4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685ZlNQs",
+          "commit": {
+            "abbreviatedOid": "29fd6f7"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "yes",
+          "createdAt": "2023-06-28T12:01:33Z",
+          "updatedAt": "2023-06-28T12:01:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDODq1g685UIglG",
+      "title": "(Editorial:) Fix 1",
+      "url": "https://github.com/cbor-wg/time-tag/pull/17",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-06-28T11:54:40Z",
+      "updatedAt": "2023-06-28T12:05:58Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "856a02d42033f1542ef5179860c1a848151ae8e9",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "fix-1",
+      "headRefOid": "ff3b786da4dd343091636e773316c53c7a3b3bfe",
+      "closedAt": "2023-06-28T12:05:58Z",
+      "mergedAt": "2023-06-28T12:05:58Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "9d9d29d5e3bb27b3d52a755c9383c6cd8aa9a408"
+      },
+      "comments": [
+        {
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "body": "\\o/",
+          "createdAt": "2023-06-28T11:57:24Z",
+          "updatedAt": "2023-06-28T11:57:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDODq1g685ZlL-c",
+          "commit": {
+            "abbreviatedOid": "b02e9a3"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-06-28T11:58:12Z",
+          "updatedAt": "2023-06-28T11:58:12Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDODq1g685WKSM9",
+      "title": "Input from IANA early review 2023-07-21",
+      "url": "https://github.com/cbor-wg/time-tag/pull/18",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-07-23T08:41:46Z",
+      "updatedAt": "2023-07-23T09:49:10Z",
+      "baseRepository": "cbor-wg/time-tag",
+      "baseRefName": "master",
+      "baseRefOid": "30d8c3f8b91a391248ac604be988ec11574a33f2",
+      "headRepository": "cbor-wg/time-tag",
+      "headRefName": "iana-review",
+      "headRefOid": "5049962cd518f9f76bdb02d3afbd29c2a66a1819",
+      "closedAt": "2023-07-23T09:49:09Z",
+      "mergedAt": "2023-07-23T09:49:09Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "f389d6506e07cc41fa93ac920264ed251103fa30"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}

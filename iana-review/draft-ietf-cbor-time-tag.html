@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Greek,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period</title>
+<meta content="Carsten Bormann" name="author">
+<meta content="Ben Gamari" name="author">
+<meta content="Henk Birkholz" name="author">
+<meta content="
+       The Concise Binary Object Representation (CBOR, RFC 8949) is a data
+format whose design goals include the possibility of extremely small
+code size, fairly small message size, and extensibility without the
+need for version negotiation. 
+       In CBOR, one point of extensibility is the definition of CBOR tags.
+RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+1 (Posix time as int or float).  Since then, additional requirements have
+become known.  The present document defines a CBOR tag for time that
+allows a more elaborate representation of time, as well as related
+CBOR tags for duration and time period.  It is
+intended as the reference document for the IANA registration of the
+CBOR tags defined. 
+       The present version (-08) fixes some cosmetic bugs, in the
+references and in the plaintext representation of one formula.
+It reflects the state of the document after the short final WGLC
+completed. 
+    " name="description">
+<meta content="xml2rfc 3.17.4" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-cbor-time-tag-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.17.4
+    Python 3.11.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 3.9.1
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.31.0
+    setuptools 67.7.2
+    six 1.16.0
+    wcwidth 0.2.6
+-->
+<link href="draft-ietf-cbor-time-tag.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">CBOR tag for extended time</td>
+<td class="right">July 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Bormann, et al.</td>
+<td class="center">Expires 24 January 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-cbor-time-tag-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-07-23" class="published">23 July 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-01-24">24 January 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">C. Bormann</div>
+<div class="org">Universität Bremen TZI</div>
+</div>
+<div class="author">
+      <div class="author-name">B. Gamari</div>
+<div class="org">Well-Typed</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Birkholz</div>
+<div class="org">Fraunhofer SIT</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Concise Binary Object Representation (CBOR) Tags for Time, Duration, and Period</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">The Concise Binary Object Representation (CBOR, RFC 8949) is a data
+format whose design goals include the possibility of extremely small
+code size, fairly small message size, and extensibility without the
+need for version negotiation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">In CBOR, one point of extensibility is the definition of CBOR tags.
+RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+1 (Posix time as int or float).  Since then, additional requirements have
+become known.  The present document defines a CBOR tag for time that
+allows a more elaborate representation of time, as well as related
+CBOR tags for duration and time period.  It is
+intended as the reference document for the IANA registration of the
+CBOR tags defined.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3"><span class="cref" id="status">The present version (-08) fixes some cosmetic bugs, in the
+references and in the plaintext representation of one formula.
+It reflects the state of the document after the short final WGLC
+completed.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-ietf-cbor-time-tag/">https://datatracker.ietf.org/doc/draft-ietf-cbor-time-tag/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">
+        Discussion of this document takes place on the
+        CBOR Working Group mailing list (<span><a href="mailto:cbor@ietf.org">mailto:cbor@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/cbor/">https://mailarchive.ietf.org/arch/browse/cbor/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/cbor/">https://www.ietf.org/mailman/listinfo/cbor/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/cbor-wg/time-tag">https://github.com/cbor-wg/time-tag</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 24 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-objectives" class="internal xref">Objectives</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-time-format" class="internal xref">Time Format</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-key-1" class="internal xref">Key 1</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-keys-4-and-5" class="internal xref">Keys 4 and 5</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-keys-3-6-9-12-15-18" class="internal xref">Keys -3, -6, -9, -12, -15, -18</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-key-1-timescale" class="internal xref">Key -1: Timescale</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-clock-quality" class="internal xref">Clock Quality</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5.2.1">
+                    <p id="section-toc.1-1.3.2.5.2.1.1"><a href="#section-3.5.1" class="auto internal xref">3.5.1</a>.  <a href="#name-clockclass-key-2" class="internal xref">ClockClass (Key -2)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5.2.2">
+                    <p id="section-toc.1-1.3.2.5.2.2.1"><a href="#section-3.5.2" class="auto internal xref">3.5.2</a>.  <a href="#name-clockaccuracy-key-4" class="internal xref">ClockAccuracy (Key -4)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5.2.3">
+                    <p id="section-toc.1-1.3.2.5.2.3.1"><a href="#section-3.5.3" class="auto internal xref">3.5.3</a>.  <a href="#name-offsetscaledlogvariance-key" class="internal xref">OffsetScaledLogVariance (Key -5)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5.2.4">
+                    <p id="section-toc.1-1.3.2.5.2.4.1"><a href="#section-3.5.4" class="auto internal xref">3.5.4</a>.  <a href="#name-uncertainty-key-7" class="internal xref">Uncertainty (Key -7)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5.2.5">
+                    <p id="section-toc.1-1.3.2.5.2.5.1"><a href="#section-3.5.5" class="auto internal xref">3.5.5</a>.  <a href="#name-guarantee-key-8" class="internal xref">Guarantee (Key -8)</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-keys-10-10-time-zone-hint" class="internal xref">Keys -10, 10: Time Zone Hint</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-keys-11-11-ixdtf-suffix-inf" class="internal xref">Keys -11, 11: IXDTF Suffix Information</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-duration-format" class="internal xref">Duration Format</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-period-format" class="internal xref">Period Format</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-cddl-typenames" class="internal xref">CDDL typenames</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-cbor-tags" class="internal xref">CBOR tags</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-timescale-registry" class="internal xref">Timescale Registry</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-map-key-registry" class="internal xref">Map Key Registry</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-collected-cddl" class="internal xref">Collected CDDL</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The Concise Binary Object Representation (CBOR, <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>) provides
+for the interchange of structured data without a requirement for a
+pre-agreed schema.
+RFC 8949 defines a basic set of data types, as well as a tagging
+mechanism that enables extending the set of data types supported via
+an IANA registry.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">In CBOR, one point of extensibility is the definition of CBOR tags.
+RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+1 (Posix time as int or float).  Since then, additional requirements have
+become known.  The present document defines a CBOR tag for time that
+allows a more elaborate representation of time, as well as related
+CBOR tags for duration and time period.  It is
+intended as the reference document for the IANA registration of the
+CBOR tags defined.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<div id="terms">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">The term "byte" is used in its now customary sense as a synonym for
+"octet".
+Where bit arithmetic is explained, this document uses the notation
+familiar from the programming language C (including C++14's 0bnnn
+binary literals), except that the operator "**" stands for
+exponentiation.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">CBOR diagnostic notation is defined in <span><a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">Section 8</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> and
+<span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.
+A machine-processable model of the data structures defined in this
+specification is provided throughout the text using the Concise Data
+Definition Language, CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>; <a href="#collected-cddl" class="auto internal xref">Appendix A</a> provides the
+collected model information.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="objectives">
+<section id="section-2">
+      <h2 id="name-objectives">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-objectives" class="section-name selfRef">Objectives</a>
+      </h2>
+<p id="section-2-1">For the time tag,
+the present specification addresses the following objectives that go
+beyond the original tags 0 and 1:<a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-2.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
+1 only provides for integer and up to binary64 floating point
+representation of times, limiting resolution to approximately
+microseconds at the time of writing (and progressively becoming
+worse over time).<a href="#section-2-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-2.2">Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+interchanges are better performed on TAI.  Other timescales may be
+registered once they become relevant (e.g., one of the proposed
+successors to UTC that might no longer use leap seconds, or a
+scale based on smeared leap seconds).<a href="#section-2-2.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-3">By incorporating a way to transport <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span> suffix information (<a href="#tzh" class="auto internal xref">Section 3.6</a>,
+<a href="#suff" class="auto internal xref">Section 3.7</a>), additional indications can be provided of intents about the
+interpretation of the time given, in particular for future times.
+Intents might include information about time zones, daylight savings
+times, preferred calendar representations, etc.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Semantics not covered by this document can be added by registering
+additional map keys for the map inside the tag, the specification for
+which is referenced by the registry entry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>, <a href="#time-format" class="auto internal xref">Section 3</a>).
+For example, map keys could be registered for:<a href="#section-2-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-5.1">Direct representation of natural platform time formats.  Some
+platforms use epoch-based time formats that require some computation
+to convert them into the representations allowed by tag 1; these
+computations can also lose precision and cause ambiguities.
+(The present specification does not take a position on whether tag 1
+can be "fixed" to include, e.g., Decimal or BigFloat representations.
+It does define how to use these representations with the extended
+time format.)<a href="#section-2-5.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-6">Additional tags are defined for durations and periods.<a href="#section-2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="time-format">
+<section id="section-3">
+      <h2 id="name-time-format">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-time-format" class="section-name selfRef">Time Format</a>
+      </h2>
+<p id="section-3-1">An extended time is indicated by CBOR tag 1001, the content of which is a map data
+item (CBOR major type 5).  The map may contain integer (major types 0
+and 1) or text string (major type 3) keys, with the value type
+determined by each specific key.
+For negative integer keys and text string values of the key,
+implementations <span class="bcp14">MUST</span> ignore key/value pairs they do not understand.
+Conversely, for unsigned integer keys, implementations <span class="bcp14">MUST</span> signal as
+an error key/value pairs they do not understand or implement
+(these are either "base time" or "critical", see below).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">The map must contain exactly one unsigned integer key that specifies
+the "base time", and may also contain one or more negative integer or
+text-string keys, which may encode supplementary information.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Supplementary information may also be provided by additional unsigned
+integer keys that are explicitly defined to provide supplementary
+information ("critical"; as these are required to be understood, there
+can be no confusion with Base Time keys).<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Negative integer and text string keys always supply supplementary
+information ("elective", and this will not be explicitly stated
+below).<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">Supplementary information may include:<a href="#section-3-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-6.1">a higher precision time offset to be added to the Base Time,<a href="#section-3-6.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-6.2">a reference timescale and epoch different from the default UTC and 1970-01-01<a href="#section-3-6.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-6.3">information about clock quality parameters, such as source,
+accuracy, and uncertainty<a href="#section-3-6.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-3-7">Additional keys can be defined by registering them in the Map Key
+Registry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>).
+Future keys may add:<a href="#section-3-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-8.1">intent information such as timezone and daylight savings time,
+and/or possibly positioning coordinates, to express information that
+would indicate a local time.<a href="#section-3-8.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-3-9">This document does not define supplementary text keys.
+A number of both unsigned and negative-integer keys are defined in
+the following subsections.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<p id="section-3-10">A formal definition of Tag 1001 in CDDL is:<a href="#section-3-10" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3-11">
+<pre>
+Etime = #6.1001(etime-detailed)
+
+etime-framework = {
+  uint =&gt; any ; at least one base time
+  * (nint/text) =&gt; any ; elective supplementary information
+  * uint =&gt; any ; critical supplementary information
+}
+
+etime-detailed = ({
+  $$ETIME-BASETIME
+  ClockQuality-group
+  * $$ETIME-ELECTIVE
+  * $$ETIME-CRITICAL
+  * ((nint/text) .feature "etime-elective-extension") =&gt; any
+  * (uint .feature "etime-critical-extension") =&gt; any
+}) .within etime-framework
+</pre><a href="#section-3-11" class="pilcrow">¶</a>
+</div>
+<div id="key-1">
+<section id="section-3.1">
+        <h3 id="name-key-1">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-key-1" class="section-name selfRef">Key 1</a>
+        </h3>
+<p id="section-3.1-1">Key 1 indicates a Base Time value that is exactly like the data item that would
+be tagged by CBOR tag 1 (Posix time <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> as int or float).
+The time value indicated by the value under this key can be further
+modified by other keys.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1-2">
+<pre>
+$$ETIME-BASETIME //= (1: ~time)
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="keys-4-and-5">
+<section id="section-3.2">
+        <h3 id="name-keys-4-and-5">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-keys-4-and-5" class="section-name selfRef">Keys 4 and 5</a>
+        </h3>
+<p id="section-3.2-1">Keys 4 and 5 indicate a Base Time value and are like key 1, except that the data item is an array as
+defined for CBOR tag 4 or 5, respectively.  This can be used to include
+a Decimal or Bigfloat epoch-based float <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> in an extended time.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.2-2">
+<pre>
+$$ETIME-BASETIME //= (4: ~decfrac)
+$$ETIME-BASETIME //= (5: ~bigfloat)
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="keys-3-6-9-12-15-18">
+<section id="section-3.3">
+        <h3 id="name-keys-3-6-9-12-15-18">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-keys-3-6-9-12-15-18" class="section-name selfRef">Keys -3, -6, -9, -12, -15, -18</a>
+        </h3>
+<p id="section-3.3-1">The keys -3, -6, -9, -12, -15 and -18 indicate additional decimal fractions by
+giving an unsigned integer (major type 0) and scaling this with the
+scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively (see <a href="#decfract" class="auto internal xref">Table 1</a>).  More than one
+of these keys <span class="bcp14">MUST NOT</span> be present in one extended time data item.
+These additional fractions are added to a Base Time in seconds <span>[<a href="#SI-SECOND" class="cite xref">SI-SECOND</a>]</span>
+indicated by a Key 1, which then <span class="bcp14">MUST</span> also be present and <span class="bcp14">MUST</span> have an
+integer value.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<span id="name-key-for-decimally-scaled-fr"></span><div id="decfract">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-key-for-decimally-scaled-fr" class="selfRef">Key for decimally scaled Fractions</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Key</th>
+              <th class="text-left" rowspan="1" colspan="1">meaning</th>
+              <th class="text-left" rowspan="1" colspan="1">example usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-3</td>
+              <td class="text-left" rowspan="1" colspan="1">milliseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">Java time</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-6</td>
+              <td class="text-left" rowspan="1" colspan="1">microseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">(old) UNIX time</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-9</td>
+              <td class="text-left" rowspan="1" colspan="1">nanoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">(new) UNIX time</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-12</td>
+              <td class="text-left" rowspan="1" colspan="1">picoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">Haskell time</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-15</td>
+              <td class="text-left" rowspan="1" colspan="1">femtoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">(future)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-18</td>
+              <td class="text-left" rowspan="1" colspan="1">attoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">(future)</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<div class="lang-cddl sourcecode" id="section-3.3-3">
+<pre>
+$$ETIME-ELECTIVE //= (-3: uint)
+$$ETIME-ELECTIVE //= (-6: uint)
+$$ETIME-ELECTIVE //= (-9: uint)
+$$ETIME-ELECTIVE //= (-12: uint)
+$$ETIME-ELECTIVE //= (-15: uint)
+$$ETIME-ELECTIVE //= (-18: uint)
+</pre><a href="#section-3.3-3" class="pilcrow">¶</a>
+</div>
+<p id="section-3.3-4">Note that these keys have been provided to facilitate representing
+pairs of the form second/decimal fraction of a second, as found for
+instance in C <code>timespec</code> (compare Section 7.27.1 of <span>[<a href="#C" class="cite xref">C</a>]</span>).
+When ingesting a timestamp with one of these keys into a type provided
+by the target platform, care has to be taken to meet its invariants.
+E.g., for C <code>timespec</code>, the fractional part <code>tv_nsec</code> needs to be
+between 0 inclusive and 10<sup>9</sup> exclusive, which can be
+achieved by also adjusting the base time appropriately.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="key-timescale">
+<section id="section-3.4">
+        <h3 id="name-key-1-timescale">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-key-1-timescale" class="section-name selfRef">Key -1: Timescale</a>
+        </h3>
+<p id="section-3.4-1">Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
+with the POSIX epoch <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span>; the value 1 indicates TAI, with the
+PTP (Precision Time Protocol) epoch <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.4-2">
+<pre>
+$$ETIME-ELECTIVE //= (-1 =&gt; $ETIME-TIMESCALE)
+
+$ETIME-TIMESCALE /= &amp;(etime-utc: 0)
+$ETIME-TIMESCALE /= &amp;(etime-tai: 1)
+</pre><a href="#section-3.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.4-3">If key -1 is not present, timescale value 0 is implied.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">Additional values can be registered in the Timescale Registry
+(<a href="#timescale-registry" class="auto internal xref">Section 7.2</a>); values <span class="bcp14">MUST</span> be integers or text strings.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" — instead,
+the time should be converted to TAI or UTC using a single addition or subtraction.)<a href="#section-3.4-5" class="pilcrow">¶</a></p>
+<span id="name-converting-common-offset-ti"></span><div id="offset">
+<figure id="figure-1">
+          <div id="section-3.4-6.1">
+            <div class="alignLeft art-svg artwork" id="section-3.4-6.1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="6.009ex" role="img" viewBox="0 -791.3 43055.4 2587.3" width="100ex">
+                <defs>
+                  <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461-gensym001" stroke-width="1"></path>
+                  <path d="M444 428l-89 -348c-1 -4 -1 -6 -1 -9c0 -8 4 -14 14 -14c21 0 40 26 57 46l5 6l13 -11c-23 -33 -74 -107 -132 -107c-29 0 -40 19 -40 52c0 9 1 25 4 37l26 95h-1c-7 -5 -97 -126 -137 -156c-23 -17 -49 -28 -72 -28c-47 0 -61 36 -61 74c0 21 3 40 8 59l59 231 c4 15 6 21 6 25c0 12 -11 23 -33 23c-7 0 -19 -1 -26 -3l-3 15l157 26l-84 -326c-2 -9 -3 -16 -3 -24c0 -21 8 -34 26 -34c25 0 65 31 100 77c43 57 89 146 109 219l21 75h77Z" id="E1-STIXWEBNORMALI-1D462-gensym001" stroke-width="1"></path>
+                  <path d="M363 111l12 -13c-51 -60 -113 -109 -198 -109c-97 0 -137 78 -137 155c0 140 121 297 263 297c50 0 97 -27 97 -76c0 -38 -16 -70 -54 -70c-26 0 -38 21 -38 38c0 24 29 36 29 58c0 12 -10 21 -34 21c-119 0 -176 -179 -176 -259c0 -87 49 -109 94 -109 c61 0 107 33 142 67Z" id="E1-STIXWEBNORMALI-1D450-gensym001" stroke-width="1"></path>
+                  <path d="M637 320h-589v66h589v-66zM637 120h-589v66h589v-66Z" id="E1-STIXWEBMAIN-3D-gensym001" stroke-width="1"></path>
+                  <path d="M467 96l-5 -6c-28 -34 -76 -98 -128 -98c-32 0 -41 23 -41 46c0 13 4 29 7 40l57 221c2 8 7 28 7 42c0 19 -6 38 -24 38c-38 0 -101 -86 -132 -133c-36 -54 -62 -101 -68 -122l-33 -124h-77l95 374c0 18 -3 32 -30 32c-10 0 -21 -2 -28 -3l-2 15l159 23l-51 -189h3 c5 0 54 70 56 73c40 50 100 116 160 116c44 0 56 -29 56 -62c0 -25 -6 -50 -11 -70l-59 -231c-1 -2 -1 -5 -1 -10c1 -6 4 -14 15 -14c24 0 48 36 62 53Z" id="E1-STIXWEBNORMALI-1D45B-gensym001" stroke-width="1"></path>
+                  <path d="M253 370l14 13c39 37 78 58 113 58c61 0 94 -54 94 -155c0 -129 -110 -298 -254 -298c-24 0 -42 4 -61 19l-24 -100c-3 -13 -5 -24 -5 -35c0 -22 11 -43 61 -43h16l-3 -12h-234l3 12c62 3 69 33 81 79l117 464c0 19 -1 33 -31 33c-8 0 -20 -2 -28 -4l-2 16l158 24 l-18 -69zM214 238l-46 -200c14 -16 34 -21 46 -21c101 0 176 173 176 285c0 63 -28 83 -51 83c-53 0 -105 -61 -125 -147Z" id="E1-STIXWEBNORMALI-1D45D-gensym001" stroke-width="1"></path>
+                  <path d="M621 220h-557v66h557v-66Z" id="E1-STIXWEBMAIN-2212-gensym001" stroke-width="1"></path>
+                  <path d="M474 137l-54 -137h-391v12l178 189c94 99 130 175 130 260c0 91 -54 141 -139 141c-72 0 -107 -32 -147 -130l-21 5c21 117 85 199 208 199c113 0 185 -77 185 -176c0 -79 -39 -154 -128 -248l-165 -176h234c42 0 63 11 96 67Z" id="E1-STIXWEBMAIN-32-gensym001" stroke-width="1"></path>
+                  <path d="M476 330c0 -172 -63 -344 -226 -344c-171 0 -226 186 -226 350c0 177 69 340 230 340c131 0 222 -141 222 -346zM380 325c0 208 -44 325 -132 325c-83 0 -128 -118 -128 -321s44 -317 130 -317c85 0 130 115 130 313Z" id="E1-STIXWEBMAIN-30-gensym001" stroke-width="1"></path>
+                  <path d="M445 155c0 -103 -77 -169 -197 -169c-113 0 -192 69 -192 163c0 69 23 108 130 183c-103 85 -124 123 -124 188c0 96 83 156 194 156c99 0 168 -65 168 -143c0 -75 -35 -109 -134 -162c123 -82 155 -136 155 -216zM355 533c0 69 -41 115 -109 115 c-67 0 -110 -37 -110 -99s37 -108 125 -160c68 40 94 82 94 144zM271 272l-59 40c-59 -48 -80 -89 -80 -154c0 -92 51 -144 127 -144c65 0 110 45 110 110c0 62 -30 102 -98 148Z" id="E1-STIXWEBMAIN-38-gensym001" stroke-width="1"></path>
+                  <path d="M59 -22l-3 20c152 27 264 132 304 296c-43 -42 -91 -57 -150 -57c-108 0 -180 81 -180 203c0 135 89 236 208 236c64 0 118 -28 157 -76c40 -50 64 -122 64 -206c0 -115 -40 -224 -120 -297c-85 -77 -150 -101 -280 -119zM362 355v39c0 168 -45 254 -132 254 c-30 0 -56 -12 -73 -34c-20 -27 -35 -86 -35 -140c0 -119 48 -194 123 -194c44 0 117 22 117 75Z" id="E1-STIXWEBMAIN-39-gensym001" stroke-width="1"></path>
+                  <path d="M472 428l-91 -345s-1 -2 -1 -11c0 -11 6 -17 14 -17c10 0 25 2 64 54l12 -12c-31 -47 -85 -107 -133 -107c-33 0 -42 23 -42 55c0 13 6 34 11 50h-4c-72 -92 -134 -105 -173 -105c-63 0 -89 55 -89 119c0 132 132 332 276 332c43 0 64 -24 66 -46h1l9 33h80zM367 341 c0 41 -12 71 -50 71c-68 0 -128 -87 -162 -171c-18 -45 -28 -89 -28 -124c0 -53 31 -66 58 -66c69 0 139 95 167 190c8 26 15 66 15 100Z" id="E1-STIXWEBNORMALI-1D44E-gensym001" stroke-width="1"></path>
+                  <path d="M257 566c0 -26 -22 -46 -48 -46c-29 0 -48 20 -48 46c0 25 19 50 48 50c26 0 48 -25 48 -50zM227 441l-92 -364c-1 -6 -1 -10 -1 -14c0 -7 6 -10 13 -10c22 0 28 12 64 51l13 -10c-35 -45 -85 -105 -134 -105c-28 0 -40 19 -40 46c0 12 0 31 79 338c1 2 2 9 2 12 c0 17 -8 22 -31 22c-9 0 -21 -2 -28 -4l-3 16Z" id="E1-STIXWEBNORMALI-1D456-gensym001" stroke-width="1"></path>
+                  <path d="M492 413l-13 -45h-81c13 -15 17 -28 17 -50c0 -75 -53 -137 -141 -148c-59 -8 -88 -33 -88 -58c0 -63 233 -23 233 -148c0 -71 -66 -151 -215 -151c-134 0 -184 57 -184 115s55 88 117 108c-17 11 -24 30 -24 47c0 38 37 87 85 87v4c-67 15 -94 62 -94 109 c0 79 68 158 174 158c42 0 73 -13 88 -28h126zM336 349c0 37 -10 62 -54 62c-54 0 -98 -71 -98 -139c0 -46 12 -81 56 -81c71 0 96 102 96 158zM349 -69c0 78 -132 73 -192 95c-8 -5 -18 -10 -26 -16c-26 -19 -48 -45 -48 -72c0 -47 44 -97 139 -97c91 0 127 46 127 90Z" id="E1-STIXWEBNORMALI-1D454-gensym001" stroke-width="1"></path>
+                  <path d="M390 441l-24 -146h-15c0 64 -36 120 -92 120c-25 0 -51 -17 -51 -58c0 -55 134 -147 134 -242c0 -62 -48 -125 -135 -125c-34 0 -98 20 -110 20c-9 0 -18 -4 -30 -21h-17l25 156h16c0 -63 41 -130 104 -130c59 0 73 50 73 89c0 82 -130 132 -130 230c0 79 59 107 114 107 c43 0 63 -20 92 -20c11 0 22 10 30 20h16Z" id="E1-STIXWEBNORMALI-1D460-gensym001" stroke-width="1"></path>
+                  <path d="M636 220h-261v-261h-66v261h-261v66h261v261h66v-261h261v-66Z" id="E1-STIXWEBMAIN-2B-gensym001" stroke-width="1"></path>
+                  <path d="M61 510l-16 4c29 95 92 162 196 162c93 0 156 -55 156 -137c0 -48 -26 -98 -93 -138c44 -19 62 -31 83 -53c28 -31 44 -77 44 -129c0 -53 -17 -102 -46 -140c-48 -64 -143 -93 -232 -93c-73 0 -112 21 -112 57c0 21 18 36 41 36c17 0 33 -6 61 -26c37 -26 58 -31 86 -31 c74 0 130 68 130 153c0 76 -35 125 -104 145c-22 7 -45 10 -102 10v14c38 13 64 24 84 36c49 28 81 73 81 134c0 68 -42 102 -108 102c-62 0 -108 -32 -149 -106Z" id="E1-STIXWEBMAIN-33-gensym001" stroke-width="1"></path>
+                  <path d="M394 0h-276v15c74 4 95 25 95 80v449c0 34 -9 49 -30 49c-10 0 -27 -5 -45 -12l-27 -10v14l179 91l9 -3v-597c0 -43 20 -61 95 -61v-15Z" id="E1-STIXWEBMAIN-31-gensym001" stroke-width="1"></path>
+                  <path d="M438 681l-36 -85c-3 -7 -11 -13 -27 -13h-194l-40 -85c143 -27 193 -49 250 -128c26 -36 35 -74 35 -127c0 -96 -30 -158 -98 -208c-47 -34 -102 -49 -170 -49c-75 0 -127 24 -127 62c0 25 17 38 45 38c23 0 42 -5 74 -31c28 -23 51 -32 71 -32c70 0 135 83 135 169 c0 64 -22 114 -67 150c-47 38 -117 70 -213 70c-9 0 -12 2 -12 8c0 2 1 5 1 5l109 237h207c23 0 32 5 48 26Z" id="E1-STIXWEBMAIN-35-gensym001" stroke-width="1"></path>
+                  <path d="M446 684l2 -16c-157 -26 -269 -134 -296 -285c49 38 83 45 127 45c117 0 189 -80 189 -209c0 -64 -18 -120 -51 -160c-37 -46 -93 -73 -159 -73c-79 0 -142 37 -177 101c-28 51 -47 122 -47 192c0 108 38 203 109 276c86 90 165 114 303 129zM378 188 c0 128 -42 194 -135 194c-57 0 -116 -24 -116 -116c0 -152 48 -252 142 -252c72 0 109 72 109 174Z" id="E1-STIXWEBMAIN-36-gensym001" stroke-width="1"></path>
+                  <path d="M473 167h-103v-167h-78v167h-280v64l314 445h44v-445h103v-64zM292 231v343l-240 -343h240Z" id="E1-STIXWEBMAIN-34-gensym001" stroke-width="1"></path>
+                </defs>
+                <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
+                  <g transform="translate(16540,0)">
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" x="0" y="0"></use>
+                    <g transform="translate(313,-150)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D462-gensym001" transform="scale(0.707)" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" transform="scale(0.707)" x="474" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D450-gensym001" transform="scale(0.707)" x="788" y="0"></use>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-3D-gensym001" x="1542" y="0"></use>
+                    <g transform="translate(2505,0)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" x="0" y="0"></use>
+                      <g transform="translate(313,-150)">
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D45B-gensym001" transform="scale(0.707)" x="0" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" transform="scale(0.707)" x="497" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D45D-gensym001" transform="scale(0.707)" x="810" y="0"></use>
+                      </g>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-2212-gensym001" x="4060" y="0"></use>
+                    <g transform="translate(4968,0)">
+                      <use xlink:href="#E1-STIXWEBMAIN-32-gensym001"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-32-gensym001" x="500" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-30-gensym001" x="1001" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym001" x="1501" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-39-gensym001" x="2002" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym001" x="2502" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym001" x="3003" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym001" x="3503" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-30-gensym001" x="4004" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-30-gensym001" x="4504" y="0"></use>
+                    </g>
+                  </g>
+                  <g transform="translate(16774,-1400)">
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" x="0" y="0"></use>
+                    <g transform="translate(313,-150)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" transform="scale(0.707)" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D44E-gensym001" transform="scale(0.707)" x="313" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D456-gensym001" transform="scale(0.707)" x="816" y="0"></use>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-3D-gensym001" x="1488" y="0"></use>
+                    <g transform="translate(2451,0)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461-gensym001" x="0" y="0"></use>
+                      <g transform="translate(313,-150)">
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D454-gensym001" transform="scale(0.707)" x="0" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D45D-gensym001" transform="scale(0.707)" x="492" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D460-gensym001" transform="scale(0.707)" x="982" y="0"></use>
+                      </g>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-2B-gensym001" x="4093" y="0"></use>
+                    <g transform="translate(5001,0)">
+                      <use xlink:href="#E1-STIXWEBMAIN-33-gensym001"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-31-gensym001" x="500" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-35-gensym001" x="1001" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-39-gensym001" x="1501" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-36-gensym001" x="2002" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-34-gensym001" x="2502" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym001" x="3003" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-31-gensym001" x="3503" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-39-gensym001" x="4004" y="0"></use>
+                    </g>
+                  </g>
+                </g>
+              </svg><a href="#section-3.4-6.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-converting-common-offset-ti" class="selfRef">Converting Common Offset Timescales</a>
+          </figcaption></figure>
+</div>
+<aside id="section-3.4-7">
+          <p id="section-3.4-7.1">Editor's note:
+This initial set of timescales was deliberately chosen to be frugal, as
+the specification of the tag provides an extension point where
+additional timescales can be registered at any time.
+Registrations are clearly needed for earth-referenced timescales (such
+as UT1 and TT), as well as possibly for specific realizations of
+abstract time scales (such as TAI(USNO) which is more accurate as a
+constant offset basis for GPS times).
+While the registration process itself is trivial, these registrations
+need to be made based on a solid specification of their actual
+definition.
+Draft text for a specification of the UT1 time scale can be found at <a href="https://github.com/cbor-wg/time-tag/pull/9">https://github.com/cbor-wg/time-tag/pull/9</a>.<a href="#section-3.4-7.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="clock-quality">
+<section id="section-3.5">
+        <h3 id="name-clock-quality">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-clock-quality" class="section-name selfRef">Clock Quality</a>
+        </h3>
+<p id="section-3.5-1">A number of keys are defined to indicate the quality of clock that was
+used to determine the point in time.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">The first three are analogous to <code>clock-quality-grouping</code> in
+<span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span>, which is in turn based on the definitions in
+<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; two more are specific to this document.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.5-3">
+<pre>
+ClockQuality-group = (
+  ? &amp;(ClockClass: -2) =&gt; uint .size 1 ; PTP/RFC8575
+  ? &amp;(ClockAccuracy: -4) =&gt; uint .size 1 ; PTP/RFC8575
+  ? &amp;(OffsetScaledLogVariance: -5) =&gt; uint .size 2 ; PTP/RFC8575
+  ? &amp;(Uncertainty: -7) =&gt; ~time/~duration
+  ? &amp;(Guarantee: -8) =&gt; ~time/~duration
+)
+</pre><a href="#section-3.5-3" class="pilcrow">¶</a>
+</div>
+<div id="clockclass-key-2">
+<section id="section-3.5.1">
+          <h4 id="name-clockclass-key-2">
+<a href="#section-3.5.1" class="section-number selfRef">3.5.1. </a><a href="#name-clockclass-key-2" class="section-name selfRef">ClockClass (Key -2)</a>
+          </h4>
+<p id="section-3.5.1-1">Key -2 (ClockClass) can be used to indicate the clock class as per
+Table 5 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.
+It is defined as a one-byte unsigned integer as that is the range defined there.<a href="#section-3.5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="clockaccuracy-key-4">
+<section id="section-3.5.2">
+          <h4 id="name-clockaccuracy-key-4">
+<a href="#section-3.5.2" class="section-number selfRef">3.5.2. </a><a href="#name-clockaccuracy-key-4" class="section-name selfRef">ClockAccuracy (Key -4)</a>
+          </h4>
+<p id="section-3.5.2-1">Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as per
+Table 6 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.
+It is defined as a one-byte unsigned integer as that is the range defined there.
+The range between 32 and 47 is a slightly distorted logarithmic scale from
+25 ns to 1 s (see <a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>); the number 254 is the
+value to be used if an unknown accuracy needs to be expressed.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
+<span id="name-approximate-conversion-from"></span><div id="formula-accuracy-enum">
+<figure id="figure-2">
+            <div id="section-3.5.2-2.1">
+              <div class="alignLeft art-svg artwork" id="section-3.5.2-2.1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14044.6 2013.3" width="32.62ex">
+                  <defs>
+                    <path d="M363 112l14 -13c-70 -86 -138 -110 -200 -110c-98 0 -137 84 -137 156c0 23 1 37 6 60c25 111 135 236 262 236c42 0 102 -14 102 -76c0 -127 -167 -176 -286 -182v-28c0 -64 52 -107 113 -107c42 0 90 18 126 64zM124 211h9c104 0 198 69 198 157c0 25 -19 43 -44 43 c-74 0 -134 -115 -163 -200Z" id="E1-STIXWEBNORMALI-1D452-gensym002" stroke-width="1"></path>
+                    <path d="M467 96l-5 -6c-28 -34 -76 -98 -128 -98c-32 0 -41 23 -41 46c0 13 4 29 7 40l57 221c2 8 7 28 7 42c0 19 -6 38 -24 38c-38 0 -101 -86 -132 -133c-36 -54 -62 -101 -68 -122l-33 -124h-77l95 374c0 18 -3 32 -30 32c-10 0 -21 -2 -28 -3l-2 15l159 23l-51 -189h3 c5 0 54 70 56 73c40 50 100 116 160 116c44 0 56 -29 56 -62c0 -25 -6 -50 -11 -70l-59 -231c-1 -2 -1 -5 -1 -10c1 -6 4 -14 15 -14c24 0 48 36 62 53Z" id="E1-STIXWEBNORMALI-1D45B-gensym002" stroke-width="1"></path>
+                    <path d="M444 428l-89 -348c-1 -4 -1 -6 -1 -9c0 -8 4 -14 14 -14c21 0 40 26 57 46l5 6l13 -11c-23 -33 -74 -107 -132 -107c-29 0 -40 19 -40 52c0 9 1 25 4 37l26 95h-1c-7 -5 -97 -126 -137 -156c-23 -17 -49 -28 -72 -28c-47 0 -61 36 -61 74c0 21 3 40 8 59l59 231 c4 15 6 21 6 25c0 12 -11 23 -33 23c-7 0 -19 -1 -26 -3l-3 15l157 26l-84 -326c-2 -9 -3 -16 -3 -24c0 -21 8 -34 26 -34c25 0 65 31 100 77c43 57 89 146 109 219l21 75h77Z" id="E1-STIXWEBNORMALI-1D462-gensym002" stroke-width="1"></path>
+                    <path d="M667 107l13 -11c-32 -54 -84 -104 -131 -104c-22 0 -39 10 -39 49c0 7 1 17 6 37l56 221c4 14 6 23 6 40c0 20 -6 38 -24 38c-54 0 -164 -181 -179 -242l-34 -135h-79l77 299c2 9 5 25 5 40c0 20 -5 38 -23 38c-52 0 -162 -181 -178 -242l-35 -135h-78l95 374 c0 18 -6 31 -33 31c-8 0 -19 -1 -27 -2l-2 14l157 24l-44 -169h6c94 143 154 169 192 169c37 0 55 -37 55 -81c0 -17 -3 -32 -9 -52l-10 -36h5c29 52 81 114 130 147c22 15 41 22 61 22c36 0 54 -26 54 -71c0 -18 -1 -37 -7 -61l-61 -231c-1 -3 -2 -9 -2 -12 c0 -8 6 -12 15 -12c17 0 43 16 62 53Z" id="E1-STIXWEBNORMALI-1D45A-gensym002" stroke-width="1"></path>
+                    <path d="M472 428l-91 -345s-1 -2 -1 -11c0 -11 6 -17 14 -17c10 0 25 2 64 54l12 -12c-31 -47 -85 -107 -133 -107c-33 0 -42 23 -42 55c0 13 6 34 11 50h-4c-72 -92 -134 -105 -173 -105c-63 0 -89 55 -89 119c0 132 132 332 276 332c43 0 64 -24 66 -46h1l9 33h80zM367 341 c0 41 -12 71 -50 71c-68 0 -128 -87 -162 -171c-18 -45 -28 -89 -28 -124c0 -53 31 -66 58 -66c69 0 139 95 167 190c8 26 15 66 15 100Z" id="E1-STIXWEBNORMALI-1D44E-gensym002" stroke-width="1"></path>
+                    <path d="M363 111l12 -13c-51 -60 -113 -109 -198 -109c-97 0 -137 78 -137 155c0 140 121 297 263 297c50 0 97 -27 97 -76c0 -38 -16 -70 -54 -70c-26 0 -38 21 -38 38c0 24 29 36 29 58c0 12 -10 21 -34 21c-119 0 -176 -179 -176 -259c0 -87 49 -109 94 -109 c61 0 107 33 142 67Z" id="E1-STIXWEBNORMALI-1D450-gensym002" stroke-width="1"></path>
+                    <path d="M604 475h33c-6 -85 -60 -204 -158 -204c-96 0 -203 128 -275 128c-70 0 -107 -67 -123 -138h-33c5 100 65 204 163 204c96 0 203 -128 276 -128c69 0 102 67 117 138zM604 239h33c-6 -85 -60 -204 -158 -204c-96 0 -203 128 -275 128c-70 0 -107 -67 -123 -138h-33 c5 100 65 204 163 204c96 0 203 -128 276 -128c69 0 102 67 117 138Z" id="E1-STIXWEBMAIN-2248-gensym002" stroke-width="1"></path>
+                    <path d="M473 167h-103v-167h-78v167h-280v64l314 445h44v-445h103v-64zM292 231v343l-240 -343h240Z" id="E1-STIXWEBMAIN-34-gensym002" stroke-width="1"></path>
+                    <path d="M445 155c0 -103 -77 -169 -197 -169c-113 0 -192 69 -192 163c0 69 23 108 130 183c-103 85 -124 123 -124 188c0 96 83 156 194 156c99 0 168 -65 168 -143c0 -75 -35 -109 -134 -162c123 -82 155 -136 155 -216zM355 533c0 69 -41 115 -109 115 c-67 0 -110 -37 -110 -99s37 -108 125 -160c68 40 94 82 94 144zM271 272l-59 40c-59 -48 -80 -89 -80 -154c0 -92 51 -144 127 -144c65 0 110 45 110 110c0 62 -30 102 -98 148Z" id="E1-STIXWEBMAIN-38-gensym002" stroke-width="1"></path>
+                    <path d="M636 220h-261v-261h-66v261h-261v66h261v261h66v-261h261v-66Z" id="E1-STIXWEBMAIN-2B-gensym002" stroke-width="1"></path>
+                    <path d="M447 -213h-259v926h66v-798c0 -64 19 -95 84 -95h109v-33Z" id="E1-STIXWEBMAIN-230A-gensym002" stroke-width="1"></path>
+                    <path d="M474 137l-54 -137h-391v12l178 189c94 99 130 175 130 260c0 91 -54 141 -139 141c-72 0 -107 -32 -147 -130l-21 5c21 117 85 199 208 199c113 0 185 -77 185 -176c0 -79 -39 -154 -128 -248l-165 -176h234c42 0 63 11 96 67Z" id="E1-STIXWEBMAIN-32-gensym002" stroke-width="1"></path>
+                    <path d="M203 253c0 -32 -27 -60 -59 -60c-33 0 -61 30 -61 60s28 60 61 60c32 0 59 -28 59 -60Z" id="E1-STIXWEBMAIN-22C5-gensym002" stroke-width="1"></path>
+                    <path d="M278 668l-148 -591s-1 -4 -1 -11s4 -13 12 -13c23 0 53 39 62 55l16 -12c-34 -40 -77 -106 -135 -106c-30 0 -39 26 -39 51c0 12 3 26 6 36l128 510c3 13 3 21 3 24c0 12 -8 22 -31 22c-7 0 -19 -2 -27 -3l-3 15Z" id="E1-STIXWEBNORMALI-1D459-gensym002" stroke-width="1"></path>
+                    <path d="M438 287c0 -139 -110 -298 -263 -298c-101 0 -135 90 -135 163c0 128 103 289 251 289c80 0 147 -46 147 -154zM357 318c0 38 -14 93 -67 93c-82 0 -169 -149 -169 -285c0 -33 3 -107 59 -107c106 0 177 223 177 299Z" id="E1-STIXWEBNORMALI-1D45C-gensym002" stroke-width="1"></path>
+                    <path d="M492 413l-13 -45h-81c13 -15 17 -28 17 -50c0 -75 -53 -137 -141 -148c-59 -8 -88 -33 -88 -58c0 -63 233 -23 233 -148c0 -71 -66 -151 -215 -151c-134 0 -184 57 -184 115s55 88 117 108c-17 11 -24 30 -24 47c0 38 37 87 85 87v4c-67 15 -94 62 -94 109 c0 79 68 158 174 158c42 0 73 -13 88 -28h126zM336 349c0 37 -10 62 -54 62c-54 0 -98 -71 -98 -139c0 -46 12 -81 56 -81c71 0 96 102 96 158zM349 -69c0 78 -132 73 -192 95c-8 -5 -18 -10 -26 -16c-26 -19 -48 -45 -48 -72c0 -47 44 -97 139 -97c91 0 127 46 127 90Z" id="E1-STIXWEBNORMALI-1D454-gensym002" stroke-width="1"></path>
+                    <path d="M394 0h-276v15c74 4 95 25 95 80v449c0 34 -9 49 -30 49c-10 0 -27 -5 -45 -12l-27 -10v14l179 91l9 -3v-597c0 -43 20 -61 95 -61v-15Z" id="E1-STIXWEBMAIN-31-gensym002" stroke-width="1"></path>
+                    <path d="M476 330c0 -172 -63 -344 -226 -344c-171 0 -226 186 -226 350c0 177 69 340 230 340c131 0 222 -141 222 -346zM380 325c0 208 -44 325 -132 325c-83 0 -128 -118 -128 -321s44 -317 130 -317c85 0 130 115 130 313Z" id="E1-STIXWEBMAIN-30-gensym002" stroke-width="1"></path>
+                    <path d="M156 301l104 -63c64 -39 88 -66 88 -123c0 -67 -64 -125 -140 -125c-21 0 -50 1 -73 9c-24 8 -35 9 -46 9c-12 0 -18 -2 -24 -12h-13v157h16c21 -97 58 -141 127 -141c51 0 83 33 83 74c0 31 -20 57 -53 75l-54 30c-83 46 -120 94 -120 145c0 79 56 123 138 123 c24 0 46 -1 67 -11c11 -5 21 -8 28 -8c4 0 8 1 16 10h11l5 -136h-15c-23 90 -53 123 -113 123c-43 0 -75 -21 -75 -68c0 -22 15 -51 43 -68Z" id="E1-STIXWEBMAIN-73-gensym002" stroke-width="1"></path>
+                    <path d="M621 220h-557v66h557v-66Z" id="E1-STIXWEBMAIN-2212-gensym002" stroke-width="1"></path>
+                    <path d="M430 441l-19 -132h-15c-7 46 -24 105 -93 105c-82 0 -139 -97 -161 -167h181l-5 -36h-185c-7 -20 -7 -41 -7 -66c0 -64 37 -101 92 -101c58 0 109 34 144 68l12 -14c-53 -60 -111 -109 -194 -109c-94 0 -140 69 -140 152c0 142 114 300 269 300c49 0 55 -20 83 -20 c12 0 19 11 23 20h15Z" id="E1-STIXWEBNORMALI-1D716-gensym002" stroke-width="1"></path>
+                    <path d="M286 -213h-259v33h109c65 0 84 31 84 95v798h66v-926Z" id="E1-STIXWEBMAIN-230B-gensym002" stroke-width="1"></path>
+                  </defs>
+                  <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D452-gensym002" x="0" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D45B-gensym002" x="445" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D462-gensym002" x="943" y="0"></use>
+                    <g transform="translate(1417,0)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D45A-gensym002" x="0" y="0"></use>
+                      <g transform="translate(710,-150)">
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D44E-gensym002" transform="scale(0.707)" x="0" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D450-gensym002" transform="scale(0.707)" x="502" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBNORMALI-1D450-gensym002" transform="scale(0.707)" x="918" y="0"></use>
+                      </g>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-2248-gensym002" x="3448" y="0"></use>
+                    <g transform="translate(4411,0)">
+                      <use xlink:href="#E1-STIXWEBMAIN-34-gensym002"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-38-gensym002" x="500" y="0"></use>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-2B-gensym002" x="5635" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-230A-gensym002" x="6542" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-32-gensym002" x="7012" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-22C5-gensym002" x="7735" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D459-gensym002" x="8243" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D45C-gensym002" x="8562" y="0"></use>
+                    <g transform="translate(9020,0)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D454-gensym002" x="0" y="0"></use>
+                      <g transform="translate(492,-150)">
+                        <use xlink:href="#E1-STIXWEBMAIN-31-gensym002" transform="scale(0.707)"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-30-gensym002" transform="scale(0.707)" x="500" y="0"></use>
+                      </g>
+                    </g>
+                    <g transform="translate(10321,0)">
+                      <g transform="translate(120,0)">
+                        <rect height="60" width="1453" x="0" y="220"></rect>
+                        <g transform="translate(60,676)">
+                          <use xlink:href="#E1-STIXWEBNORMALI-1D44E-gensym002" x="0" y="0"></use>
+                          <use xlink:href="#E1-STIXWEBNORMALI-1D450-gensym002" x="502" y="0"></use>
+                          <use xlink:href="#E1-STIXWEBNORMALI-1D450-gensym002" x="918" y="0"></use>
+                        </g>
+                        <use xlink:href="#E1-STIXWEBMAIN-73-gensym002" x="532" y="-686"></use>
+                      </g>
+                    </g>
+                    <use xlink:href="#E1-STIXWEBMAIN-2212-gensym002" x="12236" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D716-gensym002" x="13144" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-230B-gensym002" x="13575" y="0"></use>
+                  </g>
+                </svg><a href="#section-3.5.2-2.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-approximate-conversion-from" class="selfRef">Approximate conversion from accuracy to accuracy enumeration value</a>
+            </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="offsetscaledlogvariance-key-5">
+<section id="section-3.5.3">
+          <h4 id="name-offsetscaledlogvariance-key">
+<a href="#section-3.5.3" class="section-number selfRef">3.5.3. </a><a href="#name-offsetscaledlogvariance-key" class="section-name selfRef">OffsetScaledLogVariance (Key -5)</a>
+          </h4>
+<p id="section-3.5.3-1">Key -5 (OffsetScaledLogVariance) can be used to represent the variance
+exhibited by the clock when it has lost its synchronization with an
+external reference clock.  The details for the computation of this
+characteristic are defined in Section 7.6.3 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.<a href="#section-3.5.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="uncertainty-key-7">
+<section id="section-3.5.4">
+          <h4 id="name-uncertainty-key-7">
+<a href="#section-3.5.4" class="section-number selfRef">3.5.4. </a><a href="#name-uncertainty-key-7" class="section-name selfRef">Uncertainty (Key -7)</a>
+          </h4>
+<p id="section-3.5.4-1">Key -7 (Uncertainty) can be used to represent a known measurement
+uncertainty for the clock, as a numeric value in seconds or as a
+duration (<a href="#duration" class="auto internal xref">Section 4</a>).<a href="#section-3.5.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.4-2">For this document, uncertainty is defined as in Section 2.2.3 of
+<span>[<a href="#GUM" class="cite xref">GUM</a>]</span>: "parameter, associated with the result of a measurement, that
+characterizes the dispersion of the values that could reasonably be
+attributed to the measurand".  More specifically, the value for this
+key represents the extended uncertainty for k = 2, in seconds.<a href="#section-3.5.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.5.4-3">Note that the additional information that can be meaningfully provided
+with the duration that represents an uncertainty is limited, e.g., it
+is not customary to provide an uncertainty for a duration representing
+an uncertainty.
+Implementations are free to reduce an uncertainty (which is already
+elective) to the information they can process.<a href="#section-3.5.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="guarantee-key-8">
+<section id="section-3.5.5">
+          <h4 id="name-guarantee-key-8">
+<a href="#section-3.5.5" class="section-number selfRef">3.5.5. </a><a href="#name-guarantee-key-8" class="section-name selfRef">Guarantee (Key -8)</a>
+          </h4>
+<p id="section-3.5.5-1">Key -8 (Guarantee) can be used to represent a stated guarantee for the
+accuracy of the point in time, as a numeric value in seconds or as a
+duration (<a href="#duration" class="auto internal xref">Section 4</a>)
+representing the maximum allowed deviation from the true value.<a href="#section-3.5.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.5-2">While such a guarantee is unattainable in theory, existing standards
+such as <span>[<a href="#RFC3161" class="cite xref">RFC3161</a>]</span> stipulate the representation of such guarantees,
+and therefore this format provides a way to represent them as well;
+the time value given is nominally guaranteed to not deviate from the
+actual time by more than the value of the guarantee, in seconds.<a href="#section-3.5.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5.5-3">Note that the additional information that can be meaningfully provided
+with the duration that represents a guarantee is limited, e.g., it is
+not meaningful to provide a guarantee of accuracy for the duration
+representing a guarantee of accuracy.
+Implementations are free to reduce a guarantee (which is already
+elective) to the information they can process.<a href="#section-3.5.5-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="tzh">
+<section id="section-3.6">
+        <h3 id="name-keys-10-10-time-zone-hint">
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-keys-10-10-time-zone-hint" class="section-name selfRef">Keys -10, 10: Time Zone Hint</a>
+        </h3>
+<p id="section-3.6-1">Keys -10 and 10 supply supplementary information, where key 10 is critical.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">They can be used to provide a hint about the time zone that
+would best fit for displaying the time given to humans, using a text
+string in the format defined for <code>time-zone-name</code> or <code>time-numoffset</code>
+in <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>.
+Key -10 is equivalent to providing this information as an elective
+hint, while key 10 provides this information as critical (i.e., it
+<span class="bcp14">MUST</span> be used when interpreting the entry with this key).<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">Keys -10 and 10 <span class="bcp14">MUST NOT</span> both be present.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.6-4">
+<pre>
+$$ETIME-ELECTIVE //= (-10: time-zone-info)
+$$ETIME-CRITICAL //= (10: time-zone-info)
+
+time-zone-info = tstr .abnf
+                 ("time-zone-name / time-numoffset" .det IXDTFtz)
+IXDTFtz = '
+   time-hour       = 2DIGIT  ; 00-23
+   time-minute     = 2DIGIT  ; 00-59
+   time-numoffset  = ("+" / "-") time-hour ":" time-minute
+
+
+
+   time-zone-initial = ALPHA / "." / "_"
+   time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
+   time-zone-part    = time-zone-initial *13(time-zone-char)
+                       ; but not "." or ".."
+   time-zone-name    = time-zone-part *("/" time-zone-part)
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF] and [RFC3339]; update as needed
+</pre><a href="#section-3.6-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="suff">
+<section id="section-3.7">
+        <h3 id="name-keys-11-11-ixdtf-suffix-inf">
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-keys-11-11-ixdtf-suffix-inf" class="section-name selfRef">Keys -11, 11: IXDTF Suffix Information</a>
+        </h3>
+<p id="section-3.7-1">Keys -11 and 11 supply supplementary information, where key 11 is critical.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<p id="section-3.7-2">Similar to keys -10 and 10, keys -11 (elective) and 11 (critical) can
+be used to provide additional information in the style of IXDTF
+suffixes, such as the calendar that would best fit for displaying the
+time given to humans.
+The key's value is a map that has IXDTF <code>suffix-key</code> names as keys and
+corresponding suffix values as values, specifically:<a href="#section-3.7-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.7-3">
+<pre>
+$$ETIME-ELECTIVE //= (-11: suffix-info-map)
+$$ETIME-CRITICAL //= (11: suffix-info-map)
+
+suffix-info-map = { * suffix-key =&gt; suffix-values }
+suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
+suffix-values = one-or-more&lt;suffix-value&gt;
+one-or-more&lt;T&gt; = T / [ 2* T ]
+suffix-value = tstr .abnf ("suffix-value" .det IXDTF)
+
+IXDTF = '
+   key-initial       = lcalpha / "_"
+   key-char          = key-initial / DIGIT / "-"
+   suffix-key        = key-initial *key-char
+
+   suffix-value      = 1*alphanum
+   alphanum          = ALPHA / DIGIT
+   lcalpha           =  %x61-7A
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF]; update as needed!
+</pre><a href="#section-3.7-3" class="pilcrow">¶</a>
+</div>
+<p id="section-3.7-4">When keys -11 and 11 both are present, the two maps <span class="bcp14">MUST NOT</span> have
+entries with the same map keys.<a href="#section-3.7-4" class="pilcrow">¶</a></p>
+<p id="section-3.7-5">Figure 4 of <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span> gives an example for an extended date-time with both time zone
+and suffix information:<a href="#section-3.7-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.7-6">
+<pre>
+1996-12-19T16:39:57-08:00[America/Los_Angeles][u-ca=hebrew]
+</pre><a href="#section-3.7-6" class="pilcrow">¶</a>
+</div>
+<p id="section-3.7-7">A time tag that is approximating this example, in CBOR diagnostic
+notation, would be:<a href="#section-3.7-7" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.7-8">
+<pre>
+/ 1996-12-19T16:39:57-08:00[America//Los_Angeles][u-ca=hebrew] /
+1001({ 1: 851042397,
+     -10: "America/Los_Angeles",
+     -11: { "u-ca": "hebrew" }
+})
+</pre><a href="#section-3.7-8" class="pilcrow">¶</a>
+</div>
+<p id="section-3.7-9">Note that both -10 and -11 are using negative keys and therefore
+provide elective information, as in the IXDTF form.
+Note also that in this example the time numeric offset (<code>-08:00</code>) is
+lost in translating from the <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> information in the IXDTF into a
+Posix time that can be included under Key 1 in a time tag.<a href="#section-3.7-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="duration">
+<section id="section-4">
+      <h2 id="name-duration-format">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-duration-format" class="section-name selfRef">Duration Format</a>
+      </h2>
+<p id="section-4-1">A duration is the length of an interval of time.
+Durations in this format are given in SI seconds, possibly adjusted
+for conventional corrections of the timescale given (e.g., leap
+seconds).<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Except for using Tag 1002 instead of 1001,
+durations are structurally identical to time values.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-4-3">
+<pre>
+Duration = #6.1001(etime-detailed)
+</pre><a href="#section-4-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4-4">Semantically, they do not measure the time elapsed from a given epoch,
+but from the start to the end of (an otherwise unspecified) interval
+of time.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">In combination with an epoch identified in the context, a duration can
+also be used to express an absolute time.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">Without such context, durations are subject to some uncertainties
+underlying the timescale used.
+E.g., for durations intended as a determinant of future time periods,
+there is some uncertainty of what irregularities (such as leap
+seconds, timescale corrections) will be exhibited by the timescale in
+that period.
+For durations as measurements of past periods, abstracting the period
+to a duration loses some detail about timescale irregularities.
+For many applications, these uncertainties are acceptable and thus
+the use of durations is appropriate.<a href="#section-4-6" class="pilcrow">¶</a></p>
+<aside id="section-4-7">
+        <p id="section-4-7.1">Note that <span>[<a href="#ISO8601" class="cite xref">ISO8601:1988</a>]</span> durations are rather different from the ones defined
+in the present specification; there is no intention to support ISO 8601
+durations here.<a href="#section-4-7.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="period">
+<section id="section-5">
+      <h2 id="name-period-format">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-period-format" class="section-name selfRef">Period Format</a>
+      </h2>
+<p id="section-5-1">A period is a specific interval of time, specified as either two times
+giving the start and the end of that interval, or as one of these two
+plus a duration.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">They are given as an array of unwrapped time and duration elements,
+tagged with Tag 1003:<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-5-3">
+<pre>
+Period = #6.1003([
+  start: ~Time / null
+  end: ~Time / null
+  ? duration: ~Duration / null
+])
+</pre><a href="#section-5-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5-4">If the third array element is not given, the duration element is null.
+Exactly two out of the three elements must be non-null, this can be
+clumsily expressed in CDDL as:<a href="#section-5-4" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-5-5">
+<pre>
+clumsy-Period = #6.1003([
+  (start: ~Time,
+   ((end: ~Time,
+     ? duration: null) //
+    (end: null,
+     duration: ~Duration))) //
+  (start: null,
+   end: ~Time,
+   duration: ~Duration)
+])
+</pre><a href="#section-5-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="cddl-typenames">
+<section id="section-6">
+      <h2 id="name-cddl-typenames">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cddl-typenames" class="section-name selfRef">CDDL typenames</a>
+      </h2>
+<p id="section-6-1">When detailed validation is not needed, the
+type names defined in <a href="#tag-cddl" class="auto internal xref">Figure 3</a> are recommended:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<span id="name-recommended-type-names-for-"></span><div id="tag-cddl">
+<figure id="figure-3">
+        <div class="lang-cddl sourcecode" id="section-6-2.1">
+<pre>
+etime = #6.1001({* (int/tstr) =&gt; any})
+duration = #6.1002({* (int/tstr) =&gt; any})
+period = #6.1003([~etime/null, ~etime/null, ~duration/null])
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-recommended-type-names-for-" class="selfRef">Recommended type names for CDDL</a>
+        </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-7">
+      <h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="cbor-tags">
+<section id="section-7.1">
+        <h3 id="name-cbor-tags">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-cbor-tags" class="section-name selfRef">CBOR tags</a>
+        </h3>
+<p id="section-7.1-1">In the registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>,
+IANA has allocated the tags in <a href="#tab-tag-values" class="auto internal xref">Table 2</a> from what was at the
+time the
+FCFS space, with the present document as the specification reference.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<span id="name-values-for-tags"></span><div id="tab-tag-values">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-values-for-tags" class="selfRef">Values for Tags</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Tag</th>
+              <th class="text-left" rowspan="1" colspan="1">Data Item</th>
+              <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">1001</td>
+              <td class="text-left" rowspan="1" colspan="1">map</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis] extended time</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">1002</td>
+              <td class="text-left" rowspan="1" colspan="1">map</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis] duration</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">1003</td>
+              <td class="text-left" rowspan="1" colspan="1">array</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis] period</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-7.1-3">IANA is requested to change the "Data Item" column for Tag 1003 from
+"map" to "array".<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="timescale-registry">
+<section id="section-7.2">
+        <h3 id="name-timescale-registry">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-timescale-registry" class="section-name selfRef">Timescale Registry</a>
+        </h3>
+<p id="section-7.2-1">This specification defines a new registry titled "Timescales" in the
+"CBOR Time Tag Parameters" registry group
+[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+and "RFC Required" as the Registration Procedure (Sections <a href="https://rfc-editor.org/rfc/rfc8126#section-4.5" class="relref">4.5</a> and <a href="https://rfc-editor.org/rfc/rfc8126#section-4.7" class="relref">4.7</a> of <span>[<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">Each entry needs to provide a timescale name (a sequence of uppercase
+ASCII characters and digits, where a digit may not occur at the start:
+<code>[A-Z][A-Z0-9]*</code>), a value (CBOR unsigned integer, uint), and brief description
+of the semantics, and a specification reference (RFC).
+The initial contents are shown in <a href="#tab-timescales" class="auto internal xref">Table 3</a>.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<span id="name-initial-content-of-timescal"></span><div id="tab-timescales">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-initial-content-of-timescal" class="selfRef">Initial Content of Timescale Registry</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Timescale</th>
+              <th class="text-right" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">UTC</td>
+              <td class="text-right" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">UTC with POSIX Epoch</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TAI</td>
+              <td class="text-right" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">TAI with PTP Epoch</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="map-key-registry">
+<section id="section-7.3">
+        <h3 id="name-map-key-registry">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-map-key-registry" class="section-name selfRef">Map Key Registry</a>
+        </h3>
+<p id="section-7.3-1">This specification defines a new registry titled "Map Keys"
+in the "CBOR Time Tag Parameters" registry group
+[IANA.cbor-time-tag-parameters], with "Specification Required" as the
+Registration Procedure (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a> of [<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">The designated expert is requested to assign the key values with the
+shortest encodings (1+0 and 1+1 encoding) to registrations that are
+likely to enjoy wide use and can benefit from short encodings.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int), a brief description
+of the semantics, and a specification reference (RFC).
+The initial contents are shown in <a href="#tab-timescales" class="auto internal xref">Table 3</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<table class="center" id="table-4">
+          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-18</td>
+              <td class="text-left" rowspan="1" colspan="1">attoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-15</td>
+              <td class="text-left" rowspan="1" colspan="1">femtoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-12</td>
+              <td class="text-left" rowspan="1" colspan="1">picoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-11</td>
+              <td class="text-left" rowspan="1" colspan="1">IXDTF Suffix Information (elective)</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-10</td>
+              <td class="text-left" rowspan="1" colspan="1">IXDTF Time Zone Hint (elective)</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-9</td>
+              <td class="text-left" rowspan="1" colspan="1">nanoseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-8</td>
+              <td class="text-left" rowspan="1" colspan="1">Guarantee</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-7</td>
+              <td class="text-left" rowspan="1" colspan="1">Uncertainty</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-6</td>
+              <td class="text-left" rowspan="1" colspan="1">microseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-5</td>
+              <td class="text-left" rowspan="1" colspan="1">Offset-Scaled Log Variance</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-4</td>
+              <td class="text-left" rowspan="1" colspan="1">Clock Accuracy</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-3</td>
+              <td class="text-left" rowspan="1" colspan="1">milliseconds</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-2</td>
+              <td class="text-left" rowspan="1" colspan="1">Clock Class</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">Base Time value (as in CBOR Tag 1)</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">4</td>
+              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 4</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">5</td>
+              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 5</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-left" rowspan="1" colspan="1">IXDTF Time Zone Hint (critical)</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">11</td>
+              <td class="text-left" rowspan="1" colspan="1">IXDTF Suffix Information (critical)</td>
+              <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
+</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">The security considerations of RFC 8949 apply; the tags introduced
+here are not expected to raise security considerations beyond those.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">Time, of course, has significant security considerations; these
+include the exploitation of ambiguities where time is security
+relevant (e.g., for freshness or in a validity span) or the disclosure
+of characteristics of the emitting system (e.g., time zone, or clock
+resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-9">
+      <h2 id="name-references">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-9.1">
+        <h3 id="name-normative-references">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="BCP26">[BCP26]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="GUM">[GUM]</dt>
+        <dd>
+<span class="refAuthor">Joint Committee for Guides in Metrology</span>, <span class="refTitle">"Evaluation of measurement data — Guide to the expression of uncertainty in measurement"</span>, <span class="seriesInfo">JCGM 100:2008</span>, <time datetime="2008-09" class="refDate">September 2008</time>, <span>&lt;<a href="https://www.bipm.org/en/publications/guides/gum.html">https://www.bipm.org/en/publications/guides/gum.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cbor-tags">https://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IEEE1588-2008">[IEEE1588-2008]</dt>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"1588-2008 — IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <time datetime="2008-07" class="refDate">July 2008</time>, <span>&lt;<a href="http://standards.ieee.org/findstds/standard/1588-2008.html">http://standards.ieee.org/findstds/standard/1588-2008.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IXDTF">[IXDTF]</dt>
+        <dd>
+<span class="refAuthor">Sharma, U.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps with additional information"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sedate-datetime-extended-09</span>, <time datetime="2023-07-14" class="refDate">14 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09">https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8949">[RFC8949]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SI-SECOND">[SI-SECOND]</dt>
+        <dd>
+<span class="refAuthor">International Organization for Standardization (ISO)</span>, <span class="refTitle">"Quantities and units — Part 3: Space and time"</span>, <span class="seriesInfo">ISO 80000-3</span>, <time datetime="2006-03-01" class="refDate">1 March 2006</time>. </dd>
+<dd class="break"></dd>
+<dt id="TIME_T">[TIME_T]</dt>
+      <dd>
+<span class="refAuthor">The Open Group Base Specifications</span>, <span class="refTitle">"Vol. 1: Base Definitions, Issue 7"</span>, <span class="seriesInfo">Section 4.16 'Seconds Since the Epoch'</span>, <span class="seriesInfo">IEEE Std 1003.1-2017</span>, <span class="seriesInfo">2018 Edition</span>, <time datetime="2018" class="refDate">2018</time>, <span>&lt;<a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16">http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-9.2">
+        <h3 id="name-informative-references">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="C">[C]</dt>
+        <dd>
+<span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Information technology — Programming languages — C"</span>, <span class="refContent">Fourth Edition</span>, <span class="seriesInfo">ISO/IEC 9899:2018</span>, <time datetime="2018-06" class="refDate">June 2018</time>, <span>&lt;<a href="https://www.iso.org/standard/74528.html">https://www.iso.org/standard/74528.html</a>&gt;</span>. <span class="annotation">Contents available via &lt;⁠<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf">https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf</a>&gt;</span>
+          </dd>
+<dd class="break"></dd>
+<dt id="ISO8601">[ISO8601:1988]</dt>
+        <dd>
+<span class="refAuthor">ISO</span>, <span class="refTitle">"Data elements and interchange formats — Information interchange — Representation of dates and times"</span>, <span class="seriesInfo">ISO 8601:1988</span>, <time datetime="1988-06" class="refDate">June 1988</time>, <span>&lt;<a href="https://www.iso.org/standard/15903.html">https://www.iso.org/standard/15903.html</a>&gt;</span>. <span class="annotation">Also available from &lt;⁠<a href="https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf">https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf</a>&gt;.</span>
+        </dd>
+<dd class="break"></dd>
+<dt id="RFC3161">[RFC3161]</dt>
+        <dd>
+<span class="refAuthor">Adams, C.</span>, <span class="refAuthor">Cain, P.</span>, <span class="refAuthor">Pinkas, D.</span>, and <span class="refAuthor">R. Zuccherato</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)"</span>, <span class="seriesInfo">RFC 3161</span>, <span class="seriesInfo">DOI 10.17487/RFC3161</span>, <time datetime="2001-08" class="refDate">August 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3161">https://www.rfc-editor.org/rfc/rfc3161</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3339">[RFC3339]</dt>
+        <dd>
+<span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8575">[RFC8575]</dt>
+      <dd>
+<span class="refAuthor">Jiang, Y., Ed.</span>, <span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Xu, J.</span>, and <span class="refAuthor">R. Cummings, Ed.</span>, <span class="refTitle">"YANG Data Model for the Precision Time Protocol (PTP)"</span>, <span class="seriesInfo">RFC 8575</span>, <span class="seriesInfo">DOI 10.17487/RFC8575</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8575">https://www.rfc-editor.org/rfc/rfc8575</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="collected-cddl">
+<section id="appendix-A">
+      <h2 id="name-collected-cddl">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-collected-cddl" class="section-name selfRef">Collected CDDL</a>
+      </h2>
+<p id="appendix-A-1">This appendix collects the CDDL rules spread over the document into
+one convenient place.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<span id="name-collected-cddl-rules-from-t"></span><div id="fig-collected-cddl">
+<figure id="figure-4">
+        <div class="breakable lang-cddl sourcecode" id="appendix-A-2.1">
+<pre>
+Etime = #6.1001(etime-detailed)
+
+etime-framework = {
+  uint =&gt; any ; at least one base time
+  * (nint/text) =&gt; any ; elective supplementary information
+  * uint =&gt; any ; critical supplementary information
+}
+
+etime-detailed = ({
+  $$ETIME-BASETIME
+  ClockQuality-group
+  * $$ETIME-ELECTIVE
+  * $$ETIME-CRITICAL
+  * ((nint/text) .feature "etime-elective-extension") =&gt; any
+  * (uint .feature "etime-critical-extension") =&gt; any
+}) .within etime-framework
+
+
+$$ETIME-BASETIME //= (1: ~time)
+
+
+$$ETIME-BASETIME //= (4: ~decfrac)
+$$ETIME-BASETIME //= (5: ~bigfloat)
+
+
+$$ETIME-ELECTIVE //= (-3: uint)
+$$ETIME-ELECTIVE //= (-6: uint)
+$$ETIME-ELECTIVE //= (-9: uint)
+$$ETIME-ELECTIVE //= (-12: uint)
+$$ETIME-ELECTIVE //= (-15: uint)
+$$ETIME-ELECTIVE //= (-18: uint)
+
+
+$$ETIME-ELECTIVE //= (-1 =&gt; $ETIME-TIMESCALE)
+
+$ETIME-TIMESCALE /= &amp;(etime-utc: 0)
+$ETIME-TIMESCALE /= &amp;(etime-tai: 1)
+
+
+ClockQuality-group = (
+  ? &amp;(ClockClass: -2) =&gt; uint .size 1 ; PTP/RFC8575
+  ? &amp;(ClockAccuracy: -4) =&gt; uint .size 1 ; PTP/RFC8575
+  ? &amp;(OffsetScaledLogVariance: -5) =&gt; uint .size 2 ; PTP/RFC8575
+  ? &amp;(Uncertainty: -7) =&gt; ~time/~duration
+  ? &amp;(Guarantee: -8) =&gt; ~time/~duration
+)
+
+
+$$ETIME-ELECTIVE //= (-10: time-zone-info)
+$$ETIME-CRITICAL //= (10: time-zone-info)
+
+time-zone-info = tstr .abnf
+                 ("time-zone-name / time-numoffset" .det IXDTFtz)
+IXDTFtz = '
+   time-hour       = 2DIGIT  ; 00-23
+   time-minute     = 2DIGIT  ; 00-59
+   time-numoffset  = ("+" / "-") time-hour ":" time-minute
+
+
+
+   time-zone-initial = ALPHA / "." / "_"
+   time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
+   time-zone-part    = time-zone-initial *13(time-zone-char)
+                       ; but not "." or ".."
+   time-zone-name    = time-zone-part *("/" time-zone-part)
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF] and [RFC3339]; update as needed
+
+
+$$ETIME-ELECTIVE //= (-11: suffix-info-map)
+$$ETIME-CRITICAL //= (11: suffix-info-map)
+
+suffix-info-map = { * suffix-key =&gt; suffix-values }
+suffix-key = tstr .abnf ("suffix-key" .det IXDTF)
+suffix-values = one-or-more&lt;suffix-value&gt;
+one-or-more&lt;T&gt; = T / [ 2* T ]
+suffix-value = tstr .abnf ("suffix-value" .det IXDTF)
+
+IXDTF = '
+   key-initial       = lcalpha / "_"
+   key-char          = key-initial / DIGIT / "-"
+   suffix-key        = key-initial *key-char
+
+   suffix-value      = 1*alphanum
+   alphanum          = ALPHA / DIGIT
+   lcalpha           =  %x61-7A
+   ALPHA             =  %x41-5A / %x61-7A   ; A-Z / a-z
+   DIGIT             =  %x30-39 ; 0-9
+' ; extracted from [IXDTF]; update as needed!
+
+
+Duration = #6.1001(etime-detailed)
+
+
+Period = #6.1003([
+  start: ~Time / null
+  end: ~Time / null
+  ? duration: ~Duration / null
+])
+
+
+clumsy-Period = #6.1003([
+  (start: ~Time,
+   ((end: ~Time,
+     ? duration: null) //
+    (end: null,
+     duration: ~Duration))) //
+  (start: null,
+   end: ~Time,
+   duration: ~Duration)
+])
+
+
+etime = #6.1001({* (int/tstr) =&gt; any})
+duration = #6.1002({* (int/tstr) =&gt; any})
+period = #6.1003([~etime/null, ~etime/null, ~duration/null])
+</pre>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<a href="#name-collected-cddl-rules-from-t" class="selfRef">Collected CDDL rules from this specification</a>
+        </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="appendix-B">
+      <h2 id="name-acknowledgements">
+<a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Carsten Bormann</span></div>
+<div dir="auto" class="left"><span class="org">Universität Bremen TZI</span></div>
+<div dir="auto" class="left"><span class="street-address">Postfach 330440</span></div>
+<div dir="auto" class="left">
+<span class="postal-code">D-28359</span> <span class="locality">Bremen</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Germany</span></div>
+<div class="tel">
+<span>Phone:</span>
+<a href="tel:+49-421-218-63921" class="tel">+49-421-218-63921</a>
+</div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cabo@tzi.org" class="email">cabo@tzi.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Ben Gamari</span></div>
+<div dir="auto" class="left"><span class="org">Well-Typed</span></div>
+<div dir="auto" class="left"><span class="street-address">117 Middle Rd.</span></div>
+<div dir="auto" class="left">
+<span class="locality">Portsmouth</span>, <span class="region">NH</span> <span class="postal-code">03801</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ben@well-typed.com" class="email">ben@well-typed.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Henk Birkholz</span></div>
+<div dir="auto" class="left"><span class="org">Fraunhofer Institute for Secure Information Technology</span></div>
+<div dir="auto" class="left"><span class="street-address">Rheinstrasse 75</span></div>
+<div dir="auto" class="left">
+<span class="postal-code">64295</span> <span class="locality">Darmstadt</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Germany</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:henk.birkholz@sit.fraunhofer.de" class="email">henk.birkholz@sit.fraunhofer.de</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
