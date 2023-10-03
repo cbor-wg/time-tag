@@ -696,7 +696,7 @@ Period = #6.1003([
 
 If the third array element is not given, the duration element is null.
 Exactly two out of the three elements must be non-null, this can be
-clumsily expressed in CDDL as:
+somewhat verbosely expressed in CDDL as:
 
 ~~~ cddl
 clumsy-Period = #6.1003([
