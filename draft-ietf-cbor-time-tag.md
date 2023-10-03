@@ -637,7 +637,7 @@ durations are structurally identical to time values.
 
 
 ~~~ cddl
-Duration = #6.1001(etime-detailed)
+Duration = #6.1002(etime-detailed)
 ~~~
 
 Semantically, they do not measure the time elapsed from a given epoch,
