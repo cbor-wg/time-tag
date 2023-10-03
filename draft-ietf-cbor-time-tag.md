@@ -728,6 +728,14 @@ period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 IANA Considerations
 ============
 
+
+[^to-be-removed]
+
+[^to-be-removed]: RFC Editor: please replace RFCthis with the RFC
+    number of this RFC, \[IANA.cbor-time-tag-parameters] with a
+    reference to the new registry, and remove this note.
+
+
 CBOR tags
 ---------
 
@@ -749,7 +757,7 @@ IANA is requested to change the "Data Item" column for Tag 1003 from
 Timescale Registry
 ------------------
 
-This specification defines a new registry titled "Timescales" in the
+This specification defines a new registry titled "Timescales" in a new
 "CBOR Time Tag Parameters" registry group
 \[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
