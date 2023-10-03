@@ -796,9 +796,9 @@ The initial contents are shown in {{tab-timescales}}.
 |    -4 | Clock Accuracy                      | \[RFCthis]          |
 |    -3 | milliseconds                        | \[RFCthis]          |
 |    -2 | Clock Class                         | \[RFCthis]          |
-|     1 | Base Time value (as in CBOR Tag 1)  | \[RFCthis]          |
-|     4 | Base Time value as in CBOR Tag 4    | \[RFCthis]          |
-|     5 | Base Time value as in CBOR Tag 5    | \[RFCthis]          |
+|     1 | Base Time value as in CBOR Tag 1    | {{-cbor}} \[RFCthis]  |
+|     4 | Base Time value as in CBOR Tag 4    | {{-cbor}} \[RFCthis]  |
+|     5 | Base Time value as in CBOR Tag 5    | {{-cbor}} \[RFCthis]  |
 |    10 | IXDTF Time Zone Hint (critical)     | \[RFCthis], {{IXDTF}} |
 |    11 | IXDTF Suffix Information (critical) | \[RFCthis], {{IXDTF}} |
 
