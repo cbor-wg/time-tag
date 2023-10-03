@@ -139,6 +139,18 @@ informative:
       ISO: '8601:1988'
     date: 1988-06
     ann: Also available from <⁠<https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf>>.
+  ISO8601-2019:
+    display: 'ISO8601-1:2019'
+    target: https://www.iso.org/standard/70907.html
+    title: >
+      Date and time — Representations for information interchange —
+      Part 1: Basic rules
+    author:
+    - org: International Organization for Standardization
+      abbrev: ISO
+    seriesinfo:
+      ISO: '8601-1:2019'
+    date: 2019-02
   C:
     target: https://www.iso.org/standard/74528.html
     title: Information technology — Programming languages — C
@@ -659,7 +671,7 @@ For many applications, these uncertainties are acceptable and thus
 the use of durations is appropriate.
 
 <aside markdown="1">
-Note that {{ISO8601}} durations are rather different from the ones defined
+Note that the durations defined in {{ISO8601}} and {{ISO8601-2019}} are rather different from the ones defined
 in the present specification; there is no intention to support ISO 8601
 durations here.
 </aside>
