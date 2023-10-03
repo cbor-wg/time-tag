@@ -410,7 +410,6 @@ constant offset basis for GPS times).
 While the registration process itself is trivial, these registrations
 need to be made based on a solid specification of their actual
 definition.
-Draft text for a specification of the UT1 time scale can be found at <https://github.com/cbor-wg/time-tag/pull/9>.
 
 Clock Quality
 ------
