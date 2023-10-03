@@ -83,15 +83,31 @@ normative:
     date: 2006-03-01
     seriesinfo:
       ISO: 80000-3
+  RFC8575: ptp-yang
   IEEE1588-2008:
-    target: http://standards.ieee.org/findstds/standard/1588-2008.html
+    target: https://standards.ieee.org/ieee/1588/4355/
     title: >
-      1588-2008 — IEEE Standard for a Precision Clock
-      Synchronization Protocol for Networked Measurement and Control
-      Systems
+      IEEE Standard for a Precision Clock Synchronization Protocol for
+      Networked Measurement and Control Systems
+    seriesinfo:
+      IEEE: 1588-2008
     author:
       org: IEEE
     date: 2008-07
+    ann: Often called PTP v2, as it replaced the earlier 2002 version
+      of this standard by a non-backwards compatible protocol.
+  IEEE1588-2019:
+    target: https://standards.ieee.org/ieee/1588/6825/
+    title: >
+      IEEE Standard for a Precision Clock Synchronization Protocol for
+      Networked Measurement and Control Systems
+    seriesinfo:
+      IEEE: 1588-2019
+    author:
+      org: IEEE
+    date: 2020-06
+    ann: Often called PTP v2.1, as it has been designed so it can be
+      used in way that is fully backwards compatible to IEEE1588-2008.
   GUM:
     target: https://www.bipm.org/en/publications/guides/gum.html
     title: >
@@ -106,8 +122,8 @@ normative:
   RFC8610: cddl
   IXDTF: I-D.ietf-sedate-datetime-extended
 
+
 informative:
-  RFC8575:
   RFC3161:
   RFC3339:
   ISO8601:
@@ -374,7 +390,8 @@ Key -1: Timescale {#key-timescale}
 
 Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
-PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}.
+PTP (Precision Time Protocol) epoch (1 January 1970 00:00:00 TAI, see
+{{IEEE1588-2019}} or {{IEEE1588-2008}}).
 
 ~~~ cddl
 $$ETIME-ELECTIVE //= (-1 => $ETIME-TIMESCALE)
@@ -434,17 +451,22 @@ ClockQuality-group = (
 ### ClockClass (Key -2)
 
 Key -2 (ClockClass) can be used to indicate the clock class as per
-Table 5 of {{IEEE1588-2008}}.
+{{RFC8575}} (which is based on Table 5 in Section 7.6.2.4 of
+{{IEEE1588-2008}}; this has updated language as Table 4 in Section 7.6.2.5
+of {{IEEE1588-2019}}).
 It is defined as a one-byte unsigned integer as that is the range defined there.
 
 ### ClockAccuracy (Key -4)
 
 
-Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as per
-Table 6 of {{IEEE1588-2008}}.
+Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as
+per {{RFC8575}} (which is based on Table 6 in Section 7.6.2.5 of
+{{IEEE1588-2008}}; additional values have been defined in Table 5 in
+Section 7.6.2.6 of {{IEEE1588-2019}}).
 It is defined as a one-byte unsigned integer as that is the range defined there.
 The range between 32 and 47 is a slightly distorted logarithmic scale from
-25 ns to 1 s (see {{formula-accuracy-enum}}); the number 254 is the
+25 ns to 1 s (extended to 23 to 47 for 1 ps to 1 s in {{IEEE1588-2019}})
+— see {{formula-accuracy-enum}}; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.
 
 <!-- Note that the double space after the \approx is actually needed -->
@@ -460,7 +482,8 @@ enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsi
 Key -5 (OffsetScaledLogVariance) can be used to represent the variance
 exhibited by the clock when it has lost its synchronization with an
 external reference clock.  The details for the computation of this
-characteristic are defined in Section 7.6.3 of {{IEEE1588-2008}}.
+characteristic are defined in Section 7.6.3 of {{IEEE1588-2019}} and the
+same section in {{IEEE1588-2008}}.
 
 ### Uncertainty (Key -7)
 
