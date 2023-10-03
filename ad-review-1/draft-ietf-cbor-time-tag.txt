@@ -5,10 +5,10 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                               B. Gamari
-Expires: 30 December 2023                                     Well-Typed
+Expires: 5 April 2024                                         Well-Typed
                                                              H. Birkholz
                                                           Fraunhofer SIT
-                                                            28 June 2023
+                                                          3 October 2023
 
 
 Concise Binary Object Representation (CBOR) Tags for Time, Duration, and
@@ -32,8 +32,9 @@ Abstract
    registration of the CBOR tags defined.
 
 
-   // The present version (-05) adds CDDL definitions; this should now
-   // address all WGLC comments.
+   // The present version (-09) addresses IANA early review comments.
+   // It reflects the state of the document after the short final WGLC
+   // completed.
 
 About This Document
 
@@ -50,6 +51,13 @@ About This Document
    Source for this draft and an issue tracker can be found at
    https://github.com/cbor-wg/time-tag.
 
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 1]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
 Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
@@ -65,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 December 2023.
+   This Internet-Draft will expire on 5 April 2024.
 
 Copyright Notice
 
@@ -83,36 +91,44 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Introduction
-     1.1.  Terminology
-   2.  Objectives
-   3.  Time Format
-     3.1.  Key 1
-     3.2.  Keys 4 and 5
-     3.3.  Keys -3, -6, -9, -12, -15, -18
-     3.4.  Key -1: Timescale
-     3.5.  Clock Quality
-       3.5.1.  ClockClass (Key -2)
-       3.5.2.  ClockAccuracy (Key -4)
-       3.5.3.  OffsetScaledLogVariance (Key -5)
-       3.5.4.  Uncertainty (Key -7)
-       3.5.5.  Guarantee (Key -8)
-     3.6.  Keys -10, 10: Time Zone Hint
-     3.7.  Keys -11, 11: IXDTF Suffix Information
-   4.  Duration Format
-   5.  Period Format
-   6.  CDDL typenames
-   7.  IANA Considerations
-     7.1.  CBOR tags
-     7.2.  Timescale Registry
-     7.3.  Map Key Registry
-   8.  Security Considerations
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
-   Appendix A.  Collected CDDL
-   Acknowledgements
-   Authors' Addresses
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Objectives  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Time Format . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     3.1.  Key 1 . . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     3.2.  Keys 4 and 5  . . . . . . . . . . . . . . . . . . . . . .   6
+     3.3.  Keys -3, -6, -9, -12, -15, -18  . . . . . . . . . . . . .   6
+     3.4.  Key -1: Timescale . . . . . . . . . . . . . . . . . . . .   7
+     3.5.  Clock Quality . . . . . . . . . . . . . . . . . . . . . .   8
+       3.5.1.  ClockClass (Key -2) . . . . . . . . . . . . . . . . .   9
+       3.5.2.  ClockAccuracy (Key -4)  . . . . . . . . . . . . . . .   9
+       3.5.3.  OffsetScaledLogVariance (Key -5)  . . . . . . . . . .   9
+       3.5.4.  Uncertainty (Key -7)  . . . . . . . . . . . . . . . .   9
+       3.5.5.  Guarantee (Key -8)  . . . . . . . . . . . . . . . . .  10
+     3.6.  Keys -10, 10: Time Zone Hint  . . . . . . . . . . . . . .  10
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 2]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
+     3.7.  Keys -11, 11: IXDTF Suffix Information  . . . . . . . . .  11
+   4.  Duration Format . . . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Period Format . . . . . . . . . . . . . . . . . . . . . . . .  13
+   6.  CDDL typenames  . . . . . . . . . . . . . . . . . . . . . . .  14
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+     7.1.  CBOR tags . . . . . . . . . . . . . . . . . . . . . . . .  14
+     7.2.  Timescale Registry  . . . . . . . . . . . . . . . . . . .  15
+     7.3.  Map Key Registry  . . . . . . . . . . . . . . . . . . . .  15
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  17
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  18
+   Appendix A.  Collected CDDL . . . . . . . . . . . . . . . . . . .  19
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  22
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  Introduction
 
@@ -144,6 +160,15 @@ Table of Contents
    notation familiar from the programming language C (including C++14's
    0bnnn binary literals), except that the operator "**" stands for
    exponentiation.
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 3]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    CBOR diagnostic notation is defined in Section 8 of [RFC8949] and
    Appendix G of [RFC8610].  A machine-processable model of the data
@@ -189,6 +214,17 @@ Table of Contents
       representations with the extended time format.)
 
    Additional tags are defined for durations and periods.
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 4]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
 3.  Time Format
 
@@ -238,6 +274,14 @@ Table of Contents
 
    A formal definition of Tag 1001 in CDDL is:
 
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 5]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    Etime = #6.1001(etime-detailed)
 
    etime-framework = {
@@ -284,6 +328,16 @@ Table of Contents
    are added to a Base Time in seconds [SI-SECOND] indicated by a Key 1,
    which then MUST also be present and MUST have an integer value.
 
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 6]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
                  +=====+==============+=================+
                  | Key | meaning      | example usage   |
                  +=====+==============+=================+
@@ -323,7 +377,8 @@ Table of Contents
 
    Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
    with the POSIX epoch [TIME_T]; the value 1 indicates TAI, with the
-   PTP (Precision Time Protocol) epoch [IEEE1588-2008].
+   PTP (Precision Time Protocol) epoch (1 January 1970 00:00:00 TAI, see
+   [IEEE1588-2019] or [IEEE1588-2008]).
 
    $$ETIME-ELECTIVE //= (-1 => $ETIME-TIMESCALE)
 
@@ -331,6 +386,13 @@ Table of Contents
    $ETIME-TIMESCALE /= &(etime-tai: 1)
 
    If key -1 is not present, timescale value 0 is implied.
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 7]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    Additional values can be registered in the Timescale Registry
    (Section 7.2); values MUST be integers or text strings.
@@ -356,10 +418,7 @@ Table of Contents
       |  (such as TAI(USNO) which is more accurate as a constant offset
       |  basis for GPS times).  While the registration process itself is
       |  trivial, these registrations need to be made based on a solid
-      |  specification of their actual definition.  Draft text for a
-      |  specification of the UT1 time scale can be found at
-      |  https://github.com/cbor-wg/time-tag/pull/9 (https://github.com/
-      |  cbor-wg/time-tag/pull/9).
+      |  specification of their actual definition.
 
 3.5.  Clock Quality
 
@@ -378,23 +437,42 @@ Table of Contents
      ? &(Guarantee: -8) => ~time/~duration
    )
 
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 8]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
 3.5.1.  ClockClass (Key -2)
 
    Key -2 (ClockClass) can be used to indicate the clock class as per
-   Table 5 of [IEEE1588-2008].  It is defined as a one-byte unsigned
-   integer as that is the range defined there.
+   [RFC8575] (which is based on Table 5 in Section 7.6.2.4 of
+   [IEEE1588-2008]; this has updated language as Table 4 in
+   Section 7.6.2.5 of [IEEE1588-2019]).  It is defined as a one-byte
+   unsigned integer as that is the range defined there.
 
 3.5.2.  ClockAccuracy (Key -4)
 
    Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as
-   per Table 6 of [IEEE1588-2008].  It is defined as a one-byte unsigned
-   integer as that is the range defined there.  The range between 32 and
-   47 is a slightly distorted logarithmic scale from 25 ns to 1 s (see
-   Figure 2); the number 254 is the value to be used if an unknown
-   accuracy needs to be expressed.
+   per [RFC8575] (which is based on Table 6 in Section 7.6.2.5 of
+   [IEEE1588-2008]; additional values have been defined in Table 5 in
+   Section 7.6.2.6 of [IEEE1588-2019]).  It is defined as a one-byte
+   unsigned integer as that is the range defined there.  The range
+   between 32 and 47 is a slightly distorted logarithmic scale from
+   25 ns to 1 s (extended to 23 to 47 for 1 ps to 1 s in
+   [IEEE1588-2019]) — see Figure 2; the number 254 is the value to be
+   used if an unknown accuracy needs to be expressed.
 
-   enum    ≈48 + ⌊2 ⋅log₁₀  - ϵ⌋
-       acc
+                            acc
+   enum    ≈ 48 + ⌊2 ⋅log   ──── - ϵ⌋
+       acc               10  s
 
          Figure 2: Approximate conversion from accuracy to accuracy
                              enumeration value
@@ -404,7 +482,8 @@ Table of Contents
    Key -5 (OffsetScaledLogVariance) can be used to represent the
    variance exhibited by the clock when it has lost its synchronization
    with an external reference clock.  The details for the computation of
-   this characteristic are defined in Section 7.6.3 of [IEEE1588-2008].
+   this characteristic are defined in Section 7.6.3 of [IEEE1588-2019]
+   and the same section in [IEEE1588-2008].
 
 3.5.4.  Uncertainty (Key -7)
 
@@ -417,6 +496,22 @@ Table of Contents
    characterizes the dispersion of the values that could reasonably be
    attributed to the measurand".  More specifically, the value for this
    key represents the extended uncertainty for k = 2, in seconds.
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                  [Page 9]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
+   Note that the additional information that can be meaningfully
+   provided with the duration that represents an uncertainty is limited,
+   e.g., it is not customary to provide an uncertainty for a duration
+   representing an uncertainty.  Implementations are free to reduce an
+   uncertainty (which is already elective) to the information they can
+   process.
 
 3.5.5.  Guarantee (Key -8)
 
@@ -431,6 +526,13 @@ Table of Contents
    the time value given is nominally guaranteed to not deviate from the
    actual time by more than the value of the guarantee, in seconds.
 
+   Note that the additional information that can be meaningfully
+   provided with the duration that represents a guarantee is limited,
+   e.g., it is not meaningful to provide a guarantee of accuracy for the
+   duration representing a guarantee of accuracy.  Implementations are
+   free to reduce a guarantee (which is already elective) to the
+   information they can process.
+
 3.6.  Keys -10, 10: Time Zone Hint
 
    Keys -10 and 10 supply supplementary information, where key 10 is
@@ -444,6 +546,21 @@ Table of Contents
    (i.e., it MUST be used when interpreting the entry with this key).
 
    Keys -10 and 10 MUST NOT both be present.
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 10]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    $$ETIME-ELECTIVE //= (-10: time-zone-info)
    $$ETIME-CRITICAL //= (10: time-zone-info)
@@ -477,6 +594,29 @@ Table of Contents
    time given to humans.  The key's value is a map that has IXDTF
    suffix-key names as keys and corresponding suffix values as values,
    specifically:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 11]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    $$ETIME-ELECTIVE //= (-11: suffix-info-map)
    $$ETIME-CRITICAL //= (11: suffix-info-map)
@@ -522,6 +662,18 @@ Table of Contents
    translating from the [RFC3339] information in the IXDTF into a Posix
    time that can be included under Key 1 in a time tag.
 
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 12]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
 4.  Duration Format
 
    A duration is the length of an interval of time.  Durations in this
@@ -531,7 +683,7 @@ Table of Contents
    Except for using Tag 1002 instead of 1001, durations are structurally
    identical to time values.
 
-   Duration = #6.1001(etime-detailed)
+   Duration = #6.1002(etime-detailed)
 
    Semantically, they do not measure the time elapsed from a given
    epoch, but from the start to the end of (an otherwise unspecified)
@@ -550,9 +702,10 @@ Table of Contents
    applications, these uncertainties are acceptable and thus the use of
    durations is appropriate.
 
-      |  Note that [ISO8601:1988] durations are rather different from
-      |  the ones defined in the present specification; there is no
-      |  intention to support ISO 8601 durations here.
+      |  Note that the durations defined in [ISO8601:1988] and
+      |  [ISO8601-1:2019] are rather different from the ones defined in
+      |  the present specification; there is no intention to support ISO
+      |  8601 durations here.
 
 5.  Period Format
 
@@ -569,9 +722,17 @@ Table of Contents
      ? duration: ~Duration / null
    ])
 
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 13]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    If the third array element is not given, the duration element is
    null.  Exactly two out of the three elements must be non-null, this
-   can be clumsily expressed in CDDL as:
+   can be somewhat verbosely expressed in CDDL as:
 
    clumsy-Period = #6.1003([
      (start: ~Time,
@@ -597,11 +758,33 @@ Table of Contents
 
 7.  IANA Considerations
 
+
+   // RFC Editor: please replace RFCthis with the RFC number of this
+   // RFC, [IANA.cbor-time-tag-parameters] with a reference to the new
+   // registry, and remove this note.
+
 7.1.  CBOR tags
 
    In the registry [IANA.cbor-tags], IANA has allocated the tags in
    Table 2 from what was at the time the FCFS space, with the present
    document as the specification reference.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 14]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
               +======+===========+=========================+
               |  Tag | Data Item | Semantics               |
@@ -620,17 +803,16 @@ Table of Contents
 
 7.2.  Timescale Registry
 
-   This specification defines a new subregistry titled "Timescale
-   Registry" in the "CBOR Time Tag Parameters" registry [IANA.cbor-time-
-   tag-parameters], with a combination of "Expert Review" and "RFC
-   Required" as the Registration Procedure (Sections 4.5 and 4.7 of
-   [BCP26]).
+   This specification defines a new registry titled "Timescales" in a
+   new "CBOR Time Tag Parameters" registry group [IANA.cbor-time-tag-
+   parameters], with a combination of "Expert Review" and "RFC Required"
+   as the Registration Procedure (Sections 4.5 and 4.7 of [BCP26]).
 
    Each entry needs to provide a timescale name (a sequence of uppercase
    ASCII characters and digits, where a digit may not occur at the
-   start: [A-Z][A-Z0-9]*), a value (unsigned integer), and brief
-   description of the semantics, and a specification reference (RFC).
-   The initial contents are shown in Table 3.
+   start: [A-Z][A-Z0-9]*), a value (CBOR unsigned integer, uint), and
+   brief description of the semantics, and a specification reference
+   (RFC).  The initial contents are shown in Table 3.
 
          +===========+=======+======================+===========+
          | Timescale | Value | Semantics            | Reference |
@@ -644,60 +826,77 @@ Table of Contents
 
 7.3.  Map Key Registry
 
-   This specification defines a new subregistry titled "Map Key
-   Registry" in the "CBOR Time Tag Parameters" registry [IANA.cbor-time-
-   tag-parameters], with "Specification Required" as the Registration
+   This specification defines a new registry titled "Map Keys" in the
+   "CBOR Time Tag Parameters" registry group [IANA.cbor-time-tag-
+   parameters], with "Specification Required" as the Registration
    Procedure (Section 4.6 of [BCP26]).
 
    The designated expert is requested to assign the key values with the
    shortest encodings (1+0 and 1+1 encoding) to registrations that are
    likely to enjoy wide use and can benefit from short encodings.
 
-   Each entry needs to provide a map key value (integer), a brief
-   description of the semantics, and a specification reference (RFC).
-   The initial contents are shown in Table 3.
 
-   +=======+=====================================+====================+
-   | Value | Semantics                           | Reference          |
-   +=======+=====================================+====================+
-   | -18   | attoseconds                         | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -15   | femtoseconds                        | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -12   | picoseconds                         | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -11   | IXDTF Suffix Information (elective) | [RFCthis], [IXDTF] |
-   +-------+-------------------------------------+--------------------+
-   | -10   | IXDTF Time Zone Hint (elective)     | [RFCthis], [IXDTF] |
-   +-------+-------------------------------------+--------------------+
-   | -9    | nanoseconds                         | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -8    | Guarantee                           | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -7    | Uncertainty                         | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -6    | microseconds                        | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -5    | Offset-Scaled Log Variance          | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -4    | Clock Accuracy                      | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -3    | milliseconds                        | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | -2    | Clock Class                         | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | 1     | Base Time value (as in CBOR Tag 1)  | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | 4     | Base Time value as in CBOR Tag 4    | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | 5     | Base Time value as in CBOR Tag 5    | [RFCthis]          |
-   +-------+-------------------------------------+--------------------+
-   | 10    | IXDTF Time Zone Hint (critical)     | [RFCthis], [IXDTF] |
-   +-------+-------------------------------------+--------------------+
-   | 11    | IXDTF Suffix Information (critical) | [RFCthis], [IXDTF] |
-   +-------+-------------------------------------+--------------------+
 
-                                 Table 4
+Bormann, et al.           Expires 5 April 2024                 [Page 15]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
+   Each entry needs to provide a map key value (CBOR integer, int), a
+   brief description of the semantics, and a specification reference
+   (RFC).  The initial contents are shown in Table 3.
+
+   +=======+=====================================+=====================+
+   | Value | Semantics                           | Reference           |
+   +=======+=====================================+=====================+
+   | -18   | attoseconds                         | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -15   | femtoseconds                        | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -12   | picoseconds                         | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -11   | IXDTF Suffix Information (elective) | [RFCthis], [IXDTF]  |
+   +-------+-------------------------------------+---------------------+
+   | -10   | IXDTF Time Zone Hint (elective)     | [RFCthis], [IXDTF]  |
+   +-------+-------------------------------------+---------------------+
+   | -9    | nanoseconds                         | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -8    | Guarantee                           | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -7    | Uncertainty                         | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -6    | microseconds                        | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -5    | Offset-Scaled Log Variance          | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -4    | Clock Accuracy                      | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -3    | milliseconds                        | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | -2    | Clock Class                         | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | 1     | Base Time value as in CBOR Tag 1    | [RFC8949]           |
+   |       |                                     | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | 4     | Base Time value as in CBOR Tag 4    | [RFC8949]           |
+   |       |                                     | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | 5     | Base Time value as in CBOR Tag 5    | [RFC8949]           |
+   |       |                                     | [RFCthis]           |
+   +-------+-------------------------------------+---------------------+
+   | 10    | IXDTF Time Zone Hint (critical)     | [RFCthis], [IXDTF]  |
+   +-------+-------------------------------------+---------------------+
+   | 11    | IXDTF Suffix Information (critical) | [RFCthis], [IXDTF]  |
+   +-------+-------------------------------------+---------------------+
+
+                                  Table 4
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 16]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
 8.  Security Considerations
 
@@ -726,20 +925,40 @@ Table of Contents
 
    [IANA.cbor-tags]
               IANA, "Concise Binary Object Representation (CBOR) Tags",
-              <https://www.iana.org/assignments/cbor-tags>.
+              <http://www.iana.org/assignments/cbor-tags>.
 
    [IEEE1588-2008]
-              IEEE, "1588-2008 - IEEE Standard for a Precision Clock
-              Synchronization Protocol for Networked Measurement and
-              Control Systems", July 2008,
-              <http://standards.ieee.org/findstds/
-              standard/1588-2008.html>.
+              IEEE, "IEEE Standard for a Precision Clock Synchronization
+              Protocol for Networked Measurement and Control Systems",
+              IEEE 1588-2008, July 2008,
+              <https://standards.ieee.org/ieee/1588/4355/>.  Often
+              called PTP v2, as it replaced the earlier 2002 version of
+              this standard by a non-backwards compatible protocol.
+
+   [IEEE1588-2019]
+              IEEE, "IEEE Standard for a Precision Clock Synchronization
+              Protocol for Networked Measurement and Control Systems",
+              IEEE 1588-2019, June 2020,
+              <https://standards.ieee.org/ieee/1588/6825/>.  Often
+              called PTP v2.1, as it has been designed so it can be used
+              in way that is fully backwards compatible to
+              IEEE1588-2008.
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 17]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    [IXDTF]    Sharma, U. and C. Bormann, "Date and Time on the Internet:
               Timestamps with additional information", Work in Progress,
-              Internet-Draft, draft-ietf-sedate-datetime-extended-08, 9
-              May 2023, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-sedate-datetime-extended-08>.
+              Internet-Draft, draft-ietf-sedate-datetime-extended-09, 14
+              July 2023, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-sedate-datetime-extended-09>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -749,6 +968,11 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8575]  Jiang, Y., Ed., Liu, X., Xu, J., and R. Cummings, Ed.,
+              "YANG Data Model for the Precision Time Protocol (PTP)",
+              RFC 8575, DOI 10.17487/RFC8575, May 2019,
+              <https://www.rfc-editor.org/rfc/rfc8575>.
 
    [RFC8610]  Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
               Definition Language (CDDL): A Notational Convention to
@@ -775,13 +999,26 @@ Table of Contents
 9.2.  Informative References
 
    [C]        International Organization for Standardization,
-              "Information technology - Programming languages - C",
+              "Information technology — Programming languages — C",
               Fourth Edition, ISO/IEC 9899:2018, June 2018,
               <https://www.iso.org/standard/74528.html>.  Contents
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 18]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
               available via <https://www.open-
               std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
               (https://www.open-std.org/jtc1/sc22/wg14/www/docs/
               n2310.pdf)>
+
+   [ISO8601-1:2019]
+              ISO, "Date and time — Representations for information
+              interchange — Part 1: Basic rules", ISO 8601-1:2019,
+              February 2019, <https://www.iso.org/standard/70907.html>.
 
    [ISO8601:1988]
               ISO, "Data elements and interchange formats — Information
@@ -802,11 +1039,6 @@ Table of Contents
               Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
               <https://www.rfc-editor.org/rfc/rfc3339>.
 
-   [RFC8575]  Jiang, Y., Ed., Liu, X., Xu, J., and R. Cummings, Ed.,
-              "YANG Data Model for the Precision Time Protocol (PTP)",
-              RFC 8575, DOI 10.17487/RFC8575, May 2019,
-              <https://www.rfc-editor.org/rfc/rfc8575>.
-
 Appendix A.  Collected CDDL
 
    This appendix collects the CDDL rules spread over the document into
@@ -826,6 +1058,14 @@ Appendix A.  Collected CDDL
      * $$ETIME-ELECTIVE
      * $$ETIME-CRITICAL
      * ((nint/text) .feature "etime-elective-extension") => any
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 19]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
      * (uint .feature "etime-critical-extension") => any
    }) .within etime-framework
 
@@ -874,6 +1114,14 @@ Appendix A.  Collected CDDL
 
       time-zone-initial = ALPHA / "." / "_"
       time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 20]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
       time-zone-part    = time-zone-initial *13(time-zone-char)
                           ; but not "." or ".."
       time-zone-name    = time-zone-part *("/" time-zone-part)
@@ -904,7 +1152,7 @@ Appendix A.  Collected CDDL
    ' ; extracted from [IXDTF]; update as needed!
 
 
-   Duration = #6.1001(etime-detailed)
+   Duration = #6.1002(etime-detailed)
 
 
    Period = #6.1003([
@@ -922,6 +1170,14 @@ Appendix A.  Collected CDDL
         duration: ~Duration))) //
      (start: null,
       end: ~Time,
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 21]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
       duration: ~Duration)
    ])
 
@@ -959,3 +1215,18 @@ Authors' Addresses
    64295 Darmstadt
    Germany
    Email: henk.birkholz@sit.fraunhofer.de
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 5 April 2024                 [Page 22]
