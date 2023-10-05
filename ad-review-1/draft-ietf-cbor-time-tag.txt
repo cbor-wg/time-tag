@@ -121,7 +121,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
      7.1.  CBOR tags . . . . . . . . . . . . . . . . . . . . . . . .  14
      7.2.  Timescale Registry  . . . . . . . . . . . . . . . . . . .  15
-     7.3.  Map Key Registry  . . . . . . . . . . . . . . . . . . . .  15
+     7.3.  Time Tag Map Key Registry . . . . . . . . . . . . . . . .  15
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  17
@@ -765,9 +765,9 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 7.1.  CBOR tags
 
-   In the registry [IANA.cbor-tags], IANA has allocated the tags in
-   Table 2 from what was at the time the FCFS space, with the present
-   document as the specification reference.
+   In the "CBOR Tags" registry [IANA.cbor-tags], IANA has allocated the
+   tags in Table 2 from what was at the time the FCFS space, with the
+   present document as the specification reference.
 
 
 
@@ -803,10 +803,10 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 7.2.  Timescale Registry
 
-   This specification defines a new registry titled "Timescales" in a
-   new "CBOR Time Tag Parameters" registry group [IANA.cbor-time-tag-
-   parameters], with a combination of "Expert Review" and "RFC Required"
-   as the Registration Procedure (Sections 4.5 and 4.7 of [BCP26]).
+   This specification defines a new registry titled "Timescales" in the
+   "CBOR Tags" registry group [IANA.cbor-tags], with a combination of
+   "Expert Review" and "RFC Required" as the Registration Procedure
+   (Sections 4.5 and 4.7 of [BCP26]).
 
    Each entry needs to provide a timescale name (a sequence of uppercase
    ASCII characters and digits, where a digit may not occur at the
@@ -824,12 +824,12 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
               Table 3: Initial Content of Timescale Registry
 
-7.3.  Map Key Registry
+7.3.  Time Tag Map Key Registry
 
-   This specification defines a new registry titled "Map Keys" in the
-   "CBOR Time Tag Parameters" registry group [IANA.cbor-time-tag-
-   parameters], with "Specification Required" as the Registration
-   Procedure (Section 4.6 of [BCP26]).
+   This specification defines a new registry titled "Time Tag Map Keys"
+   in the "CBOR Tags" registry group [IANA.cbor-tags], with
+   "Specification Required" as the Registration Procedure (Section 4.6
+   of [BCP26]).
 
    The designated expert is requested to assign the key values with the
    shortest encodings (1+0 and 1+1 encoding) to registrations that are
@@ -844,52 +844,52 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
    Each entry needs to provide a map key value (CBOR integer, int), a
    brief description of the semantics, and a specification reference
-   (RFC).  The initial contents are shown in Table 3.
+   (RFC).  The initial contents are shown in Table 4.
 
    +=======+=====================================+=====================+
    | Value | Semantics                           | Reference           |
    +=======+=====================================+=====================+
-   | -18   | attoseconds                         | [RFCthis]           |
+   |   -18 | attoseconds                         | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -15   | femtoseconds                        | [RFCthis]           |
+   |   -15 | femtoseconds                        | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -12   | picoseconds                         | [RFCthis]           |
+   |   -12 | picoseconds                         | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -11   | IXDTF Suffix Information (elective) | [RFCthis], [IXDTF]  |
+   |   -11 | IXDTF Suffix Information (elective) | [RFCthis], [IXDTF]  |
    +-------+-------------------------------------+---------------------+
-   | -10   | IXDTF Time Zone Hint (elective)     | [RFCthis], [IXDTF]  |
+   |   -10 | IXDTF Time Zone Hint (elective)     | [RFCthis], [IXDTF]  |
    +-------+-------------------------------------+---------------------+
-   | -9    | nanoseconds                         | [RFCthis]           |
+   |    -9 | nanoseconds                         | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -8    | Guarantee                           | [RFCthis]           |
+   |    -8 | Guarantee                           | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -7    | Uncertainty                         | [RFCthis]           |
+   |    -7 | Uncertainty                         | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -6    | microseconds                        | [RFCthis]           |
+   |    -6 | microseconds                        | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -5    | Offset-Scaled Log Variance          | [RFCthis]           |
+   |    -5 | Offset-Scaled Log Variance          | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -4    | Clock Accuracy                      | [RFCthis]           |
+   |    -4 | Clock Accuracy                      | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -3    | milliseconds                        | [RFCthis]           |
+   |    -3 | milliseconds                        | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | -2    | Clock Class                         | [RFCthis]           |
+   |    -2 | Clock Class                         | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | 1     | Base Time value as in CBOR Tag 1    | [RFC8949]           |
+   |     1 | Base Time value as in CBOR Tag 1    | [RFC8949]           |
    |       |                                     | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | 4     | Base Time value as in CBOR Tag 4    | [RFC8949]           |
+   |     4 | Base Time value as in CBOR Tag 4    | [RFC8949]           |
    |       |                                     | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | 5     | Base Time value as in CBOR Tag 5    | [RFC8949]           |
+   |     5 | Base Time value as in CBOR Tag 5    | [RFC8949]           |
    |       |                                     | [RFCthis]           |
    +-------+-------------------------------------+---------------------+
-   | 10    | IXDTF Time Zone Hint (critical)     | [RFCthis], [IXDTF]  |
+   |    10 | IXDTF Time Zone Hint (critical)     | [RFCthis], [IXDTF]  |
    +-------+-------------------------------------+---------------------+
-   | 11    | IXDTF Suffix Information (critical) | [RFCthis], [IXDTF]  |
+   |    11 | IXDTF Suffix Information (critical) | [RFCthis], [IXDTF]  |
    +-------+-------------------------------------+---------------------+
 
-                                  Table 4
+           Table 4: Initial Content of Time Tag Map Keys Registry
 
 
 
