@@ -733,8 +733,7 @@ IANA Considerations
 [^to-be-removed]
 
 [^to-be-removed]: RFC Editor: please replace RFCthis with the RFC
-    number of this RFC, \[IANA.cbor-time-tag-parameters] with a
-    reference to the new registry, and remove this note.
+    number of this RFC, and remove this note.
 
 
 CBOR tags
