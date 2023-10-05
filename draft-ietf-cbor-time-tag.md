@@ -486,7 +486,7 @@ value to be used if an unknown accuracy needs to be expressed.
 <!-- by utftex -->
 
 ~~~ math
-enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsilon \rfloor
+enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \varepsilon \rfloor
 ~~~
 {: #formula-accuracy-enum title="Approximate conversion from accuracy to accuracy enumeration value"}
 
