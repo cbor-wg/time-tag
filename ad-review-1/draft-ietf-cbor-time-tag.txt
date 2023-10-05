@@ -760,14 +760,14 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
    // RFC Editor: please replace RFCthis with the RFC number of this
-   // RFC, [IANA.cbor-time-tag-parameters] with a reference to the new
-   // registry, and remove this note.
+   // RFC, and remove this note.
 
 7.1.  CBOR tags
 
    In the "CBOR Tags" registry [IANA.cbor-tags], IANA has allocated the
    tags in Table 2 from what was at the time the FCFS space, with the
    present document as the specification reference.
+
 
 
 
