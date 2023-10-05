@@ -5,10 +5,10 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                               B. Gamari
-Expires: 5 April 2024                                         Well-Typed
+Expires: 7 April 2024                                         Well-Typed
                                                              H. Birkholz
                                                           Fraunhofer SIT
-                                                          3 October 2023
+                                                          5 October 2023
 
 
 Concise Binary Object Representation (CBOR) Tags for Time, Duration, and
@@ -53,7 +53,7 @@ About This Document
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 1]
+Bormann, et al.           Expires 7 April 2024                  [Page 1]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -73,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 April 2024.
+   This Internet-Draft will expire on 7 April 2024.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 2]
+Bormann, et al.           Expires 7 April 2024                  [Page 2]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -165,7 +165,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 3]
+Bormann, et al.           Expires 7 April 2024                  [Page 3]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -221,7 +221,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 4]
+Bormann, et al.           Expires 7 April 2024                  [Page 4]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -277,7 +277,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 5]
+Bormann, et al.           Expires 7 April 2024                  [Page 5]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -333,7 +333,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 6]
+Bormann, et al.           Expires 7 April 2024                  [Page 6]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -389,7 +389,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 7]
+Bormann, et al.           Expires 7 April 2024                  [Page 7]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -445,7 +445,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 8]
+Bormann, et al.           Expires 7 April 2024                  [Page 8]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -465,13 +465,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
    [IEEE1588-2008]; additional values have been defined in Table 5 in
    Section 7.6.2.6 of [IEEE1588-2019]).  It is defined as a one-byte
    unsigned integer as that is the range defined there.  The range
-   between 32 and 47 is a slightly distorted logarithmic scale from
-   25 ns to 1 s (extended to 23 to 47 for 1 ps to 1 s in
-   [IEEE1588-2019]) — see Figure 2; the number 254 is the value to be
-   used if an unknown accuracy needs to be expressed.
+   between 23 and 47 is a slightly distorted logarithmic scale from 1 ps
+   to 1 s in [IEEE1588-2019] (in [IEEE1588-2008] the range was a subset
+   of that, 32 to 47 for 25 ns to 1 s) — see Figure 2; the number 254 is
+   the value to be used if an unknown accuracy needs to be expressed.
 
                             acc
-   enum    ≈ 48 + ⌊2 ⋅log   ──── - ϵ⌋
+   enum    ≈ 48 + ⌊2 ⋅log   ──── - ε⌋
        acc               10  s
 
          Figure 2: Approximate conversion from accuracy to accuracy
@@ -501,7 +501,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                  [Page 9]
+Bormann, et al.           Expires 7 April 2024                  [Page 9]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -557,7 +557,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 10]
+Bormann, et al.           Expires 7 April 2024                 [Page 10]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -613,7 +613,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 11]
+Bormann, et al.           Expires 7 April 2024                 [Page 11]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -669,7 +669,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 12]
+Bormann, et al.           Expires 7 April 2024                 [Page 12]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -725,7 +725,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 13]
+Bormann, et al.           Expires 7 April 2024                 [Page 13]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -781,7 +781,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 14]
+Bormann, et al.           Expires 7 April 2024                 [Page 14]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -837,7 +837,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 15]
+Bormann, et al.           Expires 7 April 2024                 [Page 15]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -893,7 +893,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 16]
+Bormann, et al.           Expires 7 April 2024                 [Page 16]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -949,16 +949,16 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 17]
+Bormann, et al.           Expires 7 April 2024                 [Page 17]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
    [IXDTF]    Sharma, U. and C. Bormann, "Date and Time on the Internet:
               Timestamps with additional information", Work in Progress,
-              Internet-Draft, draft-ietf-sedate-datetime-extended-09, 14
-              July 2023, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-sedate-datetime-extended-09>.
+              Internet-Draft, draft-ietf-sedate-datetime-extended-10, 5
+              October 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-sedate-datetime-extended-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1005,7 +1005,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 18]
+Bormann, et al.           Expires 7 April 2024                 [Page 18]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1061,7 +1061,7 @@ Appendix A.  Collected CDDL
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 19]
+Bormann, et al.           Expires 7 April 2024                 [Page 19]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1117,7 +1117,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 20]
+Bormann, et al.           Expires 7 April 2024                 [Page 20]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1173,7 +1173,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 21]
+Bormann, et al.           Expires 7 April 2024                 [Page 21]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1229,4 +1229,4 @@ Authors' Addresses
 
 
 
-Bormann, et al.           Expires 5 April 2024                 [Page 22]
+Bormann, et al.           Expires 7 April 2024                 [Page 22]

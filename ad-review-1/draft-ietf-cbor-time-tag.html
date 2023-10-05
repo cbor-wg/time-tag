@@ -1067,7 +1067,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann, et al.</td>
-<td class="center">Expires 5 April 2024</td>
+<td class="center">Expires 7 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1080,12 +1080,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-cbor-time-tag-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-03" class="published">3 October 2023</time>
+<time datetime="2023-10-05" class="published">5 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-05">5 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-07">7 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1156,7 +1156,7 @@ completed.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1739,15 +1739,16 @@ per <span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span> (which is ba
 <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; additional values have been defined in Table 5 in
 Section 7.6.2.6 of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span>).
 It is defined as a one-byte unsigned integer as that is the range defined there.
-The range between 32 and 47 is a slightly distorted logarithmic scale from
-25 ns to 1 s (extended to 23 to 47 for 1 ps to 1 s in <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span>)
-— see <a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>; the number 254 is the
+The range between 23 and 47 is a slightly distorted logarithmic scale
+from 1 ps to 1 s in <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> (in <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span> the range was
+a subset of that, 32 to 47 for 25 ns to 1 s) — see
+<a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
 <span id="name-approximate-conversion-from"></span><div id="formula-accuracy-enum">
 <figure id="figure-2">
             <div id="section-3.5.2-2.1">
               <div class="alignLeft art-svg artwork" id="section-3.5.2-2.1.1">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14044.6 2013.3" width="32.62ex">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14098.6 2013.3" width="32.745ex">
                   <defs>
                     <path d="M363 112l14 -13c-70 -86 -138 -110 -200 -110c-98 0 -137 84 -137 156c0 23 1 37 6 60c25 111 135 236 262 236c42 0 102 -14 102 -76c0 -127 -167 -176 -286 -182v-28c0 -64 52 -107 113 -107c42 0 90 18 126 64zM124 211h9c104 0 198 69 198 157c0 25 -19 43 -44 43 c-74 0 -134 -115 -163 -200Z" id="E1-STIXWEBNORMALI-1D452-gensym002" stroke-width="1"></path>
                     <path d="M467 96l-5 -6c-28 -34 -76 -98 -128 -98c-32 0 -41 23 -41 46c0 13 4 29 7 40l57 221c2 8 7 28 7 42c0 19 -6 38 -24 38c-38 0 -101 -86 -132 -133c-36 -54 -62 -101 -68 -122l-33 -124h-77l95 374c0 18 -3 32 -30 32c-10 0 -21 -2 -28 -3l-2 15l159 23l-51 -189h3 c5 0 54 70 56 73c40 50 100 116 160 116c44 0 56 -29 56 -62c0 -25 -6 -50 -11 -70l-59 -231c-1 -2 -1 -5 -1 -10c1 -6 4 -14 15 -14c24 0 48 36 62 53Z" id="E1-STIXWEBNORMALI-1D45B-gensym002" stroke-width="1"></path>
@@ -1769,7 +1770,7 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
                     <path d="M476 330c0 -172 -63 -344 -226 -344c-171 0 -226 186 -226 350c0 177 69 340 230 340c131 0 222 -141 222 -346zM380 325c0 208 -44 325 -132 325c-83 0 -128 -118 -128 -321s44 -317 130 -317c85 0 130 115 130 313Z" id="E1-STIXWEBMAIN-30-gensym002" stroke-width="1"></path>
                     <path d="M156 301l104 -63c64 -39 88 -66 88 -123c0 -67 -64 -125 -140 -125c-21 0 -50 1 -73 9c-24 8 -35 9 -46 9c-12 0 -18 -2 -24 -12h-13v157h16c21 -97 58 -141 127 -141c51 0 83 33 83 74c0 31 -20 57 -53 75l-54 30c-83 46 -120 94 -120 145c0 79 56 123 138 123 c24 0 46 -1 67 -11c11 -5 21 -8 28 -8c4 0 8 1 16 10h11l5 -136h-15c-23 90 -53 123 -113 123c-43 0 -75 -21 -75 -68c0 -22 15 -51 43 -68Z" id="E1-STIXWEBMAIN-73-gensym002" stroke-width="1"></path>
                     <path d="M621 220h-557v66h557v-66Z" id="E1-STIXWEBMAIN-2212-gensym002" stroke-width="1"></path>
-                    <path d="M430 441l-19 -132h-15c-7 46 -24 105 -93 105c-82 0 -139 -97 -161 -167h181l-5 -36h-185c-7 -20 -7 -41 -7 -66c0 -64 37 -101 92 -101c58 0 109 34 144 68l12 -14c-53 -60 -111 -109 -194 -109c-94 0 -140 69 -140 152c0 142 114 300 269 300c49 0 55 -20 83 -20 c12 0 19 11 23 20h15Z" id="E1-STIXWEBNORMALI-1D716-gensym002" stroke-width="1"></path>
+                    <path d="M444 372l-14 -8c-25 36 -60 47 -120 47c-63 0 -139 -44 -139 -113c0 -32 33 -51 78 -51c21 0 37 9 62 9c22 0 38 -7 38 -20c0 -17 -10 -31 -43 -31c-9 0 -40 6 -61 6c-49 0 -133 -33 -133 -103c0 -61 65 -78 125 -78c53 0 118 26 151 73l13 -10 c-42 -59 -99 -104 -210 -104c-124 0 -166 50 -166 102c0 73 49 120 116 137c-35 12 -58 33 -58 66c0 81 83 147 225 147c62 0 123 -33 136 -69Z" id="E1-STIXWEBNORMALI-1D700-gensym002" stroke-width="1"></path>
                     <path d="M286 -213h-259v33h109c65 0 84 31 84 95v798h66v-926Z" id="E1-STIXWEBMAIN-230B-gensym002" stroke-width="1"></path>
                   </defs>
                   <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
@@ -1814,8 +1815,8 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
                       </g>
                     </g>
                     <use xlink:href="#E1-STIXWEBMAIN-2212-gensym002" x="12236" y="0"></use>
-                    <use xlink:href="#E1-STIXWEBNORMALI-1D716-gensym002" x="13144" y="0"></use>
-                    <use xlink:href="#E1-STIXWEBMAIN-230B-gensym002" x="13575" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D700-gensym002" x="13144" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-230B-gensym002" x="13629" y="0"></use>
                   </g>
                 </svg><a href="#section-3.5.2-2.1.1" class="pilcrow">¶</a>
 </div>
@@ -2361,7 +2362,7 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <dd class="break"></dd>
 <dt id="IXDTF">[IXDTF]</dt>
         <dd>
-<span class="refAuthor">Sharma, U.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps with additional information"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sedate-datetime-extended-09</span>, <time datetime="2023-07-14" class="refDate">14 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09">https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Sharma, U.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps with additional information"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sedate-datetime-extended-10</span>, <time datetime="2023-10-05" class="refDate">5 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-10">https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
