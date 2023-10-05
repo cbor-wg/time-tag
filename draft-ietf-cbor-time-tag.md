@@ -476,9 +476,10 @@ per {{RFC8575}} (which is based on Table 6 in Section 7.6.2.5 of
 {{IEEE1588-2008}}; additional values have been defined in Table 5 in
 Section 7.6.2.6 of {{IEEE1588-2019}}).
 It is defined as a one-byte unsigned integer as that is the range defined there.
-The range between 32 and 47 is a slightly distorted logarithmic scale from
-25 ns to 1 s (extended to 23 to 47 for 1 ps to 1 s in {{IEEE1588-2019}})
-— see {{formula-accuracy-enum}}; the number 254 is the
+The range between 23 and 47 is a slightly distorted logarithmic scale
+from 1 ps to 1 s in {{IEEE1588-2019}} (in {{IEEE1588-2008}} the range was
+a subset of that, 32 to 47 for 25 ns to 1 s) — see
+{{formula-accuracy-enum}}; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.
 
 <!-- Note that the double space after the \approx is actually needed -->
