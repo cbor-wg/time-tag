@@ -740,7 +740,7 @@ IANA Considerations
 CBOR tags
 ---------
 
-In the registry {{-tags}},
+In the "CBOR Tags" registry {{-tags}},
 IANA has allocated the tags in {{tab-tag-values}} from what was at the
 time the
 FCFS space, with the present document as the specification reference.
@@ -758,9 +758,8 @@ IANA is requested to change the "Data Item" column for Tag 1003 from
 Timescale Registry
 ------------------
 
-This specification defines a new registry titled "Timescales" in a new
-"CBOR Time Tag Parameters" registry group
-\[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+This specification defines a new registry titled "Timescales" in the
+"CBOR Tags" registry group {{-tags}}, with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
 4.7 of BCP26}}).
 
@@ -775,13 +774,12 @@ The initial contents are shown in {{tab-timescales}}.
 | TAI       |     1 | TAI with PTP Epoch   | \[RFCthis] |
 {: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
 
-Map Key Registry
+Time Tag Map Key Registry {#map-key-registry}
 ----------------
 
-This specification defines a new registry titled "Map Keys"
-in the "CBOR Time Tag Parameters" registry group
-\[IANA.cbor-time-tag-parameters], with "Specification Required" as the
-Registration Procedure ({{Section 4.6 of BCP26}}).
+This specification defines a new registry titled "Time Tag Map Keys"
+in the "CBOR Tags" registry group {{-tags}}, with "Specification
+Required" as the Registration Procedure ({{Section 4.6 of BCP26}}).
 
 The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
@@ -789,7 +787,7 @@ likely to enjoy wide use and can benefit from short encodings.
 
 Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference (RFC).
-The initial contents are shown in {{tab-timescales}}.
+The initial contents are shown in {{tab-mapkeys}}.
 
 | Value | Semantics                           | Reference           |
 |   -18 | attoseconds                         | \[RFCthis]          |
@@ -810,6 +808,9 @@ The initial contents are shown in {{tab-timescales}}.
 |     5 | Base Time value as in CBOR Tag 5    | {{-cbor}} \[RFCthis]  |
 |    10 | IXDTF Time Zone Hint (critical)     | \[RFCthis], {{IXDTF}} |
 |    11 | IXDTF Suffix Information (critical) | \[RFCthis], {{IXDTF}} |
+{: #tab-mapkeys cols='r l l' title="Initial Content of Time Tag Map
+Keys Registry"}
+
 
 Security Considerations
 ============
