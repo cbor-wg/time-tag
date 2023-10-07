@@ -25,24 +25,24 @@ CBOR tags defined.
 It reflects the state of the document after the short final WGLC
 completed. 
     " name="description">
-<meta content="xml2rfc 3.17.4" name="generator">
+<meta content="xml2rfc 3.18.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-cbor-time-tag-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.17.4
-    Python 3.11.4
+  xml2rfc 3.18.1
+    Python 3.11.5
     ConfigArgParse 1.5.3
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.9.1
+    platformdirs 3.11.0
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
-    wcwidth 0.2.6
+    wcwidth 0.2.8
 -->
 <link href="draft-ietf-cbor-time-tag.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1063,11 +1063,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CBOR tag for extended time</td>
-<td class="right">July 2023</td>
+<td class="right">October 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann, et al.</td>
-<td class="center">Expires 24 January 2024</td>
+<td class="center">Expires 9 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1080,12 +1080,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-cbor-time-tag-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-07-23" class="published">23 July 2023</time>
+<time datetime="2023-10-07" class="published">7 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-01-24">24 January 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-09">9 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1156,7 +1156,7 @@ completed.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1258,7 +1258,7 @@ completed.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-timescale-registry" class="internal xref">Timescale Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-map-key-registry" class="internal xref">Map Key Registry</a></p>
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-time-tag-map-key-registry" class="internal xref">Time Tag Map Key Registry</a></p>
 </li>
             </ul>
 </li>
@@ -1342,17 +1342,19 @@ collected model information.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 the present specification addresses the following objectives that go
 beyond the original tags 0 and 1:<a href="#section-2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2-2.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
+<li class="normal" id="section-2-2.1">
+          <p id="section-2-2.1.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
 1 only provides for integer and up to binary64 floating point
 representation of times, limiting resolution to approximately
 microseconds at the time of writing (and progressively becoming
-worse over time).<a href="#section-2-2.1" class="pilcrow">¶</a>
+worse over time).<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-2-2.2">Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+        <li class="normal" id="section-2-2.2">
+          <p id="section-2-2.2.1">Indication of timescale.  Tags 0 and 1 are for UTC; however, some
 interchanges are better performed on TAI.  Other timescales may be
 registered once they become relevant (e.g., one of the proposed
 successors to UTC that might no longer use leap seconds, or a
-scale based on smeared leap seconds).<a href="#section-2-2.2" class="pilcrow">¶</a>
+scale based on smeared leap seconds).<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-2-3">By incorporating a way to transport <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span> suffix information (<a href="#tzh" class="auto internal xref">Section 3.6</a>,
@@ -1365,14 +1367,15 @@ additional map keys for the map inside the tag, the specification for
 which is referenced by the registry entry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>, <a href="#time-format" class="auto internal xref">Section 3</a>).
 For example, map keys could be registered for:<a href="#section-2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2-5.1">Direct representation of natural platform time formats.  Some
+<li class="normal" id="section-2-5.1">
+          <p id="section-2-5.1.1">Direct representation of natural platform time formats.  Some
 platforms use epoch-based time formats that require some computation
 to convert them into the representations allowed by tag 1; these
 computations can also lose precision and cause ambiguities.
 (The present specification does not take a position on whether tag 1
 can be "fixed" to include, e.g., Decimal or BigFloat representations.
 It does define how to use these representations with the extended
-time format.)<a href="#section-2-5.1" class="pilcrow">¶</a>
+time format.)<a href="#section-2-5.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-2-6">Additional tags are defined for durations and periods.<a href="#section-2-6" class="pilcrow">¶</a></p>
@@ -1404,21 +1407,25 @@ information ("elective", and this will not be explicitly stated
 below).<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">Supplementary information may include:<a href="#section-3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-6.1">a higher precision time offset to be added to the Base Time,<a href="#section-3-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3-6.1">
+          <p id="section-3-6.1.1">a higher precision time offset to be added to the Base Time,<a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-6.2">a reference timescale and epoch different from the default UTC and 1970-01-01<a href="#section-3-6.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-6.2">
+          <p id="section-3-6.2.1">a reference timescale and epoch different from the default UTC and 1970-01-01<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-6.3">information about clock quality parameters, such as source,
-accuracy, and uncertainty<a href="#section-3-6.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-6.3">
+          <p id="section-3-6.3.1">information about clock quality parameters, such as source,
+accuracy, and uncertainty<a href="#section-3-6.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-3-7">Additional keys can be defined by registering them in the Map Key
 Registry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>).
 Future keys may add:<a href="#section-3-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-8.1">intent information such as timezone and daylight savings time,
+<li class="normal" id="section-3-8.1">
+          <p id="section-3-8.1.1">intent information such as timezone and daylight savings time,
 and/or possibly positioning coordinates, to express information that
-would indicate a local time.<a href="#section-3-8.1" class="pilcrow">¶</a>
+would indicate a local time.<a href="#section-3-8.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-3-9">This document does not define supplementary text keys.
@@ -1563,7 +1570,8 @@ achieved by also adjusting the base time appropriately.<a href="#section-3.3-4" 
         </h3>
 <p id="section-3.4-1">Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span>; the value 1 indicates TAI, with the
-PTP (Precision Time Protocol) epoch <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+PTP (Precision Time Protocol) epoch (1 January 1970 00:00:00 TAI, see
+<span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> or <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.4-2">
 <pre>
 $$ETIME-ELECTIVE //= (-1 =&gt; $ETIME-TIMESCALE)
@@ -1684,8 +1692,7 @@ abstract time scales (such as TAI(USNO) which is more accurate as a
 constant offset basis for GPS times).
 While the registration process itself is trivial, these registrations
 need to be made based on a solid specification of their actual
-definition.
-Draft text for a specification of the UT1 time scale can be found at <a href="https://github.com/cbor-wg/time-tag/pull/9">https://github.com/cbor-wg/time-tag/pull/9</a>.<a href="#section-3.4-7.1" class="pilcrow">¶</a></p>
+definition.<a href="#section-3.4-7.1" class="pilcrow">¶</a></p>
 </aside>
 </section>
 </div>
@@ -1716,7 +1723,9 @@ ClockQuality-group = (
 <a href="#section-3.5.1" class="section-number selfRef">3.5.1. </a><a href="#name-clockclass-key-2" class="section-name selfRef">ClockClass (Key -2)</a>
           </h4>
 <p id="section-3.5.1-1">Key -2 (ClockClass) can be used to indicate the clock class as per
-Table 5 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.
+<span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span> (which is based on Table 5 in Section 7.6.2.4 of
+<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; this has updated language as Table 4 in Section 7.6.2.5
+of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span>).
 It is defined as a one-byte unsigned integer as that is the range defined there.<a href="#section-3.5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1725,17 +1734,21 @@ It is defined as a one-byte unsigned integer as that is the range defined there.
           <h4 id="name-clockaccuracy-key-4">
 <a href="#section-3.5.2" class="section-number selfRef">3.5.2. </a><a href="#name-clockaccuracy-key-4" class="section-name selfRef">ClockAccuracy (Key -4)</a>
           </h4>
-<p id="section-3.5.2-1">Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as per
-Table 6 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.
+<p id="section-3.5.2-1">Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as
+per <span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span> (which is based on Table 6 in Section 7.6.2.5 of
+<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; additional values have been defined in Table 5 in
+Section 7.6.2.6 of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span>).
 It is defined as a one-byte unsigned integer as that is the range defined there.
-The range between 32 and 47 is a slightly distorted logarithmic scale from
-25 ns to 1 s (see <a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>); the number 254 is the
+The range between 23 and 47 is a slightly distorted logarithmic scale
+from 1 ps to 1 s in <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> (in <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span> the range was
+a subset of that, 32 to 47 for 25 ns to 1 s) — see
+<a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
 <span id="name-approximate-conversion-from"></span><div id="formula-accuracy-enum">
 <figure id="figure-2">
             <div id="section-3.5.2-2.1">
               <div class="alignLeft art-svg artwork" id="section-3.5.2-2.1.1">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14044.6 2013.3" width="32.62ex">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14098.6 2013.3" width="32.745ex">
                   <defs>
                     <path d="M363 112l14 -13c-70 -86 -138 -110 -200 -110c-98 0 -137 84 -137 156c0 23 1 37 6 60c25 111 135 236 262 236c42 0 102 -14 102 -76c0 -127 -167 -176 -286 -182v-28c0 -64 52 -107 113 -107c42 0 90 18 126 64zM124 211h9c104 0 198 69 198 157c0 25 -19 43 -44 43 c-74 0 -134 -115 -163 -200Z" id="E1-STIXWEBNORMALI-1D452-gensym002" stroke-width="1"></path>
                     <path d="M467 96l-5 -6c-28 -34 -76 -98 -128 -98c-32 0 -41 23 -41 46c0 13 4 29 7 40l57 221c2 8 7 28 7 42c0 19 -6 38 -24 38c-38 0 -101 -86 -132 -133c-36 -54 -62 -101 -68 -122l-33 -124h-77l95 374c0 18 -3 32 -30 32c-10 0 -21 -2 -28 -3l-2 15l159 23l-51 -189h3 c5 0 54 70 56 73c40 50 100 116 160 116c44 0 56 -29 56 -62c0 -25 -6 -50 -11 -70l-59 -231c-1 -2 -1 -5 -1 -10c1 -6 4 -14 15 -14c24 0 48 36 62 53Z" id="E1-STIXWEBNORMALI-1D45B-gensym002" stroke-width="1"></path>
@@ -1757,7 +1770,7 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
                     <path d="M476 330c0 -172 -63 -344 -226 -344c-171 0 -226 186 -226 350c0 177 69 340 230 340c131 0 222 -141 222 -346zM380 325c0 208 -44 325 -132 325c-83 0 -128 -118 -128 -321s44 -317 130 -317c85 0 130 115 130 313Z" id="E1-STIXWEBMAIN-30-gensym002" stroke-width="1"></path>
                     <path d="M156 301l104 -63c64 -39 88 -66 88 -123c0 -67 -64 -125 -140 -125c-21 0 -50 1 -73 9c-24 8 -35 9 -46 9c-12 0 -18 -2 -24 -12h-13v157h16c21 -97 58 -141 127 -141c51 0 83 33 83 74c0 31 -20 57 -53 75l-54 30c-83 46 -120 94 -120 145c0 79 56 123 138 123 c24 0 46 -1 67 -11c11 -5 21 -8 28 -8c4 0 8 1 16 10h11l5 -136h-15c-23 90 -53 123 -113 123c-43 0 -75 -21 -75 -68c0 -22 15 -51 43 -68Z" id="E1-STIXWEBMAIN-73-gensym002" stroke-width="1"></path>
                     <path d="M621 220h-557v66h557v-66Z" id="E1-STIXWEBMAIN-2212-gensym002" stroke-width="1"></path>
-                    <path d="M430 441l-19 -132h-15c-7 46 -24 105 -93 105c-82 0 -139 -97 -161 -167h181l-5 -36h-185c-7 -20 -7 -41 -7 -66c0 -64 37 -101 92 -101c58 0 109 34 144 68l12 -14c-53 -60 -111 -109 -194 -109c-94 0 -140 69 -140 152c0 142 114 300 269 300c49 0 55 -20 83 -20 c12 0 19 11 23 20h15Z" id="E1-STIXWEBNORMALI-1D716-gensym002" stroke-width="1"></path>
+                    <path d="M444 372l-14 -8c-25 36 -60 47 -120 47c-63 0 -139 -44 -139 -113c0 -32 33 -51 78 -51c21 0 37 9 62 9c22 0 38 -7 38 -20c0 -17 -10 -31 -43 -31c-9 0 -40 6 -61 6c-49 0 -133 -33 -133 -103c0 -61 65 -78 125 -78c53 0 118 26 151 73l13 -10 c-42 -59 -99 -104 -210 -104c-124 0 -166 50 -166 102c0 73 49 120 116 137c-35 12 -58 33 -58 66c0 81 83 147 225 147c62 0 123 -33 136 -69Z" id="E1-STIXWEBNORMALI-1D700-gensym002" stroke-width="1"></path>
                     <path d="M286 -213h-259v33h109c65 0 84 31 84 95v798h66v-926Z" id="E1-STIXWEBMAIN-230B-gensym002" stroke-width="1"></path>
                   </defs>
                   <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
@@ -1802,8 +1815,8 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
                       </g>
                     </g>
                     <use xlink:href="#E1-STIXWEBMAIN-2212-gensym002" x="12236" y="0"></use>
-                    <use xlink:href="#E1-STIXWEBNORMALI-1D716-gensym002" x="13144" y="0"></use>
-                    <use xlink:href="#E1-STIXWEBMAIN-230B-gensym002" x="13575" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBNORMALI-1D700-gensym002" x="13144" y="0"></use>
+                    <use xlink:href="#E1-STIXWEBMAIN-230B-gensym002" x="13629" y="0"></use>
                   </g>
                 </svg><a href="#section-3.5.2-2.1.1" class="pilcrow">¶</a>
 </div>
@@ -1822,7 +1835,8 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
 <p id="section-3.5.3-1">Key -5 (OffsetScaledLogVariance) can be used to represent the variance
 exhibited by the clock when it has lost its synchronization with an
 external reference clock.  The details for the computation of this
-characteristic are defined in Section 7.6.3 of <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.<a href="#section-3.5.3-1" class="pilcrow">¶</a></p>
+characteristic are defined in Section 7.6.3 of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> and the
+same section in <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>.<a href="#section-3.5.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="uncertainty-key-7">
@@ -1988,7 +2002,7 @@ seconds).<a href="#section-4-1" class="pilcrow">¶</a></p>
 durations are structurally identical to time values.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-4-3">
 <pre>
-Duration = #6.1001(etime-detailed)
+Duration = #6.1002(etime-detailed)
 </pre><a href="#section-4-3" class="pilcrow">¶</a>
 </div>
 <p id="section-4-4">Semantically, they do not measure the time elapsed from a given epoch,
@@ -2007,7 +2021,7 @@ to a duration loses some detail about timescale irregularities.
 For many applications, these uncertainties are acceptable and thus
 the use of durations is appropriate.<a href="#section-4-6" class="pilcrow">¶</a></p>
 <aside id="section-4-7">
-        <p id="section-4-7.1">Note that <span>[<a href="#ISO8601" class="cite xref">ISO8601:1988</a>]</span> durations are rather different from the ones defined
+        <p id="section-4-7.1">Note that the durations defined in <span>[<a href="#ISO8601" class="cite xref">ISO8601:1988</a>]</span> and <span>[<a href="#ISO8601-2019" class="cite xref">ISO8601-1:2019</a>]</span> are rather different from the ones defined
 in the present specification; there is no intention to support ISO 8601
 durations here.<a href="#section-4-7.1" class="pilcrow">¶</a></p>
 </aside>
@@ -2034,7 +2048,7 @@ Period = #6.1003([
 </div>
 <p id="section-5-4">If the third array element is not given, the duration element is null.
 Exactly two out of the three elements must be non-null, this can be
-clumsily expressed in CDDL as:<a href="#section-5-4" class="pilcrow">¶</a></p>
+somewhat verbosely expressed in CDDL as:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-5-5">
 <pre>
 clumsy-Period = #6.1003([
@@ -2078,12 +2092,14 @@ period = #6.1003([~etime/null, ~etime/null, ~duration/null])
       <h2 id="name-iana-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
+<p id="section-7-1"><span class="cref" id="to-be-removed">RFC Editor: please replace RFCthis with the RFC
+number of this RFC, and remove this note.</span><a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="cbor-tags">
 <section id="section-7.1">
         <h3 id="name-cbor-tags">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-cbor-tags" class="section-name selfRef">CBOR tags</a>
         </h3>
-<p id="section-7.1-1">In the registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>,
+<p id="section-7.1-1">In the "CBOR Tags" registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>,
 IANA has allocated the tags in <a href="#tab-tag-values" class="auto internal xref">Table 2</a> from what was at the
 time the
 FCFS space, with the present document as the specification reference.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
@@ -2129,8 +2145,7 @@ FCFS space, with the present document as the specification reference.<a href="#s
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-timescale-registry" class="section-name selfRef">Timescale Registry</a>
         </h3>
 <p id="section-7.2-1">This specification defines a new registry titled "Timescales" in the
-"CBOR Time Tag Parameters" registry group
-[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+"CBOR Tags" registry group <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>, with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure (Sections <a href="https://rfc-editor.org/rfc/rfc8126#section-4.5" class="relref">4.5</a> and <a href="https://rfc-editor.org/rfc/rfc8126#section-4.7" class="relref">4.7</a> of <span>[<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">Each entry needs to provide a timescale name (a sequence of uppercase
 ASCII characters and digits, where a digit may not occur at the start:
@@ -2171,125 +2186,132 @@ The initial contents are shown in <a href="#tab-timescales" class="auto internal
 </div>
 <div id="map-key-registry">
 <section id="section-7.3">
-        <h3 id="name-map-key-registry">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-map-key-registry" class="section-name selfRef">Map Key Registry</a>
+        <h3 id="name-time-tag-map-key-registry">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-time-tag-map-key-registry" class="section-name selfRef">Time Tag Map Key Registry</a>
         </h3>
-<p id="section-7.3-1">This specification defines a new registry titled "Map Keys"
-in the "CBOR Time Tag Parameters" registry group
-[IANA.cbor-time-tag-parameters], with "Specification Required" as the
-Registration Procedure (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a> of [<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">This specification defines a new registry titled "Time Tag Map Keys"
+in the "CBOR Tags" registry group <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>, with "Specification
+Required" as the Registration Procedure (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a> of [<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.3-2">The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference (RFC).
-The initial contents are shown in <a href="#tab-timescales" class="auto internal xref">Table 3</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+The initial contents are shown in <a href="#tab-mapkeys" class="auto internal xref">Table 4</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<span id="name-initial-content-of-time-tag"></span><div id="tab-mapkeys">
 <table class="center" id="table-4">
-          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+          <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-initial-content-of-time-tag" class="selfRef">Initial Content of Time Tag Map Keys Registry</a>
+          </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-right" rowspan="1" colspan="1">Value</th>
               <th class="text-left" rowspan="1" colspan="1">Semantics</th>
               <th class="text-left" rowspan="1" colspan="1">Reference</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-18</td>
+              <td class="text-right" rowspan="1" colspan="1">-18</td>
               <td class="text-left" rowspan="1" colspan="1">attoseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-15</td>
+              <td class="text-right" rowspan="1" colspan="1">-15</td>
               <td class="text-left" rowspan="1" colspan="1">femtoseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-12</td>
+              <td class="text-right" rowspan="1" colspan="1">-12</td>
               <td class="text-left" rowspan="1" colspan="1">picoseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-11</td>
+              <td class="text-right" rowspan="1" colspan="1">-11</td>
               <td class="text-left" rowspan="1" colspan="1">IXDTF Suffix Information (elective)</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
 </td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-10</td>
+              <td class="text-right" rowspan="1" colspan="1">-10</td>
               <td class="text-left" rowspan="1" colspan="1">IXDTF Time Zone Hint (elective)</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
 </td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-9</td>
+              <td class="text-right" rowspan="1" colspan="1">-9</td>
               <td class="text-left" rowspan="1" colspan="1">nanoseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-8</td>
+              <td class="text-right" rowspan="1" colspan="1">-8</td>
               <td class="text-left" rowspan="1" colspan="1">Guarantee</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-7</td>
+              <td class="text-right" rowspan="1" colspan="1">-7</td>
               <td class="text-left" rowspan="1" colspan="1">Uncertainty</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-6</td>
+              <td class="text-right" rowspan="1" colspan="1">-6</td>
               <td class="text-left" rowspan="1" colspan="1">microseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-5</td>
+              <td class="text-right" rowspan="1" colspan="1">-5</td>
               <td class="text-left" rowspan="1" colspan="1">Offset-Scaled Log Variance</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-4</td>
+              <td class="text-right" rowspan="1" colspan="1">-4</td>
               <td class="text-left" rowspan="1" colspan="1">Clock Accuracy</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-3</td>
+              <td class="text-right" rowspan="1" colspan="1">-3</td>
               <td class="text-left" rowspan="1" colspan="1">milliseconds</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">-2</td>
+              <td class="text-right" rowspan="1" colspan="1">-2</td>
               <td class="text-left" rowspan="1" colspan="1">Clock Class</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">Base Time value (as in CBOR Tag 1)</td>
-              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+              <td class="text-right" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 1</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">4</td>
+              <td class="text-right" rowspan="1" colspan="1">4</td>
               <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 4</td>
-              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">5</td>
+              <td class="text-right" rowspan="1" colspan="1">5</td>
               <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 5</td>
-              <td class="text-left" rowspan="1" colspan="1">[RFCthis]</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-right" rowspan="1" colspan="1">10</td>
               <td class="text-left" rowspan="1" colspan="1">IXDTF Time Zone Hint (critical)</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
 </td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">11</td>
+              <td class="text-right" rowspan="1" colspan="1">11</td>
               <td class="text-left" rowspan="1" colspan="1">IXDTF Suffix Information (critical)</td>
               <td class="text-left" rowspan="1" colspan="1">[RFCthis], <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span>
 </td>
             </tr>
           </tbody>
         </table>
+</div>
 </section>
 </div>
 </section>
@@ -2312,6 +2334,7 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
       <h2 id="name-references">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
 <section id="section-9.1">
         <h3 id="name-normative-references">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
@@ -2327,15 +2350,21 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <dd class="break"></dd>
 <dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
         <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cbor-tags">https://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="http://www.iana.org/assignments/cbor-tags">http://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="IEEE1588-2008">[IEEE1588-2008]</dt>
         <dd>
-<span class="refAuthor">IEEE</span>, <span class="refTitle">"1588-2008 — IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <time datetime="2008-07" class="refDate">July 2008</time>, <span>&lt;<a href="http://standards.ieee.org/findstds/standard/1588-2008.html">http://standards.ieee.org/findstds/standard/1588-2008.html</a>&gt;</span>. </dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <span class="seriesInfo">IEEE 1588-2008</span>, <time datetime="2008-07" class="refDate">July 2008</time>, <span>&lt;<a href="https://standards.ieee.org/ieee/1588/4355/">https://standards.ieee.org/ieee/1588/4355/</a>&gt;</span>. <span class="annotation">Often called PTP v2, as it replaced the earlier 2002 version of this standard by a non-backwards compatible protocol.</span>
+        </dd>
+<dd class="break"></dd>
+<dt id="IEEE1588-2019">[IEEE1588-2019]</dt>
+        <dd>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <span class="seriesInfo">IEEE 1588-2019</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://standards.ieee.org/ieee/1588/6825/">https://standards.ieee.org/ieee/1588/6825/</a>&gt;</span>. <span class="annotation">Often called PTP v2.1, as it has been designed so it can be used in way that is fully backwards compatible to IEEE1588-2008.</span>
+        </dd>
 <dd class="break"></dd>
 <dt id="IXDTF">[IXDTF]</dt>
         <dd>
-<span class="refAuthor">Sharma, U.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps with additional information"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sedate-datetime-extended-09</span>, <time datetime="2023-07-14" class="refDate">14 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09">https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Sharma, U.</span> and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps with additional information"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sedate-datetime-extended-10</span>, <time datetime="2023-10-05" class="refDate">5 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-10">https://datatracker.ietf.org/doc/html/draft-ietf-sedate-datetime-extended-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -2344,6 +2373,10 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8575">[RFC8575]</dt>
+        <dd>
+<span class="refAuthor">Jiang, Y., Ed.</span>, <span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Xu, J.</span>, and <span class="refAuthor">R. Cummings, Ed.</span>, <span class="refTitle">"YANG Data Model for the Precision Time Protocol (PTP)"</span>, <span class="seriesInfo">RFC 8575</span>, <span class="seriesInfo">DOI 10.17487/RFC8575</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8575">https://www.rfc-editor.org/rfc/rfc8575</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8610">[RFC8610]</dt>
         <dd>
@@ -2363,6 +2396,8 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
+<div id="sec-informative-references">
 <section id="section-9.2">
         <h3 id="name-informative-references">
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
@@ -2372,6 +2407,10 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
         <dd>
 <span class="refAuthor">International Organization for Standardization</span>, <span class="refTitle">"Information technology — Programming languages — C"</span>, <span class="refContent">Fourth Edition</span>, <span class="seriesInfo">ISO/IEC 9899:2018</span>, <time datetime="2018-06" class="refDate">June 2018</time>, <span>&lt;<a href="https://www.iso.org/standard/74528.html">https://www.iso.org/standard/74528.html</a>&gt;</span>. <span class="annotation">Contents available via &lt;⁠<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf">https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf</a>&gt;</span>
           </dd>
+<dd class="break"></dd>
+<dt id="ISO8601-2019">[ISO8601-1:2019]</dt>
+        <dd>
+<span class="refAuthor">ISO</span>, <span class="refTitle">"Date and time — Representations for information interchange — Part 1: Basic rules"</span>, <span class="seriesInfo">ISO 8601-1:2019</span>, <time datetime="2019-02" class="refDate">February 2019</time>, <span>&lt;<a href="https://www.iso.org/standard/70907.html">https://www.iso.org/standard/70907.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="ISO8601">[ISO8601:1988]</dt>
         <dd>
@@ -2383,15 +2422,12 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <span class="refAuthor">Adams, C.</span>, <span class="refAuthor">Cain, P.</span>, <span class="refAuthor">Pinkas, D.</span>, and <span class="refAuthor">R. Zuccherato</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)"</span>, <span class="seriesInfo">RFC 3161</span>, <span class="seriesInfo">DOI 10.17487/RFC3161</span>, <time datetime="2001-08" class="refDate">August 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3161">https://www.rfc-editor.org/rfc/rfc3161</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3339">[RFC3339]</dt>
-        <dd>
-<span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8575">[RFC8575]</dt>
       <dd>
-<span class="refAuthor">Jiang, Y., Ed.</span>, <span class="refAuthor">Liu, X.</span>, <span class="refAuthor">Xu, J.</span>, and <span class="refAuthor">R. Cummings, Ed.</span>, <span class="refTitle">"YANG Data Model for the Precision Time Protocol (PTP)"</span>, <span class="seriesInfo">RFC 8575</span>, <span class="seriesInfo">DOI 10.17487/RFC8575</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8575">https://www.rfc-editor.org/rfc/rfc8575</a>&gt;</span>. </dd>
+<span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
 </section>
 <div id="collected-cddl">
 <section id="appendix-A">
@@ -2496,7 +2532,7 @@ IXDTF = '
 ' ; extracted from [IXDTF]; update as needed!
 
 
-Duration = #6.1001(etime-detailed)
+Duration = #6.1002(etime-detailed)
 
 
 Period = #6.1003([
