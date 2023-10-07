@@ -32,9 +32,8 @@ Abstract
    registration of the CBOR tags defined.
 
 
-   // The present version (-09) addresses IANA early review comments.
-   // It reflects the state of the document after the short final WGLC
-   // completed.
+   // The present version (-10) addresses comments and WG discussion
+   // during the AD review.
 
 About This Document
 
@@ -50,6 +49,7 @@ About This Document
 
    Source for this draft and an issue tracker can be found at
    https://github.com/cbor-wg/time-tag.
+
 
 
 
@@ -1190,6 +1190,9 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 Acknowledgements
 
+   The authors would like to acknowledge the many comments from members
+   of the CBOR WG, as well as Francesca Palombini for her AD review.
+
 Authors' Addresses
 
    Carsten Bormann
@@ -1215,9 +1218,6 @@ Authors' Addresses
    64295 Darmstadt
    Germany
    Email: henk.birkholz@sit.fraunhofer.de
-
-
-
 
 
 
