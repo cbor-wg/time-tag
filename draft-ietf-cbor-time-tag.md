@@ -83,15 +83,31 @@ normative:
     date: 2006-03-01
     seriesinfo:
       ISO: 80000-3
+  RFC8575: ptp-yang
   IEEE1588-2008:
-    target: http://standards.ieee.org/findstds/standard/1588-2008.html
+    target: https://standards.ieee.org/ieee/1588/4355/
     title: >
-      1588-2008 — IEEE Standard for a Precision Clock
-      Synchronization Protocol for Networked Measurement and Control
-      Systems
+      IEEE Standard for a Precision Clock Synchronization Protocol for
+      Networked Measurement and Control Systems
+    seriesinfo:
+      IEEE: 1588-2008
     author:
       org: IEEE
     date: 2008-07
+    ann: Often called PTP v2, as it replaced the earlier 2002 version
+      of this standard by a non-backwards compatible protocol.
+  IEEE1588-2019:
+    target: https://standards.ieee.org/ieee/1588/6825/
+    title: >
+      IEEE Standard for a Precision Clock Synchronization Protocol for
+      Networked Measurement and Control Systems
+    seriesinfo:
+      IEEE: 1588-2019
+    author:
+      org: IEEE
+    date: 2020-06
+    ann: Often called PTP v2.1, as it has been designed so it can be
+      used in way that is fully backwards compatible to IEEE1588-2008.
   GUM:
     target: https://www.bipm.org/en/publications/guides/gum.html
     title: >
@@ -106,8 +122,8 @@ normative:
   RFC8610: cddl
   IXDTF: I-D.ietf-sedate-datetime-extended
 
+
 informative:
-  RFC8575:
   RFC3161:
   RFC3339:
   ISO8601:
@@ -123,6 +139,18 @@ informative:
       ISO: '8601:1988'
     date: 1988-06
     ann: Also available from <⁠<https://nvlpubs.nist.gov/nistpubs/Legacy/FIPS/fipspub4-1-1991.pdf>>.
+  ISO8601-2019:
+    display: 'ISO8601-1:2019'
+    target: https://www.iso.org/standard/70907.html
+    title: >
+      Date and time — Representations for information interchange —
+      Part 1: Basic rules
+    author:
+    - org: International Organization for Standardization
+      abbrev: ISO
+    seriesinfo:
+      ISO: '8601-1:2019'
+    date: 2019-02
   C:
     target: https://www.iso.org/standard/74528.html
     title: Information technology — Programming languages — C
@@ -374,7 +402,8 @@ Key -1: Timescale {#key-timescale}
 
 Key -1 is used to indicate a timescale.  The value 0 indicates UTC,
 with the POSIX epoch {{TIME_T}}; the value 1 indicates TAI, with the
-PTP (Precision Time Protocol) epoch {{IEEE1588-2008}}.
+PTP (Precision Time Protocol) epoch (1 January 1970 00:00:00 TAI, see
+{{IEEE1588-2019}} or {{IEEE1588-2008}}).
 
 ~~~ cddl
 $$ETIME-ELECTIVE //= (-1 => $ETIME-TIMESCALE)
@@ -410,7 +439,6 @@ constant offset basis for GPS times).
 While the registration process itself is trivial, these registrations
 need to be made based on a solid specification of their actual
 definition.
-Draft text for a specification of the UT1 time scale can be found at <https://github.com/cbor-wg/time-tag/pull/9>.
 
 Clock Quality
 ------
@@ -435,24 +463,30 @@ ClockQuality-group = (
 ### ClockClass (Key -2)
 
 Key -2 (ClockClass) can be used to indicate the clock class as per
-Table 5 of {{IEEE1588-2008}}.
+{{RFC8575}} (which is based on Table 5 in Section 7.6.2.4 of
+{{IEEE1588-2008}}; this has updated language as Table 4 in Section 7.6.2.5
+of {{IEEE1588-2019}}).
 It is defined as a one-byte unsigned integer as that is the range defined there.
 
 ### ClockAccuracy (Key -4)
 
 
-Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as per
-Table 6 of {{IEEE1588-2008}}.
+Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as
+per {{RFC8575}} (which is based on Table 6 in Section 7.6.2.5 of
+{{IEEE1588-2008}}; additional values have been defined in Table 5 in
+Section 7.6.2.6 of {{IEEE1588-2019}}).
 It is defined as a one-byte unsigned integer as that is the range defined there.
-The range between 32 and 47 is a slightly distorted logarithmic scale from
-25 ns to 1 s (see {{formula-accuracy-enum}}); the number 254 is the
+The range between 23 and 47 is a slightly distorted logarithmic scale
+from 1 ps to 1 s in {{IEEE1588-2019}} (in {{IEEE1588-2008}} the range was
+a subset of that, 32 to 47 for 25 ns to 1 s) — see
+{{formula-accuracy-enum}}; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.
 
 <!-- Note that the double space after the \approx is actually needed -->
 <!-- by utftex -->
 
 ~~~ math
-enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsilon \rfloor
+enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \varepsilon \rfloor
 ~~~
 {: #formula-accuracy-enum title="Approximate conversion from accuracy to accuracy enumeration value"}
 
@@ -461,7 +495,8 @@ enum_{acc} \approx  48 + \lfloor 2 \cdot log_{10} {acc \over \mathrm{s}} - \epsi
 Key -5 (OffsetScaledLogVariance) can be used to represent the variance
 exhibited by the clock when it has lost its synchronization with an
 external reference clock.  The details for the computation of this
-characteristic are defined in Section 7.6.3 of {{IEEE1588-2008}}.
+characteristic are defined in Section 7.6.3 of {{IEEE1588-2019}} and the
+same section in {{IEEE1588-2008}}.
 
 ### Uncertainty (Key -7)
 
@@ -615,7 +650,7 @@ durations are structurally identical to time values.
 
 
 ~~~ cddl
-Duration = #6.1001(etime-detailed)
+Duration = #6.1002(etime-detailed)
 ~~~
 
 Semantically, they do not measure the time elapsed from a given epoch,
@@ -637,7 +672,7 @@ For many applications, these uncertainties are acceptable and thus
 the use of durations is appropriate.
 
 <aside markdown="1">
-Note that {{ISO8601}} durations are rather different from the ones defined
+Note that the durations defined in {{ISO8601}} and {{ISO8601-2019}} are rather different from the ones defined
 in the present specification; there is no intention to support ISO 8601
 durations here.
 </aside>
@@ -662,7 +697,7 @@ Period = #6.1003([
 
 If the third array element is not given, the duration element is null.
 Exactly two out of the three elements must be non-null, this can be
-clumsily expressed in CDDL as:
+somewhat verbosely expressed in CDDL as:
 
 ~~~ cddl
 clumsy-Period = #6.1003([
@@ -694,10 +729,17 @@ period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 IANA Considerations
 ============
 
+
+[^to-be-removed]
+
+[^to-be-removed]: RFC Editor: please replace RFCthis with the RFC
+    number of this RFC, and remove this note.
+
+
 CBOR tags
 ---------
 
-In the registry {{-tags}},
+In the "CBOR Tags" registry {{-tags}},
 IANA has allocated the tags in {{tab-tag-values}} from what was at the
 time the
 FCFS space, with the present document as the specification reference.
@@ -716,8 +758,7 @@ Timescale Registry
 ------------------
 
 This specification defines a new registry titled "Timescales" in the
-"CBOR Time Tag Parameters" registry group
-\[IANA.cbor-time-tag-parameters], with a combination of "Expert Review"
+"CBOR Tags" registry group {{-tags}}, with a combination of "Expert Review"
 and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
 4.7 of BCP26}}).
 
@@ -732,13 +773,12 @@ The initial contents are shown in {{tab-timescales}}.
 | TAI       |     1 | TAI with PTP Epoch   | \[RFCthis] |
 {: #tab-timescales cols='l r l' title="Initial Content of Timescale Registry"}
 
-Map Key Registry
+Time Tag Map Key Registry {#map-key-registry}
 ----------------
 
-This specification defines a new registry titled "Map Keys"
-in the "CBOR Time Tag Parameters" registry group
-\[IANA.cbor-time-tag-parameters], with "Specification Required" as the
-Registration Procedure ({{Section 4.6 of BCP26}}).
+This specification defines a new registry titled "Time Tag Map Keys"
+in the "CBOR Tags" registry group {{-tags}}, with "Specification
+Required" as the Registration Procedure ({{Section 4.6 of BCP26}}).
 
 The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
@@ -746,7 +786,7 @@ likely to enjoy wide use and can benefit from short encodings.
 
 Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference (RFC).
-The initial contents are shown in {{tab-timescales}}.
+The initial contents are shown in {{tab-mapkeys}}.
 
 | Value | Semantics                           | Reference           |
 |   -18 | attoseconds                         | \[RFCthis]          |
@@ -762,11 +802,14 @@ The initial contents are shown in {{tab-timescales}}.
 |    -4 | Clock Accuracy                      | \[RFCthis]          |
 |    -3 | milliseconds                        | \[RFCthis]          |
 |    -2 | Clock Class                         | \[RFCthis]          |
-|     1 | Base Time value (as in CBOR Tag 1)  | \[RFCthis]          |
-|     4 | Base Time value as in CBOR Tag 4    | \[RFCthis]          |
-|     5 | Base Time value as in CBOR Tag 5    | \[RFCthis]          |
+|     1 | Base Time value as in CBOR Tag 1    | {{-cbor}} \[RFCthis]  |
+|     4 | Base Time value as in CBOR Tag 4    | {{-cbor}} \[RFCthis]  |
+|     5 | Base Time value as in CBOR Tag 5    | {{-cbor}} \[RFCthis]  |
 |    10 | IXDTF Time Zone Hint (critical)     | \[RFCthis], {{IXDTF}} |
 |    11 | IXDTF Suffix Information (critical) | \[RFCthis], {{IXDTF}} |
+{: #tab-mapkeys cols='r l l' title="Initial Content of Time Tag Map
+Keys Registry"}
+
 
 Security Considerations
 ============

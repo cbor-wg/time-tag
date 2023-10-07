@@ -1,4 +1,3 @@
-
 Etime = #6.1001(etime-detailed)
 
 etime-framework = {
@@ -91,7 +90,7 @@ IXDTF = '
 ' ; extracted from [IXDTF]; update as needed!
 
 
-Duration = #6.1001(etime-detailed)
+Duration = #6.1002(etime-detailed)
 
 
 Period = #6.1003([
