@@ -184,9 +184,8 @@ need for version negotiation.
 [^status]
 
 [^status]:
-    The present version (-09) addresses IANA early review comments.
-    It reflects the state of the document after the short final WGLC
-    completed.
+    The present version (-10) addresses comments and WG discussion during
+    the AD review.
 
 --- middle
 
@@ -837,18 +836,12 @@ one convenient place.
 {: #fig-collected-cddl title="Collected CDDL rules from this
 specification" sourcecode-name="time-tag-collected-cddl.cddl"}
 
-<!--
-Contributors
-============
-{: numbered="no"}
-
-Ben Gamari suggested being able to use decimally scaled fractional
-seconds in CBOR time.
- -->
-
 Acknowledgements
 ================
 {: numbered="false"}
+
+The authors would like to acknowledge the many comments from members
+of the CBOR WG, as well as Francesca Palombini for her AD review.
 
 <!--  LocalWords:  CBOR extensibility IANA uint sint IEEE endian TAI
  -->
