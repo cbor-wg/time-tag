@@ -107,7 +107,7 @@ normative:
       org: IEEE
     date: 2020-06
     ann: Often called PTP v2.1, as it has been designed so it can be
-      used in way that is fully backwards compatible to IEEE1588-2008.
+      used in a way that is fully backwards compatible to IEEE1588-2008.
   GUM:
     target: https://www.bipm.org/en/publications/guides/gum.html
     title: >
@@ -170,14 +170,14 @@ format whose design goals include the possibility of extremely small
 code size, fairly small message size, and extensibility without the
 need for version negotiation.
 
+In CBOR, one point of extensibility is the definition of CBOR tags.
 [^abs2-]
 
-[^abs2-]: In CBOR, one point of extensibility is the definition of CBOR tags.
-    RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
-    1 (Posix time as int or float).  Since then, additional requirements have
+[^abs2-]: RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+    1 (POSIX time as int or float).  Since then, additional requirements have
     become known.  The present document defines a CBOR tag for time that
     allows a more elaborate representation of time, as well as related
-    CBOR tags for duration and time period.  It is
+    CBOR tags for duration and time period.  This document is
     intended as the reference document for the IANA registration of the
     CBOR tags defined.
 
@@ -197,7 +197,7 @@ for the interchange of structured data without a requirement for a
 pre-agreed schema.
 RFC 8949 defines a basic set of data types, as well as a tagging
 mechanism that enables extending the set of data types supported via
-an IANA registry.
+an IANA registry for CBOR tags ({{Section 9.2 of RFC8949}}, {{IANA.cbor-tags}}).
 
 [^abs2-]
 
@@ -208,10 +208,12 @@ Terminology         {#terms}
 
 The term "byte" is used in its now customary sense as a synonym for
 "octet".
-Where bit arithmetic is explained, this document uses the notation
-familiar from the programming language C (including C++14's 0bnnn
-binary literals), except that the operator "\*\*" stands for
-exponentiation.
+
+Superscript notation denotes exponentiation.  For example, 2 to the
+power of 64 is notated: 2<sup>64</sup>.  In the plain-text rendition
+of this specification, superscript notation is not available and
+exponentiation therefore is rendered by the surrogate notation seen
+here in the plain-text rendition.
 
 CBOR diagnostic notation is defined in {{Section 8 of -cbor}} and
 {{Section G of -cddl}}.
@@ -247,18 +249,19 @@ Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.
 
 Semantics not covered by this document can be added by registering
-additional map keys for the map inside the tag, the specification for
-which is referenced by the registry entry ({{map-key-registry}}, {{time-format}}).
-For example, map keys could be registered for:
+additional map keys for the map that is the content of the tag (see
+`etime-detailed` in {{tag-1001}}),
+the specification for
+which is referenced by the registry entry (see {{time-format}}).
 
-* Direct representation of natural platform time formats.  Some
-  platforms use epoch-based time formats that require some computation
-  to convert them into the representations allowed by tag 1; these
-  computations can also lose precision and cause ambiguities.
-  (The present specification does not take a position on whether tag 1
-  can be "fixed" to include, e.g., Decimal or BigFloat representations.
-  It does define how to use these representations with the extended
-  time format.)
+For example, map keys could be registered for direct representations
+of natural platform time formats.  Some platforms use epoch-based
+time formats that require some computation to convert them into the
+representations allowed by tag 1; these computations can also lose
+precision and cause ambiguities.  (The present specification does
+not take a position on whether tag 1 can be "fixed" to include,
+e.g., Decimal or BigFloat representations.  It does define how to
+use these representations with the extended time format.)
 
 Additional tags are defined for durations and periods.
 
@@ -282,7 +285,7 @@ text-string keys, which may encode supplementary information.
 Supplementary information may also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
 information ("critical"; as these are required to be understood, there
-can be no confusion with Base Time keys).
+can be no confusion with base time keys).
 
 Negative integer and text string keys always supply supplementary
 information ("elective", and this will not be explicitly stated
@@ -290,7 +293,7 @@ below).
 
 Supplementary information may include:
 
-* a higher precision time offset to be added to the Base Time,
+* a higher precision time offset to be added to the base time,
 
 * a reference timescale and epoch different from the default UTC and 1970-01-01
 
@@ -309,7 +312,7 @@ This document does not define supplementary text keys.
 A number of both unsigned and negative-integer keys are defined in
 the following subsections.
 
-A formal definition of Tag 1001 in CDDL is:
+{{tag-1001}} provides a formal definition of Tag 1001 in CDDL.
 
 ~~~ cddl
 Etime = #6.1001(etime-detailed)
@@ -329,14 +332,15 @@ etime-detailed = ({
   * (uint .feature "etime-critical-extension") => any
 }) .within etime-framework
 ~~~
-
+{: #tag-1001 title="CDDL definition of Tag 1001"}
 
 Key 1
 -----
 
-Key 1 indicates a Base Time value that is exactly like the data item that would
-be tagged by CBOR tag 1 (Posix time {{TIME_T}} as int or float).
-The time value indicated by the value under this key can be further
+Key 1 indicates a base time value that is exactly like the data item that would
+be tagged by CBOR tag 1 (POSIX time {{TIME_T}} as int or float).
+As described above, the time value indicated by the value under this
+key can be further
 modified by other keys.
 
 ~~~ cddl
@@ -347,10 +351,11 @@ $$ETIME-BASETIME //= (1: ~time)
 Keys 4 and 5
 ------------
 
-Keys 4 and 5 indicate a Base Time value and are like key 1, except that the data item is an array as
-defined for CBOR tag 4 or 5, respectively.  This can be used to include
-a Decimal or Bigfloat epoch-based float {{TIME_T}} in an extended time.
-
+Keys 4 and 5 indicate a base time value and are like key 1, except that the data item is an array as
+defined for CBOR tag 4 or 5, respectively.
+This can be used to include a Decimal or Bigfloat epoch-based float
+{{TIME_T}} in an extended time, e.g., to achieve higher resolution or to
+avoid rounding errors.
 
 ~~~ cddl
 $$ETIME-BASETIME //= (4: ~decfrac)
@@ -363,9 +368,11 @@ Keys -3, -6, -9, -12, -15, -18
 
 The keys -3, -6, -9, -12, -15 and -18 indicate additional decimal fractions by
 giving an unsigned integer (major type 0) and scaling this with the
-scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively (see {{decfract}}).  More than one
-of these keys MUST NOT be present in one extended time data item.
-These additional fractions are added to a Base Time in seconds {{SI-SECOND}}
+scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively
+(see {{decfract}}).
+Each extended time data item MUST NOT contain more than one
+of these keys.
+These additional fractions are added to a base time in seconds {{SI-SECOND}}
 indicated by a Key 1, which then MUST also be present and MUST have an
 integer value.
 
@@ -389,7 +396,7 @@ $$ETIME-ELECTIVE //= (-18: uint)
 
 Note that these keys have been provided to facilitate representing
 pairs of the form second/decimal fraction of a second, as found for
-instance in C `timespec` (compare Section 7.27.1 of {{C}}).
+instance in C `timespec` (Section 7.27.1 of {{C}}).
 When ingesting a timestamp with one of these keys into a type provided
 by the target platform, care has to be taken to meet its invariants.
 E.g., for C `timespec`, the fractional part `tv_nsec` needs to be
@@ -447,7 +454,7 @@ used to determine the point in time.
 
 The first three are analogous to `clock-quality-grouping` in
 {{RFC8575}}, which is in turn based on the definitions in
-{{IEEE1588-2008}}; two more are specific to this document.
+{{IEEE1588-2008}}; the last two are specific to this document.
 
 ~~~ cddl
 ClockQuality-group = (
@@ -463,12 +470,11 @@ ClockQuality-group = (
 
 Key -2 (ClockClass) can be used to indicate the clock class as per
 {{RFC8575}} (which is based on Table 5 in Section 7.6.2.4 of
-{{IEEE1588-2008}}; this has updated language as Table 4 in Section 7.6.2.5
-of {{IEEE1588-2019}}).
-It is defined as a one-byte unsigned integer as that is the range defined there.
+{{IEEE1588-2008}}; Table 4 in Section 7.6.2.5 of {{IEEE1588-2019}} has updated language).
+It is defined as a one-byte unsigned integer as that is the range
+defined in IEEE 1588.
 
 ### ClockAccuracy (Key -4)
-
 
 Key -4 (ClockAccuracy) can be used to indicate the clock accuracy as
 per {{RFC8575}} (which is based on Table 6 in Section 7.6.2.5 of
@@ -507,14 +513,15 @@ For this document, uncertainty is defined as in Section 2.2.3 of
 {{GUM}}: "parameter, associated with the result of a measurement, that
 characterizes the dispersion of the values that could reasonably be
 attributed to the measurand".  More specifically, the value for this
-key represents the extended uncertainty for k = 2, in seconds.
+key represents the expanded uncertainty for k = 2 (Section 6.2.1 of {{GUM}}), in seconds.
 
 Note that the additional information that can be meaningfully provided
 with the duration that represents an uncertainty is limited, e.g., it
 is not customary to provide an uncertainty for a duration representing
 an uncertainty.
-Implementations are free to reduce an uncertainty (which is already
-elective) to the information they can process.
+Implementations are free to reduce the information contained in an
+uncertainty (which is already elective) to the information they can
+process.
 
 ### Guarantee (Key -8)
 
@@ -634,7 +641,7 @@ Note that both -10 and -11 are using negative keys and therefore
 provide elective information, as in the IXDTF form.
 Note also that in this example the time numeric offset (`-08:00`) is
 lost in translating from the {{RFC3339}} information in the IXDTF into a
-Posix time that can be included under Key 1 in a time tag.
+POSIX time that can be included under Key 1 in a time tag.
 
 Duration Format {#duration}
 ===============
@@ -688,8 +695,8 @@ tagged with Tag 1003:
 
 ~~~ cddl
 Period = #6.1003([
-  start: ~Time / null
-  end: ~Time / null
+  start: ~Etime / null
+  end: ~Etime / null
   ? duration: ~Duration / null
 ])
 ~~~
@@ -700,13 +707,13 @@ somewhat verbosely expressed in CDDL as:
 
 ~~~ cddl
 clumsy-Period = #6.1003([
-  (start: ~Time,
-   ((end: ~Time,
+  (start: ~Etime,
+   ((end: ~Etime,
      ? duration: null) //
     (end: null,
      duration: ~Duration))) //
   (start: null,
-   end: ~Time,
+   end: ~Etime,
    duration: ~Duration)
 ])
 ~~~
@@ -784,7 +791,7 @@ shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.
 
 Each entry needs to provide a map key value (CBOR integer, int), a brief description
-of the semantics, and a specification reference (RFC).
+of the semantics, and a specification reference.
 The initial contents are shown in {{tab-mapkeys}}.
 
 | Value | Semantics                           | Reference           |
@@ -801,9 +808,9 @@ The initial contents are shown in {{tab-mapkeys}}.
 |    -4 | Clock Accuracy                      | \[RFCthis]          |
 |    -3 | milliseconds                        | \[RFCthis]          |
 |    -2 | Clock Class                         | \[RFCthis]          |
-|     1 | Base Time value as in CBOR Tag 1    | {{-cbor}} \[RFCthis]  |
-|     4 | Base Time value as in CBOR Tag 4    | {{-cbor}} \[RFCthis]  |
-|     5 | Base Time value as in CBOR Tag 5    | {{-cbor}} \[RFCthis]  |
+|     1 | base time value as in CBOR Tag 1    | {{-cbor}} \[RFCthis]  |
+|     4 | base time value as in CBOR Tag 4    | {{-cbor}} \[RFCthis]  |
+|     5 | base time value as in CBOR Tag 5    | {{-cbor}} \[RFCthis]  |
 |    10 | IXDTF Time Zone Hint (critical)     | \[RFCthis], {{IXDTF}} |
 |    11 | IXDTF Suffix Information (critical) | \[RFCthis], {{IXDTF}} |
 {: #tab-mapkeys cols='r l l' title="Initial Content of Time Tag Map
