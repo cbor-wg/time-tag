@@ -15,10 +15,10 @@ code size, fairly small message size, and extensibility without the
 need for version negotiation. 
        In CBOR, one point of extensibility is the definition of CBOR tags.
 RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
-1 (Posix time as int or float).  Since then, additional requirements have
+1 (POSIX time as int or float).  Since then, additional requirements have
 become known.  The present document defines a CBOR tag for time that
 allows a more elaborate representation of time, as well as related
-CBOR tags for duration and time period.  It is
+CBOR tags for duration and time period.  This document is
 intended as the reference document for the IANA registration of the
 CBOR tags defined. 
        The present version (-10) addresses comments and WG discussion during
@@ -1066,7 +1066,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann, et al.</td>
-<td class="center">Expires 9 April 2024</td>
+<td class="center">Expires 12 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1079,12 +1079,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-cbor-time-tag-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-07" class="published">7 October 2023</time>
+<time datetime="2023-10-10" class="published">10 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-09">9 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-12">12 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1111,10 +1111,10 @@ code size, fairly small message size, and extensibility without the
 need for version negotiation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">In CBOR, one point of extensibility is the definition of CBOR tags.
 RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
-1 (Posix time as int or float).  Since then, additional requirements have
+1 (POSIX time as int or float).  Since then, additional requirements have
 become known.  The present document defines a CBOR tag for time that
 allows a more elaborate representation of time, as well as related
-CBOR tags for duration and time period.  It is
+CBOR tags for duration and time period.  This document is
 intended as the reference document for the IANA registration of the
 CBOR tags defined.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3"><span class="cref" id="status">The present version (-10) addresses comments and WG discussion during
@@ -1154,7 +1154,7 @@ the AD review.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1297,13 +1297,12 @@ for the interchange of structured data without a requirement for a
 pre-agreed schema.
 RFC 8949 defines a basic set of data types, as well as a tagging
 mechanism that enables extending the set of data types supported via
-an IANA registry.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">In CBOR, one point of extensibility is the definition of CBOR tags.
-RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
-1 (Posix time as int or float).  Since then, additional requirements have
+an IANA registry for CBOR tags (<span><a href="https://rfc-editor.org/rfc/rfc8949#section-9.2" class="relref">Section 9.2</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>).<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">RFC 8949 defines two tags for time: CBOR tag 0 (RFC3339 time as a string) and tag
+1 (POSIX time as int or float).  Since then, additional requirements have
 become known.  The present document defines a CBOR tag for time that
 allows a more elaborate representation of time, as well as related
-CBOR tags for duration and time period.  It is
+CBOR tags for duration and time period.  This document is
 intended as the reference document for the IANA registration of the
 CBOR tags defined.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="terms">
@@ -1316,17 +1315,18 @@ CBOR tags defined.<a href="#section-1-2" class="pilcrow">¶</a></p>
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">The term "byte" is used in its now customary sense as a synonym for
-"octet".
-Where bit arithmetic is explained, this document uses the notation
-familiar from the programming language C (including C++14's 0bnnn
-binary literals), except that the operator "**" stands for
-exponentiation.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
-<p id="section-1.1-3">CBOR diagnostic notation is defined in <span><a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">Section 8</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> and
+"octet".<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">Superscript notation denotes exponentiation.  For example, 2 to the
+power of 64 is notated: 2<sup>64</sup>.  In the plain-text rendition
+of this specification, superscript notation is not available and
+exponentiation therefore is rendered by the surrogate notation seen
+here in the plain-text rendition.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">CBOR diagnostic notation is defined in <span><a href="https://rfc-editor.org/rfc/rfc8949#section-8" class="relref">Section 8</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> and
 <span><a href="https://rfc-editor.org/rfc/rfc8610#appendix-G" class="relref">Appendix G</a> of [<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.
 A machine-processable model of the data structures defined in this
 specification is provided throughout the text using the Concise Data
 Definition Language, CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>; <a href="#collected-cddl" class="auto internal xref">Appendix A</a> provides the
-collected model information.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+collected model information.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1361,21 +1361,18 @@ interpretation of the time given, in particular for future times.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Semantics not covered by this document can be added by registering
-additional map keys for the map inside the tag, the specification for
-which is referenced by the registry entry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>, <a href="#time-format" class="auto internal xref">Section 3</a>).
-For example, map keys could be registered for:<a href="#section-2-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2-5.1">
-          <p id="section-2-5.1.1">Direct representation of natural platform time formats.  Some
-platforms use epoch-based time formats that require some computation
-to convert them into the representations allowed by tag 1; these
-computations can also lose precision and cause ambiguities.
-(The present specification does not take a position on whether tag 1
-can be "fixed" to include, e.g., Decimal or BigFloat representations.
-It does define how to use these representations with the extended
-time format.)<a href="#section-2-5.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
+additional map keys for the map that is the content of the tag (see
+<code>etime-detailed</code> in <a href="#tag-1001" class="auto internal xref">Figure 1</a>),
+the specification for
+which is referenced by the registry entry (see <a href="#time-format" class="auto internal xref">Section 3</a>).<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">For example, map keys could be registered for direct representations
+of natural platform time formats.  Some platforms use epoch-based
+time formats that require some computation to convert them into the
+representations allowed by tag 1; these computations can also lose
+precision and cause ambiguities.  (The present specification does
+not take a position on whether tag 1 can be "fixed" to include,
+e.g., Decimal or BigFloat representations.  It does define how to
+use these representations with the extended time format.)<a href="#section-2-5" class="pilcrow">¶</a></p>
 <p id="section-2-6">Additional tags are defined for durations and periods.<a href="#section-2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1399,14 +1396,14 @@ text-string keys, which may encode supplementary information.<a href="#section-3
 <p id="section-3-3">Supplementary information may also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
 information ("critical"; as these are required to be understood, there
-can be no confusion with Base Time keys).<a href="#section-3-3" class="pilcrow">¶</a></p>
+can be no confusion with base time keys).<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Negative integer and text string keys always supply supplementary
 information ("elective", and this will not be explicitly stated
 below).<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">Supplementary information may include:<a href="#section-3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-6.1">
-          <p id="section-3-6.1.1">a higher precision time offset to be added to the Base Time,<a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
+          <p id="section-3-6.1.1">a higher precision time offset to be added to the base time,<a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-6.2">
           <p id="section-3-6.2.1">a reference timescale and epoch different from the default UTC and 1970-01-01<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
@@ -1429,8 +1426,10 @@ would indicate a local time.<a href="#section-3-8.1.1" class="pilcrow">¶</a></p
 <p id="section-3-9">This document does not define supplementary text keys.
 A number of both unsigned and negative-integer keys are defined in
 the following subsections.<a href="#section-3-9" class="pilcrow">¶</a></p>
-<p id="section-3-10">A formal definition of Tag 1001 in CDDL is:<a href="#section-3-10" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3-11">
+<p id="section-3-10"><a href="#tag-1001" class="auto internal xref">Figure 1</a> provides a formal definition of Tag 1001 in CDDL.<a href="#section-3-10" class="pilcrow">¶</a></p>
+<span id="name-cddl-definition-of-tag-1001"></span><div id="tag-1001">
+<figure id="figure-1">
+        <div class="lang-cddl sourcecode" id="section-3-11.1">
 <pre>
 Etime = #6.1001(etime-detailed)
 
@@ -1448,16 +1447,21 @@ etime-detailed = ({
   * ((nint/text) .feature "etime-elective-extension") =&gt; any
   * (uint .feature "etime-critical-extension") =&gt; any
 }) .within etime-framework
-</pre><a href="#section-3-11" class="pilcrow">¶</a>
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-cddl-definition-of-tag-1001" class="selfRef">CDDL definition of Tag 1001</a>
+        </figcaption></figure>
 </div>
 <div id="key-1">
 <section id="section-3.1">
         <h3 id="name-key-1">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-key-1" class="section-name selfRef">Key 1</a>
         </h3>
-<p id="section-3.1-1">Key 1 indicates a Base Time value that is exactly like the data item that would
-be tagged by CBOR tag 1 (Posix time <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> as int or float).
-The time value indicated by the value under this key can be further
+<p id="section-3.1-1">Key 1 indicates a base time value that is exactly like the data item that would
+be tagged by CBOR tag 1 (POSIX time <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> as int or float).
+As described above, the time value indicated by the value under this
+key can be further
 modified by other keys.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1-2">
 <pre>
@@ -1471,9 +1475,11 @@ $$ETIME-BASETIME //= (1: ~time)
         <h3 id="name-keys-4-and-5">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-keys-4-and-5" class="section-name selfRef">Keys 4 and 5</a>
         </h3>
-<p id="section-3.2-1">Keys 4 and 5 indicate a Base Time value and are like key 1, except that the data item is an array as
-defined for CBOR tag 4 or 5, respectively.  This can be used to include
-a Decimal or Bigfloat epoch-based float <span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> in an extended time.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">Keys 4 and 5 indicate a base time value and are like key 1, except that the data item is an array as
+defined for CBOR tag 4 or 5, respectively.
+This can be used to include a Decimal or Bigfloat epoch-based float
+<span>[<a href="#TIME_T" class="cite xref">TIME_T</a>]</span> in an extended time, e.g., to achieve higher resolution or to
+avoid rounding errors.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.2-2">
 <pre>
 $$ETIME-BASETIME //= (4: ~decfrac)
@@ -1489,9 +1495,11 @@ $$ETIME-BASETIME //= (5: ~bigfloat)
         </h3>
 <p id="section-3.3-1">The keys -3, -6, -9, -12, -15 and -18 indicate additional decimal fractions by
 giving an unsigned integer (major type 0) and scaling this with the
-scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively (see <a href="#decfract" class="auto internal xref">Table 1</a>).  More than one
-of these keys <span class="bcp14">MUST NOT</span> be present in one extended time data item.
-These additional fractions are added to a Base Time in seconds <span>[<a href="#SI-SECOND" class="cite xref">SI-SECOND</a>]</span>
+scale factor 1e-3, 1e-6, 1e-9, 1e-12, 1e-15, and 1e-18, respectively
+(see <a href="#decfract" class="auto internal xref">Table 1</a>).
+Each extended time data item <span class="bcp14">MUST NOT</span> contain more than one
+of these keys.
+These additional fractions are added to a base time in seconds <span>[<a href="#SI-SECOND" class="cite xref">SI-SECOND</a>]</span>
 indicated by a Key 1, which then <span class="bcp14">MUST</span> also be present and <span class="bcp14">MUST</span> have an
 integer value.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <span id="name-key-for-decimally-scaled-fr"></span><div id="decfract">
@@ -1553,7 +1561,7 @@ $$ETIME-ELECTIVE //= (-18: uint)
 </div>
 <p id="section-3.3-4">Note that these keys have been provided to facilitate representing
 pairs of the form second/decimal fraction of a second, as found for
-instance in C <code>timespec</code> (compare Section 7.27.1 of <span>[<a href="#C" class="cite xref">C</a>]</span>).
+instance in C <code>timespec</code> (Section 7.27.1 of <span>[<a href="#C" class="cite xref">C</a>]</span>).
 When ingesting a timestamp with one of these keys into a type provided
 by the target platform, care has to be taken to meet its invariants.
 E.g., for C <code>timespec</code>, the fractional part <code>tv_nsec</code> needs to be
@@ -1584,7 +1592,7 @@ $ETIME-TIMESCALE /= &amp;(etime-tai: 1)
 <p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)<a href="#section-3.4-5" class="pilcrow">¶</a></p>
 <span id="name-converting-common-offset-ti"></span><div id="offset">
-<figure id="figure-1">
+<figure id="figure-2">
           <div id="section-3.4-6.1">
             <div class="alignLeft art-svg artwork" id="section-3.4-6.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="6.009ex" role="img" viewBox="0 -791.3 43055.4 2587.3" width="100ex">
@@ -1675,7 +1683,7 @@ the time should be converted to TAI or UTC using a single addition or subtractio
               </svg><a href="#section-3.4-6.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-converting-common-offset-ti" class="selfRef">Converting Common Offset Timescales</a>
           </figcaption></figure>
 </div>
@@ -1703,7 +1711,7 @@ definition.<a href="#section-3.4-7.1" class="pilcrow">¶</a></p>
 used to determine the point in time.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 <p id="section-3.5-2">The first three are analogous to <code>clock-quality-grouping</code> in
 <span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span>, which is in turn based on the definitions in
-<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; two more are specific to this document.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; the last two are specific to this document.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.5-3">
 <pre>
 ClockQuality-group = (
@@ -1722,9 +1730,9 @@ ClockQuality-group = (
           </h4>
 <p id="section-3.5.1-1">Key -2 (ClockClass) can be used to indicate the clock class as per
 <span>[<a href="#RFC8575" class="cite xref">RFC8575</a>]</span> (which is based on Table 5 in Section 7.6.2.4 of
-<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; this has updated language as Table 4 in Section 7.6.2.5
-of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span>).
-It is defined as a one-byte unsigned integer as that is the range defined there.<a href="#section-3.5.1-1" class="pilcrow">¶</a></p>
+<span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span>; Table 4 in Section 7.6.2.5 of <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> has updated language).
+It is defined as a one-byte unsigned integer as that is the range
+defined in IEEE 1588.<a href="#section-3.5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="clockaccuracy-key-4">
@@ -1740,10 +1748,10 @@ It is defined as a one-byte unsigned integer as that is the range defined there.
 The range between 23 and 47 is a slightly distorted logarithmic scale
 from 1 ps to 1 s in <span>[<a href="#IEEE1588-2019" class="cite xref">IEEE1588-2019</a>]</span> (in <span>[<a href="#IEEE1588-2008" class="cite xref">IEEE1588-2008</a>]</span> the range was
 a subset of that, 32 to 47 for 25 ns to 1 s) — see
-<a href="#formula-accuracy-enum" class="auto internal xref">Figure 2</a>; the number 254 is the
+<a href="#formula-accuracy-enum" class="auto internal xref">Figure 3</a>; the number 254 is the
 value to be used if an unknown accuracy needs to be expressed.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
 <span id="name-approximate-conversion-from"></span><div id="formula-accuracy-enum">
-<figure id="figure-2">
+<figure id="figure-3">
             <div id="section-3.5.2-2.1">
               <div class="alignLeft art-svg artwork" id="section-3.5.2-2.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="4.676ex" role="img" viewBox="0 -1221.9 14098.6 2013.3" width="32.745ex">
@@ -1819,7 +1827,7 @@ value to be used if an unknown accuracy needs to be expressed.<a href="#section-
                 </svg><a href="#section-3.5.2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-approximate-conversion-from" class="selfRef">Approximate conversion from accuracy to accuracy enumeration value</a>
             </figcaption></figure>
 </div>
@@ -1849,13 +1857,14 @@ duration (<a href="#duration" class="auto internal xref">Section 4</a>).<a href=
 <span>[<a href="#GUM" class="cite xref">GUM</a>]</span>: "parameter, associated with the result of a measurement, that
 characterizes the dispersion of the values that could reasonably be
 attributed to the measurand".  More specifically, the value for this
-key represents the extended uncertainty for k = 2, in seconds.<a href="#section-3.5.4-2" class="pilcrow">¶</a></p>
+key represents the expanded uncertainty for k = 2 (Section 6.2.1 of <span>[<a href="#GUM" class="cite xref">GUM</a>]</span>), in seconds.<a href="#section-3.5.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.5.4-3">Note that the additional information that can be meaningfully provided
 with the duration that represents an uncertainty is limited, e.g., it
 is not customary to provide an uncertainty for a duration representing
 an uncertainty.
-Implementations are free to reduce an uncertainty (which is already
-elective) to the information they can process.<a href="#section-3.5.4-3" class="pilcrow">¶</a></p>
+Implementations are free to reduce the information contained in an
+uncertainty (which is already elective) to the information they can
+process.<a href="#section-3.5.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="guarantee-key-8">
@@ -1982,7 +1991,7 @@ notation, would be:<a href="#section-3.7-7" class="pilcrow">¶</a></p>
 provide elective information, as in the IXDTF form.
 Note also that in this example the time numeric offset (<code>-08:00</code>) is
 lost in translating from the <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> information in the IXDTF into a
-Posix time that can be included under Key 1 in a time tag.<a href="#section-3.7-9" class="pilcrow">¶</a></p>
+POSIX time that can be included under Key 1 in a time tag.<a href="#section-3.7-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2038,8 +2047,8 @@ tagged with Tag 1003:<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-5-3">
 <pre>
 Period = #6.1003([
-  start: ~Time / null
-  end: ~Time / null
+  start: ~Etime / null
+  end: ~Etime / null
   ? duration: ~Duration / null
 ])
 </pre><a href="#section-5-3" class="pilcrow">¶</a>
@@ -2050,13 +2059,13 @@ somewhat verbosely expressed in CDDL as:<a href="#section-5-4" class="pilcrow">�
 <div class="lang-cddl sourcecode" id="section-5-5">
 <pre>
 clumsy-Period = #6.1003([
-  (start: ~Time,
-   ((end: ~Time,
+  (start: ~Etime,
+   ((end: ~Etime,
      ? duration: null) //
     (end: null,
      duration: ~Duration))) //
   (start: null,
-   end: ~Time,
+   end: ~Etime,
    duration: ~Duration)
 ])
 </pre><a href="#section-5-5" class="pilcrow">¶</a>
@@ -2069,9 +2078,9 @@ clumsy-Period = #6.1003([
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cddl-typenames" class="section-name selfRef">CDDL typenames</a>
       </h2>
 <p id="section-6-1">When detailed validation is not needed, the
-type names defined in <a href="#tag-cddl" class="auto internal xref">Figure 3</a> are recommended:<a href="#section-6-1" class="pilcrow">¶</a></p>
+type names defined in <a href="#tag-cddl" class="auto internal xref">Figure 4</a> are recommended:<a href="#section-6-1" class="pilcrow">¶</a></p>
 <span id="name-recommended-type-names-for-"></span><div id="tag-cddl">
-<figure id="figure-3">
+<figure id="figure-4">
         <div class="lang-cddl sourcecode" id="section-6-2.1">
 <pre>
 etime = #6.1001({* (int/tstr) =&gt; any})
@@ -2079,7 +2088,7 @@ duration = #6.1002({* (int/tstr) =&gt; any})
 period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 </pre>
 </div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-recommended-type-names-for-" class="selfRef">Recommended type names for CDDL</a>
         </figcaption></figure>
 </div>
@@ -2194,7 +2203,7 @@ Required" as the Registration Procedure (<span><a href="https://rfc-editor.org/r
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int), a brief description
-of the semantics, and a specification reference (RFC).
+of the semantics, and a specification reference.
 The initial contents are shown in <a href="#tab-mapkeys" class="auto internal xref">Table 4</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-time-tag"></span><div id="tab-mapkeys">
 <table class="center" id="table-4">
@@ -2279,19 +2288,19 @@ The initial contents are shown in <a href="#tab-mapkeys" class="auto internal xr
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">1</td>
-              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 1</td>
+              <td class="text-left" rowspan="1" colspan="1">base time value as in CBOR Tag 1</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">4</td>
-              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 4</td>
+              <td class="text-left" rowspan="1" colspan="1">base time value as in CBOR Tag 4</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">5</td>
-              <td class="text-left" rowspan="1" colspan="1">Base Time value as in CBOR Tag 5</td>
+              <td class="text-left" rowspan="1" colspan="1">base time value as in CBOR Tag 5</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span> [RFCthis]</td>
             </tr>
@@ -2357,7 +2366,7 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <dd class="break"></dd>
 <dt id="IEEE1588-2019">[IEEE1588-2019]</dt>
         <dd>
-<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <span class="seriesInfo">IEEE 1588-2019</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://standards.ieee.org/ieee/1588/6825/">https://standards.ieee.org/ieee/1588/6825/</a>&gt;</span>. <span class="annotation">Often called PTP v2.1, as it has been designed so it can be used in way that is fully backwards compatible to IEEE1588-2008.</span>
+<span class="refAuthor">IEEE</span>, <span class="refTitle">"IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems"</span>, <span class="seriesInfo">IEEE 1588-2019</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://standards.ieee.org/ieee/1588/6825/">https://standards.ieee.org/ieee/1588/6825/</a>&gt;</span>. <span class="annotation">Often called PTP v2.1, as it has been designed so it can be used in a way that is fully backwards compatible to IEEE1588-2008.</span>
         </dd>
 <dd class="break"></dd>
 <dt id="IXDTF">[IXDTF]</dt>
@@ -2435,7 +2444,7 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <p id="appendix-A-1">This appendix collects the CDDL rules spread over the document into
 one convenient place.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <span id="name-collected-cddl-rules-from-t"></span><div id="fig-collected-cddl">
-<figure id="figure-4">
+<figure id="figure-5">
         <div class="breakable lang-cddl sourcecode" id="appendix-A-2.1">
 <pre>
 Etime = #6.1001(etime-detailed)
@@ -2534,20 +2543,20 @@ Duration = #6.1002(etime-detailed)
 
 
 Period = #6.1003([
-  start: ~Time / null
-  end: ~Time / null
+  start: ~Etime / null
+  end: ~Etime / null
   ? duration: ~Duration / null
 ])
 
 
 clumsy-Period = #6.1003([
-  (start: ~Time,
-   ((end: ~Time,
+  (start: ~Etime,
+   ((end: ~Etime,
      ? duration: null) //
     (end: null,
      duration: ~Duration))) //
   (start: null,
-   end: ~Time,
+   end: ~Etime,
    duration: ~Duration)
 ])
 
@@ -2557,7 +2566,7 @@ duration = #6.1002({* (int/tstr) =&gt; any})
 period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 </pre>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-collected-cddl-rules-from-t" class="selfRef">Collected CDDL rules from this specification</a>
         </figcaption></figure>
 </div>
