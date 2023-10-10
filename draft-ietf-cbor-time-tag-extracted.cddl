@@ -94,20 +94,20 @@ Duration = #6.1002(etime-detailed)
 
 
 Period = #6.1003([
-  start: ~Time / null
-  end: ~Time / null
+  start: ~Etime / null
+  end: ~Etime / null
   ? duration: ~Duration / null
 ])
 
 
 clumsy-Period = #6.1003([
-  (start: ~Time,
-   ((end: ~Time,
+  (start: ~Etime,
+   ((end: ~Etime,
      ? duration: null) //
     (end: null,
      duration: ~Duration))) //
   (start: null,
-   end: ~Time,
+   end: ~Etime,
    duration: ~Duration)
 ])
 
