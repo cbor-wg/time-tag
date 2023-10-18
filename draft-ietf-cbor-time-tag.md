@@ -421,7 +421,7 @@ $ETIME-TIMESCALE /= &(etime-utc: 0)
 $ETIME-TIMESCALE /= &(etime-tai: 1)
 ~~~
 
-If key -1 is not present, timescale value 0 is implied.
+If key -1 is not present, the default timescale value 0 is implied.
 
 Additional values can be registered in the Timescale Registry
 ({{timescale-registry}}); values MUST be integers or text strings.
