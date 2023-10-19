@@ -654,7 +654,7 @@ notation, would be:
 ~~~
 
 Note that both -10 and -11 are using negative keys and therefore
-provide elective information, as in the IXDTF form.
+provide elective information, as in the IXDTF form given in the comment.
 Note also that in this example the time numeric offset (`-08:00`) is
 lost in translating from the {{RFC3339}} information in the IXDTF into a
 POSIX time that can be included under Key 1 in a time tag.
