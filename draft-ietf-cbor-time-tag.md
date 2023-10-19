@@ -306,11 +306,8 @@ Supplementary information may include:
 
 Additional keys can be defined by registering them in the Map Key
 Registry ({{map-key-registry}}).
-Future keys may add:
-
-* intent information such as timezone and daylight savings time,
-  and/or possibly positioning coordinates, to express information that
-  would indicate a local time.
+Registered keys may, for instance, add intent information such as timezone and daylight savings time,
+and/or possibly positioning coordinates, to express information that would indicate a local time.
 
 This document does not define supplementary text keys.
 A number of both unsigned and negative-integer keys are defined in
