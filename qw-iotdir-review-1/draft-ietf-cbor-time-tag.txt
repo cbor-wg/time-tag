@@ -105,7 +105,7 @@ Table of Contents
        3.5.3.  OffsetScaledLogVariance (Key -5)  . . . . . . . . . .   9
        3.5.4.  Uncertainty (Key -7)  . . . . . . . . . . . . . . . .   9
        3.5.5.  Guarantee (Key -8)  . . . . . . . . . . . . . . . . .  10
-     3.6.  Keys -10, 10: Time Zone Hint  . . . . . . . . . . . . . .  10
+     3.6.  Keys -10, 10: Time Zone Hint  . . . . . . . . . . . . . .  11
 
 
 
@@ -122,13 +122,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
      7.1.  CBOR tags . . . . . . . . . . . . . . . . . . . . . . . .  14
      7.2.  Timescale Registry  . . . . . . . . . . . . . . . . . . .  15
      7.3.  Time Tag Map Key Registry . . . . . . . . . . . . . . . .  15
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  17
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  18
-   Appendix A.  Collected CDDL . . . . . . . . . . . . . . . . . . .  19
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  22
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  18
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  19
+   Appendix A.  Collected CDDL . . . . . . . . . . . . . . . . . . .  20
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  23
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
 
@@ -185,7 +185,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
 2.  Objectives
 
    For the time tag, the present specification addresses the following
-   objectives that go beyond the original tags 0 and 1:
+   objectives that go beyond the original tags 0 and 1 (defined in
+   Sections 3.4.1 and 3.4.2 of [RFC8949]):
 
    *  Additional resolution for epoch-based time (as in tag 1).  CBOR
       tag 1 only provides for integer and up to binary64 floating point
@@ -193,17 +194,19 @@ Internet-Draft         CBOR tag for extended time           October 2023
       microseconds at the time of writing (and progressively becoming
       worse over time).
 
-   *  Indication of timescale.  Tags 0 and 1 are for UTC; however, some
-      interchanges are better performed on TAI.  Other timescales may be
-      registered once they become relevant (e.g., one of the proposed
-      successors to UTC that might no longer use leap seconds, or a
-      scale based on smeared leap seconds).
+   *  Indication of timescale.  Tags 0 and 1 are defined for UTC;
+      however, some interchanges are better performed on TAI.  Other
+      timescales may be registered once they become relevant (e.g., one
+      of the proposed successors to UTC that might no longer use leap
+      seconds, or a scale based on smeared leap seconds).
 
    By incorporating a way to transport [IXDTF] suffix information
    (Section 3.6, Section 3.7), additional indications can be provided of
-   intents about the interpretation of the time given, in particular for
-   future times.  Intents might include information about time zones,
-   daylight savings times, preferred calendar representations, etc.
+   intents about the interpretation of the time given, in particular
+   also for instances of time that, at the time they are being
+   described, are in the future.  Intents might include information
+   about time zones, daylight savings times, preferred calendar
+   representations, etc.
 
    Semantics not covered by this document can be added by registering
    additional map keys for the map that is the content of the tag (see
@@ -215,9 +218,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    time formats that require some computation to convert them into the
    representations allowed by tag 1; these computations can also lose
    precision and cause ambiguities.  (The present specification does not
-   take a position on whether tag 1 can be "fixed" to include, e.g.,
-   Decimal or BigFloat representations.  It does define how to use these
-   representations with the extended time format.)
 
 
 
@@ -225,6 +225,10 @@ Bormann, et al.           Expires 21 April 2024                 [Page 4]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   take a position on whether tag 1 can be "fixed" to include, e.g.,
+   Decimal or BigFloat representations.  It does define how to use these
+   representations with the extended time format.)
 
    Additional tags are defined for durations and periods.
 
@@ -266,12 +270,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
    *  information about clock quality parameters, such as source,
       accuracy, and uncertainty
 
-   Additional keys can be defined by registering them in the Map Key
-   Registry (Section 7.3).  Future keys may add:
 
-   *  intent information such as timezone and daylight savings time,
-      and/or possibly positioning coordinates, to express information
-      that would indicate a local time.
+
 
 
 
@@ -281,6 +281,12 @@ Bormann, et al.           Expires 21 April 2024                 [Page 5]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   Additional keys can be defined by registering them in the Map Key
+   Registry (Section 7.3).  Registered keys may, for instance, add
+   intent information such as timezone and daylight savings time, and/or
+   possibly positioning coordinates, to express information that would
+   indicate a local time.
 
    This document does not define supplementary text keys.  A number of
    both unsigned and negative-integer keys are defined in the following
@@ -324,12 +330,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    epoch-based float [TIME_T] in an extended time, e.g., to achieve
    higher resolution or to avoid rounding errors.
 
-   $$ETIME-BASETIME //= (4: ~decfrac)
-   $$ETIME-BASETIME //= (5: ~bigfloat)
-
-
-
-
 
 
 
@@ -337,6 +337,9 @@ Bormann, et al.           Expires 21 April 2024                 [Page 6]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   $$ETIME-BASETIME //= (4: ~decfrac)
+   $$ETIME-BASETIME //= (5: ~bigfloat)
 
 3.3.  Keys -3, -6, -9, -12, -15, -18
 
@@ -382,9 +385,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    timespec, the fractional part tv_nsec needs to be between 0 inclusive
    and 10^9 exclusive, which can be achieved by also adjusting the base
    time appropriately.
-
-
-
 
 
 
@@ -520,6 +520,18 @@ Internet-Draft         CBOR tag for extended time           October 2023
    information contained in an uncertainty (which is already elective)
    to the information they can process.
 
+   For example, a timestamp that is given to a resolution of 10^-6
+   seconds (microseconds) but only has an uncertainty of 10^-3 seconds
+   (milliseconds) could be expressed by one of the extended time tags in
+   Figure 4 (note the slight rounding error in the third case, which is
+   probably inconsequential for an uncertainty value):
+
+   1001({1: 1697724754, -6: 873294, -7: {1: 0, -6: 1000}}),
+   1001({1: 1697724754, -6: 873294, -7: {1: 0, -3: 1}}),
+   1001({1: 1697724754, -6: 873294, -7: {1: 0.001}})
+
+                    Figure 4: Examples Using Uncertainty
+
 3.5.5.  Guarantee (Key -8)
 
    Key -8 (Guarantee) can be used to represent a stated guarantee for
@@ -540,6 +552,16 @@ Internet-Draft         CBOR tag for extended time           October 2023
    free to reduce a guarantee (which is already elective) to the
    information they can process.
 
+
+
+
+
+
+Bormann, et al.           Expires 21 April 2024                [Page 10]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
 3.6.  Keys -10, 10: Time Zone Hint
 
    Keys -10 and 10 supply supplementary information, where key 10 is
@@ -553,14 +575,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    (i.e., it MUST be used when interpreting the entry with this key).
 
    Keys -10 and 10 MUST NOT both be present.
-
-
-
-
-Bormann, et al.           Expires 21 April 2024                [Page 10]
-
-Internet-Draft         CBOR tag for extended time           October 2023
-
 
    $$ETIME-ELECTIVE //= (-10: time-zone-info)
    $$ETIME-CRITICAL //= (10: time-zone-info)
@@ -594,20 +608,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    time given to humans.  The key's value is a map that has IXDTF
    suffix-key names as keys and corresponding suffix values as values,
    specifically:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -657,11 +657,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
    })
 
    Note that both -10 and -11 are using negative keys and therefore
-   provide elective information, as in the IXDTF form.  Note also that
-   in this example the time numeric offset (-08:00) is lost in
-   translating from the [RFC3339] information in the IXDTF into a POSIX
-   time that can be included under Key 1 in a time tag.
-
+   provide elective information, as in the IXDTF form given in the
+   comment.  Note also that in this example the time numeric offset
+   (-08:00) is lost in translating from the [RFC3339] information in the
+   IXDTF into a POSIX time that can be included under Key 1 in a time
+   tag.
 
 
 
@@ -748,13 +748,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
 6.  CDDL typenames
 
    When detailed validation is not needed, the type names defined in
-   Figure 4 are recommended:
+   Figure 5 are recommended:
 
    etime = #6.1001({* (int/tstr) => any})
    duration = #6.1002({* (int/tstr) => any})
    period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 
-                 Figure 4: Recommended type names for CDDL
+                 Figure 5: Recommended type names for CDDL
 
 7.  IANA Considerations
 
@@ -844,7 +844,59 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
    Each entry needs to provide a map key value (CBOR integer, int), a
    brief description of the semantics, and a specification reference.
+   Note that negative integers indicate an elective key, while unsigned
+   integers indicate a key that either provides a base time or is
+   critical.  For the unsigned integers as keys, the choice of base time
+   or critical needs to be indicated in the brief semantics description.
+   (Elective map keys may be explicitly marked as such in the
+   description, e.g., to distinguish them from critical keys.)
+
    The initial contents are shown in Table 4.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 21 April 2024                [Page 16]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
 
    +=======+=====================================+=====================+
    | Value | Semantics                           | Reference           |
@@ -893,7 +945,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 16]
+
+
+
+
+Bormann, et al.           Expires 21 April 2024                [Page 17]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -949,7 +1005,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 17]
+Bormann, et al.           Expires 21 April 2024                [Page 18]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1005,7 +1061,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 18]
+Bormann, et al.           Expires 21 April 2024                [Page 19]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1061,7 +1117,7 @@ Appendix A.  Collected CDDL
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 19]
+Bormann, et al.           Expires 21 April 2024                [Page 20]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1117,7 +1173,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 20]
+Bormann, et al.           Expires 21 April 2024                [Page 21]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1173,7 +1229,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 21]
+Bormann, et al.           Expires 21 April 2024                [Page 22]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -1186,7 +1242,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
    duration = #6.1002({* (int/tstr) => any})
    period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 
-           Figure 5: Collected CDDL rules from this specification
+           Figure 6: Collected CDDL rules from this specification
 
 Acknowledgements
 
@@ -1229,4 +1285,4 @@ Authors' Addresses
 
 
 
-Bormann, et al.           Expires 21 April 2024                [Page 22]
+Bormann, et al.           Expires 21 April 2024                [Page 23]
