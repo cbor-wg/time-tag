@@ -273,8 +273,8 @@ item (CBOR major type 5).  The map may contain integer (major types 0
 and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
-implementations MUST ignore key/value pairs they do not understand; we
-say that these keys are "elective", as the extended time is still
+implementations MUST ignore key/value pairs they do not understand;
+these keys are "elective", as the extended time is still
 usable if an implementation elects not to implement them.
 Conversely, for unsigned integer keys, implementations MUST signal as
 an error key/value pairs they do not understand or implement
