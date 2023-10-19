@@ -808,6 +808,14 @@ likely to enjoy wide use and can benefit from short encodings.
 
 Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference.
+Note that negative integers indicate an elective key, while unsigned
+integers indicate a key that either provides a base time or is
+critical.
+For the unsigned integers as keys, the choice of base time or critical
+needs to be indicated in the brief semantics description.
+(Elective map keys may be explicitly marked as such in the
+description, e.g., to distinguish them from critical keys.)
+
 The initial contents are shown in {{tab-mapkeys}}.
 
 | Value | Semantics                           | Reference           |
