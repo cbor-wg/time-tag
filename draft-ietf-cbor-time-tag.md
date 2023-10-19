@@ -228,7 +228,7 @@ Objectives
 
 For the time tag,
 the present specification addresses the following objectives that go
-beyond the original tags 0 and 1:
+beyond the original tags 0 and 1 (defined in {{Sections 3.4.1 and 3.4.2 of -cbor}}):
 
 * Additional resolution for epoch-based time (as in tag 1).  CBOR tag
   1 only provides for integer and up to binary64 floating point
@@ -236,7 +236,7 @@ beyond the original tags 0 and 1:
   microseconds at the time of writing (and progressively becoming
   worse over time).
 
-* Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+* Indication of timescale.  Tags 0 and 1 are defined for UTC; however, some
   interchanges are better performed on TAI.  Other timescales may be
   registered once they become relevant (e.g., one of the proposed
   successors to UTC that might no longer use leap seconds, or a
@@ -244,7 +244,8 @@ beyond the original tags 0 and 1:
 
 By incorporating a way to transport {{IXDTF}} suffix information ({{tzh}},
 {{suff}}), additional indications can be provided of intents about the
-interpretation of the time given, in particular for future times.
+interpretation of the time given, in particular also for instances of
+time that, at the time they are being described, are in the future.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.
 
@@ -273,7 +274,9 @@ item (CBOR major type 5).  The map may contain integer (major types 0
 and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
-implementations MUST ignore key/value pairs they do not understand.
+implementations MUST ignore key/value pairs they do not understand;
+these keys are "elective", as the extended time is still
+usable if an implementation elects not to implement them.
 Conversely, for unsigned integer keys, implementations MUST signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).
@@ -284,11 +287,12 @@ text-string keys, which may encode supplementary information.
 
 Supplementary information may also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
-information ("critical"; as these are required to be understood, there
-can be no confusion with base time keys).
+information (we say these keys are defined to be "critical"); as these
+are required to be understood, there can be no confusion with base
+time keys.
 
 Negative integer and text string keys always supply supplementary
-information ("elective", and this will not be explicitly stated
+information (they are "elective", and this will not be explicitly stated
 below).
 
 Supplementary information may include:
@@ -302,11 +306,8 @@ Supplementary information may include:
 
 Additional keys can be defined by registering them in the Map Key
 Registry ({{map-key-registry}}).
-Future keys may add:
-
-* intent information such as timezone and daylight savings time,
-  and/or possibly positioning coordinates, to express information that
-  would indicate a local time.
+Registered keys may, for instance, add intent information such as timezone and daylight savings time,
+and/or possibly positioning coordinates, to express information that would indicate a local time.
 
 This document does not define supplementary text keys.
 A number of both unsigned and negative-integer keys are defined in
@@ -418,7 +419,7 @@ $ETIME-TIMESCALE /= &(etime-utc: 0)
 $ETIME-TIMESCALE /= &(etime-tai: 1)
 ~~~
 
-If key -1 is not present, timescale value 0 is implied.
+If key -1 is not present, the default timescale value 0 is implied.
 
 Additional values can be registered in the Timescale Registry
 ({{timescale-registry}}); values MUST be integers or text strings.
@@ -522,6 +523,21 @@ an uncertainty.
 Implementations are free to reduce the information contained in an
 uncertainty (which is already elective) to the information they can
 process.
+
+For example, a timestamp that is given to a resolution of
+10<sup>-6</sup> seconds (microseconds) but only has an uncertainty of
+10<sup>-3</sup> seconds (milliseconds) could be expressed by one of
+the extended time tags in {{uncertainty-example}} (note the slight
+rounding error in the third case, which is probably inconsequential
+for an uncertainty value):
+
+~~~ cbor-diag
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -6: 1000}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -3: 1}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0.001}})
+~~~
+{: #uncertainty-example title="Examples Using Uncertainty"}
+
 
 ### Guarantee (Key -8)
 
@@ -638,7 +654,7 @@ notation, would be:
 ~~~
 
 Note that both -10 and -11 are using negative keys and therefore
-provide elective information, as in the IXDTF form.
+provide elective information, as in the IXDTF form given in the comment.
 Note also that in this example the time numeric offset (`-08:00`) is
 lost in translating from the {{RFC3339}} information in the IXDTF into a
 POSIX time that can be included under Key 1 in a time tag.
@@ -792,6 +808,14 @@ likely to enjoy wide use and can benefit from short encodings.
 
 Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference.
+Note that negative integers indicate an elective key, while unsigned
+integers indicate a key that either provides a base time or is
+critical.
+For the unsigned integers as keys, the choice of base time or critical
+needs to be indicated in the brief semantics description.
+(Elective map keys may be explicitly marked as such in the
+description, e.g., to distinguish them from critical keys.)
+
 The initial contents are shown in {{tab-mapkeys}}.
 
 | Value | Semantics                           | Reference           |
