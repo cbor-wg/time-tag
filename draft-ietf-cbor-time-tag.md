@@ -527,6 +527,21 @@ Implementations are free to reduce the information contained in an
 uncertainty (which is already elective) to the information they can
 process.
 
+For example, a timestamp that is given to a resolution of
+10<sup>-6</sup> seconds (microseconds) but only has an uncertainty of
+10<sup>-3</sup> seconds (milliseconds) could be expressed by one of
+the extended time tags in {{uncertainty-example}} (note the slight
+rounding error in the third case, which is probably inconsequential
+for an uncertainty value):
+
+~~~ cbor-diag
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -6: 1000}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -3: 1}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0.001}})
+~~~
+{: #uncertainty-example title="Examples Using Uncertainty"}
+
+
 ### Guarantee (Key -8)
 
 Key -8 (Guarantee) can be used to represent a stated guarantee for the
