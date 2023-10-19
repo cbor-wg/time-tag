@@ -228,7 +228,7 @@ Objectives
 
 For the time tag,
 the present specification addresses the following objectives that go
-beyond the original tags 0 and 1:
+beyond the original tags 0 and 1 (defined in {{Sections 3.4.1 and 3.4.2 of -cbor}}):
 
 * Additional resolution for epoch-based time (as in tag 1).  CBOR tag
   1 only provides for integer and up to binary64 floating point
@@ -236,7 +236,7 @@ beyond the original tags 0 and 1:
   microseconds at the time of writing (and progressively becoming
   worse over time).
 
-* Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+* Indication of timescale.  Tags 0 and 1 are defined for UTC; however, some
   interchanges are better performed on TAI.  Other timescales may be
   registered once they become relevant (e.g., one of the proposed
   successors to UTC that might no longer use leap seconds, or a
