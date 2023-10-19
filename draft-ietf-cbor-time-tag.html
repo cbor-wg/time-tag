@@ -24,12 +24,12 @@ CBOR tags defined.
        The present version (-10) addresses comments and WG discussion during
 the AD review. 
     " name="description">
-<meta content="xml2rfc 3.18.1" name="generator">
+<meta content="xml2rfc 3.18.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-cbor-time-tag-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.1
-    Python 3.11.5
+  xml2rfc 3.18.2
+    Python 3.11.6
     ConfigArgParse 1.5.3
     google-i18n-address 3.1.0
     intervaltree 3.1.0
@@ -1066,7 +1066,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Bormann, et al.</td>
-<td class="center">Expires 12 April 2024</td>
+<td class="center">Expires 21 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1079,12 +1079,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-cbor-time-tag-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-10" class="published">10 October 2023</time>
+<time datetime="2023-10-19" class="published">19 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-12">12 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-21">21 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1154,7 +1154,7 @@ the AD review.</span><a href="#section-abstract-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1338,7 +1338,7 @@ collected model information.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-2-1">For the time tag,
 the present specification addresses the following objectives that go
-beyond the original tags 0 and 1:<a href="#section-2-1" class="pilcrow">¶</a></p>
+beyond the original tags 0 and 1 (defined in Sections <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.1" class="relref">3.4.1</a> and <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.2" class="relref">3.4.2</a> of <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>):<a href="#section-2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2-2.1">
           <p id="section-2-2.1.1">Additional resolution for epoch-based time (as in tag 1).  CBOR tag
@@ -1348,7 +1348,7 @@ microseconds at the time of writing (and progressively becoming
 worse over time).<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-2.2">
-          <p id="section-2-2.2.1">Indication of timescale.  Tags 0 and 1 are for UTC; however, some
+          <p id="section-2-2.2.1">Indication of timescale.  Tags 0 and 1 are defined for UTC; however, some
 interchanges are better performed on TAI.  Other timescales may be
 registered once they become relevant (e.g., one of the proposed
 successors to UTC that might no longer use leap seconds, or a
@@ -1357,7 +1357,8 @@ scale based on smeared leap seconds).<a href="#section-2-2.2.1" class="pilcrow">
       </ul>
 <p id="section-2-3">By incorporating a way to transport <span>[<a href="#IXDTF" class="cite xref">IXDTF</a>]</span> suffix information (<a href="#tzh" class="auto internal xref">Section 3.6</a>,
 <a href="#suff" class="auto internal xref">Section 3.7</a>), additional indications can be provided of intents about the
-interpretation of the time given, in particular for future times.
+interpretation of the time given, in particular also for instances of
+time that, at the time they are being described, are in the future.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Semantics not covered by this document can be added by registering
@@ -1386,7 +1387,9 @@ item (CBOR major type 5).  The map may contain integer (major types 0
 and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
-implementations <span class="bcp14">MUST</span> ignore key/value pairs they do not understand.
+implementations <span class="bcp14">MUST</span> ignore key/value pairs they do not understand;
+these keys are "elective", as the extended time is still
+usable if an implementation elects not to implement them.
 Conversely, for unsigned integer keys, implementations <span class="bcp14">MUST</span> signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).<a href="#section-3-1" class="pilcrow">¶</a></p>
@@ -1395,10 +1398,11 @@ the "base time", and may also contain one or more negative integer or
 text-string keys, which may encode supplementary information.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">Supplementary information may also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
-information ("critical"; as these are required to be understood, there
-can be no confusion with base time keys).<a href="#section-3-3" class="pilcrow">¶</a></p>
+information (we say these keys are defined to be "critical"); as these
+are required to be understood, there can be no confusion with base
+time keys.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Negative integer and text string keys always supply supplementary
-information ("elective", and this will not be explicitly stated
+information (they are "elective", and this will not be explicitly stated
 below).<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">Supplementary information may include:<a href="#section-3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1415,21 +1419,15 @@ accuracy, and uncertainty<a href="#section-3-6.3.1" class="pilcrow">¶</a></p>
       </ul>
 <p id="section-3-7">Additional keys can be defined by registering them in the Map Key
 Registry (<a href="#map-key-registry" class="auto internal xref">Section 7.3</a>).
-Future keys may add:<a href="#section-3-7" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-8.1">
-          <p id="section-3-8.1.1">intent information such as timezone and daylight savings time,
-and/or possibly positioning coordinates, to express information that
-would indicate a local time.<a href="#section-3-8.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-3-9">This document does not define supplementary text keys.
+Registered keys may, for instance, add intent information such as timezone and daylight savings time,
+and/or possibly positioning coordinates, to express information that would indicate a local time.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">This document does not define supplementary text keys.
 A number of both unsigned and negative-integer keys are defined in
-the following subsections.<a href="#section-3-9" class="pilcrow">¶</a></p>
-<p id="section-3-10"><a href="#tag-1001" class="auto internal xref">Figure 1</a> provides a formal definition of Tag 1001 in CDDL.<a href="#section-3-10" class="pilcrow">¶</a></p>
+the following subsections.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9"><a href="#tag-1001" class="auto internal xref">Figure 1</a> provides a formal definition of Tag 1001 in CDDL.<a href="#section-3-9" class="pilcrow">¶</a></p>
 <span id="name-cddl-definition-of-tag-1001"></span><div id="tag-1001">
 <figure id="figure-1">
-        <div class="lang-cddl sourcecode" id="section-3-11.1">
+        <div class="lang-cddl sourcecode" id="section-3-10.1">
 <pre>
 Etime = #6.1001(etime-detailed)
 
@@ -1586,7 +1584,7 @@ $ETIME-TIMESCALE /= &amp;(etime-utc: 0)
 $ETIME-TIMESCALE /= &amp;(etime-tai: 1)
 </pre><a href="#section-3.4-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.4-3">If key -1 is not present, timescale value 0 is implied.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">If key -1 is not present, the default timescale value 0 is implied.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
 <p id="section-3.4-4">Additional values can be registered in the Timescale Registry
 (<a href="#timescale-registry" class="auto internal xref">Section 7.2</a>); values <span class="bcp14">MUST</span> be integers or text strings.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" — instead,
@@ -1865,6 +1863,25 @@ an uncertainty.
 Implementations are free to reduce the information contained in an
 uncertainty (which is already elective) to the information they can
 process.<a href="#section-3.5.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.5.4-4">For example, a timestamp that is given to a resolution of
+10<sup>-6</sup> seconds (microseconds) but only has an uncertainty of
+10<sup>-3</sup> seconds (milliseconds) could be expressed by one of
+the extended time tags in <a href="#uncertainty-example" class="auto internal xref">Figure 4</a> (note the slight
+rounding error in the third case, which is probably inconsequential
+for an uncertainty value):<a href="#section-3.5.4-4" class="pilcrow">¶</a></p>
+<span id="name-examples-using-uncertainty"></span><div id="uncertainty-example">
+<figure id="figure-4">
+            <div class="lang-cbor-diag sourcecode" id="section-3.5.4-5.1">
+<pre>
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -6: 1000}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0, -3: 1}}),
+1001({1: 1697724754, -6: 873294, -7: {1: 0.001}})
+</pre>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<a href="#name-examples-using-uncertainty" class="selfRef">Examples Using Uncertainty</a>
+            </figcaption></figure>
+</div>
 </section>
 </div>
 <div id="guarantee-key-8">
@@ -1988,7 +2005,7 @@ notation, would be:<a href="#section-3.7-7" class="pilcrow">¶</a></p>
 </pre><a href="#section-3.7-8" class="pilcrow">¶</a>
 </div>
 <p id="section-3.7-9">Note that both -10 and -11 are using negative keys and therefore
-provide elective information, as in the IXDTF form.
+provide elective information, as in the IXDTF form given in the comment.
 Note also that in this example the time numeric offset (<code>-08:00</code>) is
 lost in translating from the <span>[<a href="#RFC3339" class="cite xref">RFC3339</a>]</span> information in the IXDTF into a
 POSIX time that can be included under Key 1 in a time tag.<a href="#section-3.7-9" class="pilcrow">¶</a></p>
@@ -2078,9 +2095,9 @@ clumsy-Period = #6.1003([
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cddl-typenames" class="section-name selfRef">CDDL typenames</a>
       </h2>
 <p id="section-6-1">When detailed validation is not needed, the
-type names defined in <a href="#tag-cddl" class="auto internal xref">Figure 4</a> are recommended:<a href="#section-6-1" class="pilcrow">¶</a></p>
+type names defined in <a href="#tag-cddl" class="auto internal xref">Figure 5</a> are recommended:<a href="#section-6-1" class="pilcrow">¶</a></p>
 <span id="name-recommended-type-names-for-"></span><div id="tag-cddl">
-<figure id="figure-4">
+<figure id="figure-5">
         <div class="lang-cddl sourcecode" id="section-6-2.1">
 <pre>
 etime = #6.1001({* (int/tstr) =&gt; any})
@@ -2088,7 +2105,7 @@ duration = #6.1002({* (int/tstr) =&gt; any})
 period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 </pre>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-recommended-type-names-for-" class="selfRef">Recommended type names for CDDL</a>
         </figcaption></figure>
 </div>
@@ -2204,7 +2221,14 @@ shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int), a brief description
 of the semantics, and a specification reference.
-The initial contents are shown in <a href="#tab-mapkeys" class="auto internal xref">Table 4</a>.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+Note that negative integers indicate an elective key, while unsigned
+integers indicate a key that either provides a base time or is
+critical.
+For the unsigned integers as keys, the choice of base time or critical
+needs to be indicated in the brief semantics description.
+(Elective map keys may be explicitly marked as such in the
+description, e.g., to distinguish them from critical keys.)<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">The initial contents are shown in <a href="#tab-mapkeys" class="auto internal xref">Table 4</a>.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-time-tag"></span><div id="tab-mapkeys">
 <table class="center" id="table-4">
           <caption>
@@ -2444,7 +2468,7 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <p id="appendix-A-1">This appendix collects the CDDL rules spread over the document into
 one convenient place.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <span id="name-collected-cddl-rules-from-t"></span><div id="fig-collected-cddl">
-<figure id="figure-5">
+<figure id="figure-6">
         <div class="breakable lang-cddl sourcecode" id="appendix-A-2.1">
 <pre>
 Etime = #6.1001(etime-detailed)
@@ -2566,7 +2590,7 @@ duration = #6.1002({* (int/tstr) =&gt; any})
 period = #6.1003([~etime/null, ~etime/null, ~duration/null])
 </pre>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-collected-cddl-rules-from-t" class="selfRef">Collected CDDL rules from this specification</a>
         </figcaption></figure>
 </div>
