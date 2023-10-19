@@ -244,7 +244,8 @@ beyond the original tags 0 and 1 (defined in {{Sections 3.4.1 and 3.4.2 of -cbor
 
 By incorporating a way to transport {{IXDTF}} suffix information ({{tzh}},
 {{suff}}), additional indications can be provided of intents about the
-interpretation of the time given, in particular for future times.
+interpretation of the time given, in particular also for instances of
+time that, at the time they are being described, are in the future.
 Intents might include information about time zones, daylight savings
 times, preferred calendar representations, etc.
 
