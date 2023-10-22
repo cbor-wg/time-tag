@@ -184,8 +184,9 @@ In CBOR, one point of extensibility is the definition of CBOR tags.
 [^status]
 
 [^status]:
-    The present version (-10) addresses comments and WG discussion during
-    the AD review.
+    (This cref will be removed by the RFC editor:)\\
+    The present revision (–11) addresses the ARTART and IOTDIR
+    directorate reviews.
 
 --- middle
 
@@ -872,7 +873,10 @@ Acknowledgements
 {: numbered="false"}
 
 The authors would like to acknowledge the many comments from members
-of the CBOR WG, as well as Francesca Palombini for her AD review.
+of the CBOR WG,
+{{{Francesca Palombini}}} for her AD review, and
+{{{Thomas Fossati}}} and
+{{{Qin Wu}}} for their directorate reviews.
 
 <!--  LocalWords:  CBOR extensibility IANA uint sint IEEE endian TAI
  -->
