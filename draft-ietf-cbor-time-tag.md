@@ -848,7 +848,7 @@ Keys Registry"}
 Security Considerations
 ============
 
-The security considerations of RFC 8949 apply; the tags introduced
+The security considerations of {{-cbor}} apply; the tags introduced
 here are not expected to raise security considerations beyond those.
 
 Time, of course, has significant security considerations; these
