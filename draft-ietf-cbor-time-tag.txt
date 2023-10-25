@@ -103,7 +103,7 @@ Table of Contents
        3.5.1.  ClockClass (Key -2) . . . . . . . . . . . . . . . . .   9
        3.5.2.  ClockAccuracy (Key -4)  . . . . . . . . . . . . . . .   9
        3.5.3.  OffsetScaledLogVariance (Key -5)  . . . . . . . . . .   9
-       3.5.4.  Uncertainty (Key -7)  . . . . . . . . . . . . . . . .   9
+       3.5.4.  Uncertainty (Key -7)  . . . . . . . . . . . . . . . .  10
        3.5.5.  Guarantee (Key -8)  . . . . . . . . . . . . . . . . .  10
      3.6.  Keys -10, 10: Time Zone Hint  . . . . . . . . . . . . . .  11
 
@@ -408,12 +408,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
    If key -1 is not present, the default timescale value 0 is implied.
 
-   Additional values can be registered in the Timescale Registry
-   (Section 7.2); values MUST be integers or text strings.
-
-   (Note that there should be no timescales "GPS" or "NTP" [RFC5905] —
-   instead, the time should be converted to TAI or UTC using a single
-   addition or subtraction.)
+   Timescale values MUST be unsigned integers or text strings; text
+   strings are provided for experimentation and MUST NOT be used between
+   parties which are not both part of the experiment.  Additional
+   unsigned integer values can be registered in the Timescale Registry
+   (Section 7.2).  (Note that there should be no timescales "GPS" or
+   "NTP" [RFC5905] — instead, the time should be converted to TAI or UTC
+   using a single addition or subtraction.)
 
    t    = t    - 2208988800
     utc    ntp
@@ -439,9 +440,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
    A number of keys are defined to indicate the quality of clock that
    was used to determine the point in time.
 
-   The first three are analogous to clock-quality-grouping in [RFC8575],
-   which is in turn based on the definitions in [IEEE1588-2008]; the
-   last two are specific to this document.
+
+
 
 
 
@@ -449,6 +449,10 @@ Bormann, et al.           Expires 27 April 2024                 [Page 8]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   The first three are analogous to clock-quality-grouping in [RFC8575],
+   which is in turn based on the definitions in [IEEE1588-2008]; the
+   last two are specific to this document.
 
    ClockQuality-group = (
      ? &(ClockClass: -2) => uint .size 1 ; PTP/RFC8575
@@ -493,11 +497,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
    this characteristic are defined in Section 7.6.3 of [IEEE1588-2019]
    and the same section in [IEEE1588-2008].
 
-3.5.4.  Uncertainty (Key -7)
 
-   Key -7 (Uncertainty) can be used to represent a known measurement
-   uncertainty for the clock, as a numeric value in seconds or as a
-   duration (Section 4).
 
 
 
@@ -505,6 +505,12 @@ Bormann, et al.           Expires 27 April 2024                 [Page 9]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+3.5.4.  Uncertainty (Key -7)
+
+   Key -7 (Uncertainty) can be used to represent a known measurement
+   uncertainty for the clock, as a numeric value in seconds or as a
+   duration (Section 4).
 
    For this document, uncertainty is defined as in Section 2.2.3 of
    [GUM]: "parameter, associated with the result of a measurement, that
@@ -548,12 +554,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    Note that the additional information that can be meaningfully
    provided with the duration that represents a guarantee is limited,
    e.g., it is not meaningful to provide a guarantee of accuracy for the
-   duration representing a guarantee of accuracy.  Implementations are
-   free to reduce a guarantee (which is already elective) to the
-   information they can process.
-
-
-
 
 
 
@@ -561,6 +561,10 @@ Bormann, et al.           Expires 27 April 2024                [Page 10]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   duration representing a guarantee of accuracy.  Implementations are
+   free to reduce a guarantee (which is already elective) to the
+   information they can process.
 
 3.6.  Keys -10, 10: Time Zone Hint
 
@@ -602,12 +606,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
    Keys -11 and 11 supply supplementary information, where key 11 is
    critical.
 
-   Similar to keys -10 and 10, keys -11 (elective) and 11 (critical) can
-   be used to provide additional information in the style of IXDTF
-   suffixes, such as the calendar that would best fit for displaying the
-   time given to humans.  The key's value is a map that has IXDTF
-   suffix-key names as keys and corresponding suffix values as values,
-   specifically:
+
+
 
 
 
@@ -617,6 +617,13 @@ Bormann, et al.           Expires 27 April 2024                [Page 11]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   Similar to keys -10 and 10, keys -11 (elective) and 11 (critical) can
+   be used to provide additional information in the style of IXDTF
+   suffixes, such as the calendar that would best fit for displaying the
+   time given to humans.  The key's value is a map that has IXDTF
+   suffix-key names as keys and corresponding suffix values as values,
+   specifically:
 
    $$ETIME-ELECTIVE //= (-11: suffix-info-map)
    $$ETIME-CRITICAL //= (11: suffix-info-map)
@@ -659,13 +666,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    Note that both -10 and -11 are using negative keys and therefore
    provide elective information, as in the IXDTF form given in the
    comment.  Note also that in this example the time numeric offset
-   (-08:00) is lost in translating from the [RFC3339] information in the
-   IXDTF into a POSIX time that can be included under Key 1 in a time
-   tag.
-
-
-
-
 
 
 
@@ -673,6 +673,10 @@ Bormann, et al.           Expires 27 April 2024                [Page 12]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   (-08:00) is lost in translating from the [RFC3339] information in the
+   IXDTF into a POSIX time that can be included under Key 1 in a time
+   tag.
 
 4.  Duration Format
 
@@ -716,11 +720,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
    They are given as an array of unwrapped time and duration elements,
    tagged with Tag 1003:
 
-   Period = #6.1003([
-     start: ~Etime / null
-     end: ~Etime / null
-     ? duration: ~Duration / null
-   ])
+
 
 
 
@@ -729,6 +729,12 @@ Bormann, et al.           Expires 27 April 2024                [Page 13]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+   Period = #6.1003([
+     start: ~Etime / null
+     end: ~Etime / null
+     ? duration: ~Duration / null
+   ])
 
    If the third array element is not given, the duration element is
    null.  Exactly two out of the three elements must be non-null, this
@@ -775,12 +781,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-
-
-
-
-
-
 Bormann, et al.           Expires 27 April 2024                [Page 14]
 
 Internet-Draft         CBOR tag for extended time           October 2023
@@ -810,9 +810,10 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
    Each entry needs to provide a timescale name (a sequence of uppercase
    ASCII characters and digits, where a digit may not occur at the
-   start: [A-Z][A-Z0-9]*), a value (CBOR unsigned integer, uint), and
-   brief description of the semantics, and a specification reference
-   (RFC).  The initial contents are shown in Table 3.
+   start: [A-Z][A-Z0-9]*), a value (CBOR unsigned integer, uint,
+   0..18446744073709551615), a brief description of the semantics, and a
+   specification reference (RFC).  The initial contents are shown in
+   Table 3.
 
          +===========+=======+======================+===========+
          | Timescale | Value | Semantics            | Reference |
@@ -831,9 +832,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
    "Specification Required" as the Registration Procedure (Section 4.6
    of [BCP26]).
 
-   The designated expert is requested to assign the key values with the
-   shortest encodings (1+0 and 1+1 encoding) to registrations that are
-   likely to enjoy wide use and can benefit from short encodings.
+
+
 
 
 
@@ -842,21 +842,21 @@ Bormann, et al.           Expires 27 April 2024                [Page 15]
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
-   Each entry needs to provide a map key value (CBOR integer, int), a
-   brief description of the semantics, and a specification reference.
-   Note that negative integers indicate an elective key, while unsigned
-   integers indicate a key that either provides a base time or is
-   critical.  For the unsigned integers as keys, the choice of base time
-   or critical needs to be indicated in the brief semantics description.
-   (Elective map keys may be explicitly marked as such in the
-   description, e.g., to distinguish them from critical keys.)
+   The designated expert is requested to assign the key values with the
+   shortest encodings (1+0 and 1+1 encoding) to registrations that are
+   likely to enjoy wide use and can benefit from short encodings.
+
+   Each entry needs to provide a map key value (CBOR integer, int,
+   -18446744073709551616..18446744073709551615), a brief description of
+   the semantics, and a specification reference.  Note that negative
+   integers indicate an elective key, while unsigned integers indicate a
+   key that either provides a base time or is critical.  For the
+   unsigned integers as keys, the choice of base time or critical needs
+   to be indicated in the brief semantics description.  (Elective map
+   keys may be explicitly marked as such in the description, e.g., to
+   distinguish them from critical keys.)
 
    The initial contents are shown in Table 4.
-
-
-
-
-
 
 
 

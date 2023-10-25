@@ -1590,14 +1590,17 @@ $ETIME-TIMESCALE /= &amp;(etime-tai: 1)
 </pre><a href="#section-3.4-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.4-3">If key -1 is not present, the default timescale value 0 is implied.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
-<p id="section-3.4-4">Additional values can be registered in the Timescale Registry
-(<a href="#timescale-registry" class="auto internal xref">Section 7.2</a>); values <span class="bcp14">MUST</span> be integers or text strings.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
-<p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> — instead,
-the time should be converted to TAI or UTC using a single addition or subtraction.)<a href="#section-3.4-5" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">Timescale values <span class="bcp14">MUST</span> be unsigned integers or text strings; text strings are
+provided for experimentation and <span class="bcp14">MUST NOT</span> be used between parties
+which are not both part of the experiment.
+Additional unsigned integer values can be registered in the Timescale Registry
+(<a href="#timescale-registry" class="auto internal xref">Section 7.2</a>).
+(Note that there should be no timescales "GPS" or "NTP" <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> — instead,
+the time should be converted to TAI or UTC using a single addition or subtraction.)<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <span id="name-converting-common-offset-ti"></span><div id="offset">
 <figure id="figure-2">
-          <div id="section-3.4-6.1">
-            <div class="alignLeft art-svg artwork" id="section-3.4-6.1.1">
+          <div id="section-3.4-5.1">
+            <div class="alignLeft art-svg artwork" id="section-3.4-5.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="6.009ex" role="img" viewBox="0 -791.3 43055.4 2587.3" width="100ex">
                 <defs>
                   <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461-gensym001" stroke-width="1"></path>
@@ -1683,15 +1686,15 @@ the time should be converted to TAI or UTC using a single addition or subtractio
                     </g>
                   </g>
                 </g>
-              </svg><a href="#section-3.4-6.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-3.4-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-converting-common-offset-ti" class="selfRef">Converting Common Offset Timescales</a>
           </figcaption></figure>
 </div>
-<aside id="section-3.4-7">
-          <p id="section-3.4-7.1">Editor's note:
+<aside id="section-3.4-6">
+          <p id="section-3.4-6.1">Editor's note:
 This initial set of timescales was deliberately chosen to be frugal, as
 the specification of the tag provides an extension point where
 additional timescales can be registered at any time.
@@ -1701,7 +1704,7 @@ abstract time scales (such as TAI(USNO) which is more accurate as a
 constant offset basis for GPS times).
 While the registration process itself is trivial, these registrations
 need to be made based on a solid specification of their actual
-definition.<a href="#section-3.4-7.1" class="pilcrow">¶</a></p>
+definition.<a href="#section-3.4-6.1" class="pilcrow">¶</a></p>
 </aside>
 </section>
 </div>
@@ -2178,7 +2181,8 @@ FCFS space, with the present document as the specification reference.<a href="#s
 and "RFC Required" as the Registration Procedure (Sections <a href="https://rfc-editor.org/rfc/rfc8126#section-4.5" class="relref">4.5</a> and <a href="https://rfc-editor.org/rfc/rfc8126#section-4.7" class="relref">4.7</a> of <span>[<a href="#BCP26" class="cite xref">BCP26</a>]</span>).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">Each entry needs to provide a timescale name (a sequence of uppercase
 ASCII characters and digits, where a digit may not occur at the start:
-<code>[A-Z][A-Z0-9]*</code>), a value (CBOR unsigned integer, uint), and brief description
+<code>[A-Z][A-Z0-9]*</code>), a value (CBOR unsigned integer, uint,
+0..18446744073709551615), a brief description
 of the semantics, and a specification reference (RFC).
 The initial contents are shown in <a href="#tab-timescales" class="auto internal xref">Table 3</a>.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <span id="name-initial-content-of-timescal"></span><div id="tab-timescales">
@@ -2224,7 +2228,8 @@ Required" as the Registration Procedure (<span><a href="https://rfc-editor.org/r
 <p id="section-7.3-2">The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int), a brief description
+<p id="section-7.3-3">Each entry needs to provide a map key value (CBOR integer, int,
+-18446744073709551616..18446744073709551615), a brief description
 of the semantics, and a specification reference.
 Note that negative integers indicate an elective key, while unsigned
 integers indicate a key that either provides a base time or is
