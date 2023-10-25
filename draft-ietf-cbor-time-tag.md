@@ -709,30 +709,38 @@ durations here.
 Period Format {#period}
 =============
 
-A period is a specific interval of time, specified as either two times
-giving the start and the end of that interval, or as one of these two
-plus a duration.
+A period is a specific interval of time, specified as either two
+extended times giving the start and the end of that interval, or as
+one of these two plus a duration.
 
-They are given as an array of unwrapped time and duration elements,
-tagged with Tag 1003:
+This is represented as an array of unwrapped time and duration elements,
+tagged with Tag 1003, one of:
+
+* a start and end time, in which case the
+  tag content is an array of two unwrapped extended time elements;
+
+* a start time with duration or an end time with duration.
+  The tag content is an array of 3 elements: the first two as
+  above but either the start or end time MUST be set to null; the
+  third one then is an unwrapped duration.
+
+A simple CDDL definition that does not capture all the constraints is:
 
 ~~~ cddl
-Period = #6.1003([
+simple-Period = #6.1003([
   start: ~Etime / null
   end: ~Etime / null
-  ? duration: ~Duration / null
+  ? duration: ~Duration
 ])
 ~~~
 
-If the third array element is not given, the duration element is null.
-Exactly two out of the three elements must be non-null, this can be
-somewhat verbosely expressed in CDDL as:
+Exactly two out of the three elements must be present and non-null;
+this can be somewhat more verbosely expressed in CDDL as:
 
 ~~~ cddl
-clumsy-Period = #6.1003([
+Period = #6.1003([
   (start: ~Etime,
-   ((end: ~Etime,
-     ? duration: null) //
+   ((end: ~Etime) //
     (end: null,
      duration: ~Duration))) //
   (start: null,
