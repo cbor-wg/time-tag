@@ -162,6 +162,7 @@ informative:
     refcontent:
     - Fourth Edition
     ann: Contents available via <⁠<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf>>
+  RFC5905: ntp
 
 --- abstract
 
@@ -279,8 +280,8 @@ and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
 implementations MUST ignore key/value pairs they do not understand;
-these keys are "elective", as the extended time is still
-usable if an implementation elects not to implement them.
+these keys are "elective", as the extended time as a whole is still
+usable without the information they carry if an implementation elects not to implement them.
 Conversely, for unsigned integer keys, implementations MUST signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).
@@ -428,7 +429,7 @@ If key -1 is not present, the default timescale value 0 is implied.
 Additional values can be registered in the Timescale Registry
 ({{timescale-registry}}); values MUST be integers or text strings.
 
-(Note that there should be no timescales "GPS" or "NTP" — instead,
+(Note that there should be no timescales "GPS" or "NTP" {{-ntp}} — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)
 
 ~~~ math-asciitex
