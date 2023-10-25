@@ -223,6 +223,9 @@ specification is provided throughout the text using the Concise Data
 Definition Language, CDDL {{-cddl}}; {{collected-cddl}} provides the
 collected model information.
 
+Several time-related terms such as UTC and TAI are discussed in
+{{IXDTF}}, which may be a useful companion document beyond its direct
+use in Sections {{<tzh}} and {{<suff}}.
 
 Objectives
 ==========
@@ -845,7 +848,7 @@ Keys Registry"}
 Security Considerations
 ============
 
-The security considerations of RFC 8949 apply; the tags introduced
+The security considerations of {{-cbor}} apply; the tags introduced
 here are not expected to raise security considerations beyond those.
 
 Time, of course, has significant security considerations; these
