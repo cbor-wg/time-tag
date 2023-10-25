@@ -162,6 +162,7 @@ informative:
     refcontent:
     - Fourth Edition
     ann: Contents available via <⁠<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf>>
+  RFC5905: ntp
 
 --- abstract
 
@@ -425,7 +426,7 @@ If key -1 is not present, the default timescale value 0 is implied.
 Additional values can be registered in the Timescale Registry
 ({{timescale-registry}}); values MUST be integers or text strings.
 
-(Note that there should be no timescales "GPS" or "NTP" — instead,
+(Note that there should be no timescales "GPS" or "NTP" {{-ntp}} — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)
 
 ~~~ math-asciitex
