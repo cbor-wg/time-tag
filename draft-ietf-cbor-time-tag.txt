@@ -119,9 +119,9 @@ Internet-Draft         CBOR tag for extended time           October 2023
    5.  Period Format . . . . . . . . . . . . . . . . . . . . . . . .  13
    6.  CDDL typenames  . . . . . . . . . . . . . . . . . . . . . . .  14
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
-     7.1.  CBOR tags . . . . . . . . . . . . . . . . . . . . . . . .  14
+     7.1.  CBOR tags . . . . . . . . . . . . . . . . . . . . . . . .  15
      7.2.  Timescale Registry  . . . . . . . . . . . . . . . . . . .  15
-     7.3.  Time Tag Map Key Registry . . . . . . . . . . . . . . . .  15
+     7.3.  Time Tag Map Key Registry . . . . . . . . . . . . . . . .  16
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  18
@@ -714,14 +714,14 @@ Internet-Draft         CBOR tag for extended time           October 2023
 5.  Period Format
 
    A period is a specific interval of time, specified as either two
-   times giving the start and the end of that interval, or as one of
-   these two plus a duration.
+   extended times giving the start and the end of that interval, or as
+   one of these two plus a duration.
 
-   They are given as an array of unwrapped time and duration elements,
-   tagged with Tag 1003:
+   This is represented as an array of unwrapped time and duration
+   elements, tagged with Tag 1003, one of:
 
-
-
+   *  a start and end time, in which case the tag content is an array of
+      two unwrapped extended time elements;
 
 
 
@@ -730,20 +730,26 @@ Bormann, et al.           Expires 27 April 2024                [Page 13]
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
-   Period = #6.1003([
+   *  a start time with duration or an end time with duration.  The tag
+      content is an array of 3 elements: the first two as above but
+      either the start or end time MUST be set to null; the third one
+      then is an unwrapped duration.
+
+   A simple CDDL definition that does not capture all the constraints
+   is:
+
+   simple-Period = #6.1003([
      start: ~Etime / null
      end: ~Etime / null
-     ? duration: ~Duration / null
+     ? duration: ~Duration
    ])
 
-   If the third array element is not given, the duration element is
-   null.  Exactly two out of the three elements must be non-null, this
-   can be somewhat verbosely expressed in CDDL as:
+   Exactly two out of the three elements must be present and non-null;
+   this can be somewhat more verbosely expressed in CDDL as:
 
-   clumsy-Period = #6.1003([
+   Period = #6.1003([
      (start: ~Etime,
-      ((end: ~Etime,
-        ? duration: null) //
+      ((end: ~Etime) //
        (end: null,
         duration: ~Duration))) //
      (start: null,
@@ -768,12 +774,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    // RFC Editor: please replace RFCthis with the RFC number of this
    // RFC, and remove this note.
 
-7.1.  CBOR tags
-
-   In the "CBOR Tags" registry [IANA.cbor-tags], IANA has allocated the
-   tags in Table 2 from what was at the time the FCFS space, with the
-   present document as the specification reference.
-
 
 
 
@@ -785,6 +785,12 @@ Bormann, et al.           Expires 27 April 2024                [Page 14]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+7.1.  CBOR tags
+
+   In the "CBOR Tags" registry [IANA.cbor-tags], IANA has allocated the
+   tags in Table 2 from what was at the time the FCFS space, with the
+   present document as the specification reference.
 
               +======+===========+=========================+
               |  Tag | Data Item | Semantics               |
@@ -825,12 +831,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
               Table 3: Initial Content of Timescale Registry
 
-7.3.  Time Tag Map Key Registry
-
-   This specification defines a new registry titled "Time Tag Map Keys"
-   in the "CBOR Tags" registry group [IANA.cbor-tags], with
-   "Specification Required" as the Registration Procedure (Section 4.6
-   of [BCP26]).
 
 
 
@@ -841,6 +841,13 @@ Bormann, et al.           Expires 27 April 2024                [Page 15]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
+
+7.3.  Time Tag Map Key Registry
+
+   This specification defines a new registry titled "Time Tag Map Keys"
+   in the "CBOR Tags" registry group [IANA.cbor-tags], with
+   "Specification Required" as the Registration Procedure (Section 4.6
+   of [BCP26]).
 
    The designated expert is requested to assign the key values with the
    shortest encodings (1+0 and 1+1 encoding) to registrations that are
@@ -857,13 +864,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
    distinguish them from critical keys.)
 
    The initial contents are shown in Table 4.
-
-
-
-
-
-
-
 
 
 
