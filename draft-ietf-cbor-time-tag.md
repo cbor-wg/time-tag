@@ -426,9 +426,11 @@ $ETIME-TIMESCALE /= &(etime-tai: 1)
 
 If key -1 is not present, the default timescale value 0 is implied.
 
-Additional values can be registered in the Timescale Registry
-({{timescale-registry}}); values MUST be integers or text strings.
-
+Timescale values MUST be unsigned integers or text strings; text strings are
+provided for experimentation and MUST NOT be used between parties
+which are not both part of the experiment.
+Additional unsigned integer values can be registered in the Timescale Registry
+({{timescale-registry}}).
 (Note that there should be no timescales "GPS" or "NTP" {{-ntp}} — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)
 
@@ -791,7 +793,8 @@ and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
 
 Each entry needs to provide a timescale name (a sequence of uppercase
 ASCII characters and digits, where a digit may not occur at the start:
-`[A-Z][A-Z0-9]*`), a value (CBOR unsigned integer, uint), and brief description
+`[A-Z][A-Z0-9]*`), a value (CBOR unsigned integer, uint,
+0..18446744073709551615), a brief description
 of the semantics, and a specification reference (RFC).
 The initial contents are shown in {{tab-timescales}}.
 
@@ -811,7 +814,8 @@ The designated expert is requested to assign the key values with the
 shortest encodings (1+0 and 1+1 encoding) to registrations that are
 likely to enjoy wide use and can benefit from short encodings.
 
-Each entry needs to provide a map key value (CBOR integer, int), a brief description
+Each entry needs to provide a map key value (CBOR integer, int,
+-18446744073709551616..18446744073709551615), a brief description
 of the semantics, and a specification reference.
 Note that negative integers indicate an elective key, while unsigned
 integers indicate a key that either provides a base time or is
