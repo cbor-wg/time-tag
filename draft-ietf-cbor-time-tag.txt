@@ -245,11 +245,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
    value type determined by each specific key.  For negative integer
    keys and text string values of the key, implementations MUST ignore
    key/value pairs they do not understand; these keys are "elective", as
-   the extended time is still usable if an implementation elects not to
-   implement them.  Conversely, for unsigned integer keys,
-   implementations MUST signal as an error key/value pairs they do not
-   understand or implement (these are either "base time" or "critical",
-   see below).
+   the extended time as a whole is still usable without the information
+   they carry if an implementation elects not to implement them.
+   Conversely, for unsigned integer keys, implementations MUST signal as
+   an error key/value pairs they do not understand or implement (these
+   are either "base time" or "critical", see below).
 
    The map must contain exactly one unsigned integer key that specifies
    the "base time", and may also contain one or more negative integer or
@@ -411,9 +411,9 @@ Internet-Draft         CBOR tag for extended time           October 2023
    Additional values can be registered in the Timescale Registry
    (Section 7.2); values MUST be integers or text strings.
 
-   (Note that there should be no timescales "GPS" or "NTP" — instead,
-   the time should be converted to TAI or UTC using a single addition or
-   subtraction.)
+   (Note that there should be no timescales "GPS" or "NTP" [RFC5905] —
+   instead, the time should be converted to TAI or UTC using a single
+   addition or subtraction.)
 
    t    = t    - 2208988800
     utc    ntp
@@ -1095,6 +1095,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
               Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
               <https://www.rfc-editor.org/rfc/rfc3339>.
 
+   [RFC5905]  Mills, D., Martin, J., Ed., Burbank, J., and W. Kasch,
+              "Network Time Protocol Version 4: Protocol and Algorithms
+              Specification", RFC 5905, DOI 10.17487/RFC5905, June 2010,
+              <https://www.rfc-editor.org/rfc/rfc5905>.
+
 Appendix A.  Collected CDDL
 
    This appendix collects the CDDL rules spread over the document into
@@ -1109,11 +1114,6 @@ Appendix A.  Collected CDDL
    }
 
    etime-detailed = ({
-     $$ETIME-BASETIME
-     ClockQuality-group
-     * $$ETIME-ELECTIVE
-     * $$ETIME-CRITICAL
-     * ((nint/text) .feature "etime-elective-extension") => any
 
 
 
@@ -1122,6 +1122,11 @@ Bormann, et al.           Expires 27 April 2024                [Page 20]
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
+     $$ETIME-BASETIME
+     ClockQuality-group
+     * $$ETIME-ELECTIVE
+     * $$ETIME-CRITICAL
+     * ((nint/text) .feature "etime-elective-extension") => any
      * (uint .feature "etime-critical-extension") => any
    }) .within etime-framework
 
@@ -1168,16 +1173,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-      time-zone-initial = ALPHA / "." / "_"
-      time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
-
-
-
 Bormann, et al.           Expires 27 April 2024                [Page 21]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
+      time-zone-initial = ALPHA / "." / "_"
+      time-zone-char    = time-zone-initial / DIGIT / "-" / "+"
       time-zone-part    = time-zone-initial *13(time-zone-char)
                           ; but not "." or ".."
       time-zone-name    = time-zone-part *("/" time-zone-part)
@@ -1224,8 +1226,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
         ? duration: null) //
        (end: null,
         duration: ~Duration))) //
-     (start: null,
-      end: ~Etime,
 
 
 
@@ -1234,6 +1234,8 @@ Bormann, et al.           Expires 27 April 2024                [Page 22]
 Internet-Draft         CBOR tag for extended time           October 2023
 
 
+     (start: null,
+      end: ~Etime,
       duration: ~Duration)
    ])
 
@@ -1275,8 +1277,6 @@ Authors' Addresses
    64295 Darmstadt
    Germany
    Email: henk.birkholz@sit.fraunhofer.de
-
-
 
 
 

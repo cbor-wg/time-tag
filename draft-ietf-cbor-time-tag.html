@@ -1393,8 +1393,8 @@ and 1) or text string (major type 3) keys, with the value type
 determined by each specific key.
 For negative integer keys and text string values of the key,
 implementations <span class="bcp14">MUST</span> ignore key/value pairs they do not understand;
-these keys are "elective", as the extended time is still
-usable if an implementation elects not to implement them.
+these keys are "elective", as the extended time as a whole is still
+usable without the information they carry if an implementation elects not to implement them.
 Conversely, for unsigned integer keys, implementations <span class="bcp14">MUST</span> signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).<a href="#section-3-1" class="pilcrow">¶</a></p>
@@ -1592,7 +1592,7 @@ $ETIME-TIMESCALE /= &amp;(etime-tai: 1)
 <p id="section-3.4-3">If key -1 is not present, the default timescale value 0 is implied.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
 <p id="section-3.4-4">Additional values can be registered in the Timescale Registry
 (<a href="#timescale-registry" class="auto internal xref">Section 7.2</a>); values <span class="bcp14">MUST</span> be integers or text strings.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
-<p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" — instead,
+<p id="section-3.4-5">(Note that there should be no timescales "GPS" or "NTP" <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> — instead,
 the time should be converted to TAI or UTC using a single addition or subtraction.)<a href="#section-3.4-5" class="pilcrow">¶</a></p>
 <span id="name-converting-common-offset-ti"></span><div id="offset">
 <figure id="figure-2">
@@ -2458,8 +2458,12 @@ resolution and wall clock offset).<a href="#section-8-2" class="pilcrow">¶</a><
 <span class="refAuthor">Adams, C.</span>, <span class="refAuthor">Cain, P.</span>, <span class="refAuthor">Pinkas, D.</span>, and <span class="refAuthor">R. Zuccherato</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)"</span>, <span class="seriesInfo">RFC 3161</span>, <span class="seriesInfo">DOI 10.17487/RFC3161</span>, <time datetime="2001-08" class="refDate">August 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3161">https://www.rfc-editor.org/rfc/rfc3161</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3339">[RFC3339]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5905">[RFC5905]</dt>
+      <dd>
+<span class="refAuthor">Mills, D.</span>, <span class="refAuthor">Martin, J., Ed.</span>, <span class="refAuthor">Burbank, J.</span>, and <span class="refAuthor">W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span class="seriesInfo">RFC 5905</span>, <span class="seriesInfo">DOI 10.17487/RFC5905</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5905">https://www.rfc-editor.org/rfc/rfc5905</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
