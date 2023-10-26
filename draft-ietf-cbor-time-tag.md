@@ -795,8 +795,8 @@ Timescale Registry
 ------------------
 
 This specification defines a new registry titled "Timescales" in the
-"CBOR Tags" registry group {{-tags}}, with a combination of "Expert Review"
-and "RFC Required" as the Registration Procedure ({{Sections 4.5 and
+"CBOR Tags" registry group {{-tags}}, with a Registration Procedure
+requiring both "Expert Review" and "RFC Required" ({{Sections 4.5 and
 4.7 of BCP26}}).
 
 Each entry needs to provide a timescale name (a sequence of uppercase
