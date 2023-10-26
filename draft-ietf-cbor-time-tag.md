@@ -870,6 +870,11 @@ relevant (e.g., for freshness or in a validity span) or the disclosure
 of characteristics of the emitting system (e.g., time zone, or clock
 resolution and wall clock offset).
 
+A more detailed discussion of security considerations emanating from
+using a representation of time that allows the inclusion of complex,
+possibly inconsistent information is available in
+{{Section 7 (Security Considerations) of IXDTF}}.
+
 --- back
 
 Collected CDDL
