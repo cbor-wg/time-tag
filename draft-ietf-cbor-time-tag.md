@@ -186,8 +186,7 @@ In CBOR, one point of extensibility is the definition of CBOR tags.
 
 [^status]:
     (This cref will be removed by the RFC editor:)\\
-    The present revision (–11) addresses the ARTART and IOTDIR
-    directorate reviews.
+    The present revision (–12) addresses the IESG reviews.
 
 --- middle
 
