@@ -286,11 +286,11 @@ Conversely, for unsigned integer keys, implementations MUST signal as
 an error key/value pairs they do not understand or implement
 (these are either "base time" or "critical", see below).
 
-The map must contain exactly one unsigned integer key that specifies
-the "base time", and may also contain one or more negative integer or
+The map MUST contain exactly one unsigned integer key that specifies
+the "base time", and MAY also contain one or more negative integer or
 text-string keys, which may encode supplementary information.
 
-Supplementary information may also be provided by additional unsigned
+Supplementary information MAY also be provided by additional unsigned
 integer keys that are explicitly defined to provide supplementary
 information (we say these keys are defined to be "critical"); as these
 are required to be understood, there can be no confusion with base
@@ -869,6 +869,11 @@ include the exploitation of ambiguities where time is security
 relevant (e.g., for freshness or in a validity span) or the disclosure
 of characteristics of the emitting system (e.g., time zone, or clock
 resolution and wall clock offset).
+
+A more detailed discussion of security considerations emanating from
+using a representation of time that allows the inclusion of complex,
+possibly inconsistent information is available in
+{{Section 7 (Security Considerations) of IXDTF}}.
 
 --- back
 
