@@ -33,8 +33,7 @@ Abstract
 
 
    // (This cref will be removed by the RFC editor:) The present
-   // revision (–11) addresses the ARTART and IOTDIR directorate
-   // reviews.
+   // revision (–12) addresses the IESG reviews.
 
 About This Document
 
@@ -50,6 +49,7 @@ About This Document
 
    Source for this draft and an issue tracker can be found at
    https://github.com/cbor-wg/time-tag.
+
 
 
 
