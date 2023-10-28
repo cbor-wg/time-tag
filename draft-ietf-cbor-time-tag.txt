@@ -5,10 +5,10 @@
 Network Working Group                                         C. Bormann
 Internet-Draft                                    Universität Bremen TZI
 Intended status: Standards Track                               B. Gamari
-Expires: 27 April 2024                                        Well-Typed
+Expires: 30 April 2024                                        Well-Typed
                                                              H. Birkholz
                                                           Fraunhofer SIT
-                                                         25 October 2023
+                                                         28 October 2023
 
 
 Concise Binary Object Representation (CBOR) Tags for Time, Duration, and
@@ -53,7 +53,7 @@ About This Document
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 1]
+Bormann, et al.           Expires 30 April 2024                 [Page 1]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -73,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 April 2024.
+   This Internet-Draft will expire on 30 April 2024.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 2]
+Bormann, et al.           Expires 30 April 2024                 [Page 2]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -125,8 +125,8 @@ Internet-Draft         CBOR tag for extended time           October 2023
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  18
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  19
-   Appendix A.  Collected CDDL . . . . . . . . . . . . . . . . . . .  20
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  20
+   Appendix A.  Collected CDDL . . . . . . . . . . . . . . . . . . .  21
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  23
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
@@ -165,7 +165,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 3]
+Bormann, et al.           Expires 30 April 2024                 [Page 3]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -221,7 +221,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 4]
+Bormann, et al.           Expires 30 April 2024                 [Page 4]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -251,11 +251,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
    an error key/value pairs they do not understand or implement (these
    are either "base time" or "critical", see below).
 
-   The map must contain exactly one unsigned integer key that specifies
-   the "base time", and may also contain one or more negative integer or
+   The map MUST contain exactly one unsigned integer key that specifies
+   the "base time", and MAY also contain one or more negative integer or
    text-string keys, which may encode supplementary information.
 
-   Supplementary information may also be provided by additional unsigned
+   Supplementary information MAY also be provided by additional unsigned
    integer keys that are explicitly defined to provide supplementary
    information (we say these keys are defined to be "critical"); as
    these are required to be understood, there can be no confusion with
@@ -277,7 +277,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 5]
+Bormann, et al.           Expires 30 April 2024                 [Page 5]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -333,7 +333,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 6]
+Bormann, et al.           Expires 30 April 2024                 [Page 6]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -389,7 +389,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 7]
+Bormann, et al.           Expires 30 April 2024                 [Page 7]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -445,7 +445,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 8]
+Bormann, et al.           Expires 30 April 2024                 [Page 8]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -501,7 +501,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                 [Page 9]
+Bormann, et al.           Expires 30 April 2024                 [Page 9]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -557,7 +557,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 10]
+Bormann, et al.           Expires 30 April 2024                [Page 10]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -613,7 +613,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 11]
+Bormann, et al.           Expires 30 April 2024                [Page 11]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -669,7 +669,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 12]
+Bormann, et al.           Expires 30 April 2024                [Page 12]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -725,7 +725,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 13]
+Bormann, et al.           Expires 30 April 2024                [Page 13]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -781,7 +781,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 14]
+Bormann, et al.           Expires 30 April 2024                [Page 14]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -837,7 +837,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 15]
+Bormann, et al.           Expires 30 April 2024                [Page 15]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -893,7 +893,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 16]
+Bormann, et al.           Expires 30 April 2024                [Page 16]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -949,7 +949,7 @@ Internet-Draft         CBOR tag for extended time           October 2023
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 17]
+Bormann, et al.           Expires 30 April 2024                [Page 17]
 
 Internet-Draft         CBOR tag for extended time           October 2023
 
@@ -964,6 +964,11 @@ Internet-Draft         CBOR tag for extended time           October 2023
    relevant (e.g., for freshness or in a validity span) or the
    disclosure of characteristics of the emitting system (e.g., time
    zone, or clock resolution and wall clock offset).
+
+   A more detailed discussion of security considerations emanating from
+   using a representation of time that allows the inclusion of complex,
+   possibly inconsistent information is available in Section 7 (Security
+   Considerations) of [IXDTF].
 
 9.  References
 
@@ -991,6 +996,20 @@ Internet-Draft         CBOR tag for extended time           October 2023
               called PTP v2, as it replaced the earlier 2002 version of
               this standard by a non-backwards compatible protocol.
 
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 18]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    [IEEE1588-2019]
               IEEE, "IEEE Standard for a Precision Clock Synchronization
               Protocol for Networked Measurement and Control Systems",
@@ -999,16 +1018,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
               called PTP v2.1, as it has been designed so it can be used
               in a way that is fully backwards compatible to
               IEEE1588-2008.
-
-
-
-
-
-
-Bormann, et al.           Expires 27 April 2024                [Page 18]
-
-Internet-Draft         CBOR tag for extended time           October 2023
-
 
    [IXDTF]    Sharma, U. and C. Bormann, "Date and Time on the Internet:
               Timestamps with additional information", Work in Progress,
@@ -1046,6 +1055,17 @@ Internet-Draft         CBOR tag for extended time           October 2023
               "Quantities and units — Part 3: Space and time",
               ISO 80000-3, 1 March 2006.
 
+
+
+
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 19]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    [TIME_T]   The Open Group Base Specifications, "Vol. 1: Base
               Definitions, Issue 7", Section 4.16 'Seconds Since the
               Epoch', IEEE Std 1003.1-2017, 2018 Edition, 2018,
@@ -1058,14 +1078,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
               "Information technology — Programming languages — C",
               Fourth Edition, ISO/IEC 9899:2018, June 2018,
               <https://www.iso.org/standard/74528.html>.  Contents
-
-
-
-Bormann, et al.           Expires 27 April 2024                [Page 19]
-
-Internet-Draft         CBOR tag for extended time           October 2023
-
-
               available via <https://www.open-
               std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
               (https://www.open-std.org/jtc1/sc22/wg14/www/docs/
@@ -1100,6 +1112,16 @@ Internet-Draft         CBOR tag for extended time           October 2023
               Specification", RFC 5905, DOI 10.17487/RFC5905, June 2010,
               <https://www.rfc-editor.org/rfc/rfc5905>.
 
+
+
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 20]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
 Appendix A.  Collected CDDL
 
    This appendix collects the CDDL rules spread over the document into
@@ -1114,14 +1136,6 @@ Appendix A.  Collected CDDL
    }
 
    etime-detailed = ({
-
-
-
-Bormann, et al.           Expires 27 April 2024                [Page 20]
-
-Internet-Draft         CBOR tag for extended time           October 2023
-
-
      $$ETIME-BASETIME
      ClockQuality-group
      * $$ETIME-ELECTIVE
@@ -1156,6 +1170,14 @@ Internet-Draft         CBOR tag for extended time           October 2023
      ? &(ClockClass: -2) => uint .size 1 ; PTP/RFC8575
      ? &(ClockAccuracy: -4) => uint .size 1 ; PTP/RFC8575
      ? &(OffsetScaledLogVariance: -5) => uint .size 2 ; PTP/RFC8575
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 21]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
      ? &(Uncertainty: -7) => ~time/~duration
      ? &(Guarantee: -8) => ~time/~duration
    )
@@ -1171,11 +1193,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
       time-minute     = 2DIGIT  ; 00-59
       time-numoffset  = ("+" / "-") time-hour ":" time-minute
 
-
-
-Bormann, et al.           Expires 27 April 2024                [Page 21]
-
-Internet-Draft         CBOR tag for extended time           October 2023
 
 
       time-zone-initial = ALPHA / "." / "_"
@@ -1210,6 +1227,13 @@ Internet-Draft         CBOR tag for extended time           October 2023
    ' ; extracted from [IXDTF]; update as needed!
 
 
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 22]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    Duration = #6.1002(etime-detailed)
 
 
@@ -1226,14 +1250,6 @@ Internet-Draft         CBOR tag for extended time           October 2023
         ? duration: null) //
        (end: null,
         duration: ~Duration))) //
-
-
-
-Bormann, et al.           Expires 27 April 2024                [Page 22]
-
-Internet-Draft         CBOR tag for extended time           October 2023
-
-
      (start: null,
       end: ~Etime,
       duration: ~Duration)
@@ -1263,6 +1279,17 @@ Authors' Addresses
    Email: cabo@tzi.org
 
 
+
+
+
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 23]
+
+Internet-Draft         CBOR tag for extended time           October 2023
+
+
    Ben Gamari
    Well-Typed
    117 Middle Rd.
@@ -1285,4 +1312,33 @@ Authors' Addresses
 
 
 
-Bormann, et al.           Expires 27 April 2024                [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bormann, et al.           Expires 30 April 2024                [Page 24]
