@@ -810,9 +810,9 @@ Internet-Draft         CBOR tag for extended time           October 2023
 7.2.  Timescale Registry
 
    This specification defines a new registry titled "Timescales" in the
-   "CBOR Tags" registry group [IANA.cbor-tags], with a combination of
-   "Expert Review" and "RFC Required" as the Registration Procedure
-   (Sections 4.5 and 4.7 of [BCP26]).
+   "CBOR Tags" registry group [IANA.cbor-tags], with a Registration
+   Procedure requiring both "Expert Review" and "RFC Required" (Sections
+   4.5 and 4.7 of [BCP26]).
 
    Each entry needs to provide a timescale name (a sequence of uppercase
    ASCII characters and digits, where a digit may not occur at the
